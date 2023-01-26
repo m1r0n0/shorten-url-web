@@ -1,76 +1,72 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 
 export default class MyLinks extends Component<any, any, any> {
-    constructor(props: any){
-        super(props);
-        this.state = {
-            items: [],
-            isLoaded: false,
-            error: null
-        }
-    }
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      items: [],
+      isLoaded: false,
+      error: null,
+    };
+  }
 
-    componentDidMount(): void {
-        fetch("https://localhost:7161/api/Links/GetLinksForCurrentUser")
-        .then(res => res.json())
-        .then(
-            (result) => {
-                this.setState({
-                    isLoaded: true,
-                    items: result.urlList
-                });
-            },
-            (error) => {
-                this.setState({
-                    isLoaded: true,
-                    error
-                });
-            }
-        )
-    }
+  componentDidMount(): void {
+    fetch("https://localhost:7161/api/Links/GetAllLinks")
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            isLoaded: true,
+            items: result.urlList,
+          });
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error,
+          });
+        }
+      );
+  }
 
   render() {
-    const { items, isLoaded, error} = this.state;
-    if (error){
-        return <p> Error {error.message}</p>
-    }
-    return (
-      <div>
-        <h1>My links</h1>
+    const { items, isLoaded, error } = this.state;
+    var table = Object.keys(items);
+    if (error) {
+      return <p> Error {error.message}</p>;
+    } else if (!isLoaded) {
+      return <p>Loading...</p>;
+    } else {
+      return (
+        <div>
+          <h1>My links</h1>
+          <table>
+            <thead>
+              <tr>
+                <th>FullUrl</th>
+                <th>ShortUrl</th>
+                <th>IsPrivate</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr>
+                  for(var i; i<table.length; i++){
 
-<table className="table">
-    <thead>
-        <tr>
-            <th>
-                FullUrl
-            </th>
-            <th>
-                ShortUrl
-            </th>
-            <th>
-                IsPrivate
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.UrlList)
-        {
-            <tr>
-                <td>
-                    //FullUrl
-                </td>
-                <td>
-                    //ShortUrl
-                </td>
-                <td>
-                    //IsPrivate
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                  }
+                  {/* {items.map((item:any) => (
+                    <tr key={item.FullUrl}> <td> {item.fullUrl}</td> </tr>
+                  ))}
+                  {items.map((item:any) => (
+                    <td key={item.ShortUr}> <td>{item.shortUrl}</td></td>
+                  ))}
+                  {items.map((item:any) => (
+                    <tr key={item.IsPrivate}> <td>{item.isPrivate}</td></tr>
+                  ))} */}
+                </tr>
+            </tbody>
+          </table>
 
-{/* scripts {
+          {/* scripts {
     <script>
         $(function() {
             $('.toggle').change(function() {
@@ -87,7 +83,8 @@ export default class MyLinks extends Component<any, any, any> {
             });
         });
     </script> */}
-      </div>
-    )
+        </div>
+      );
+    }
   }
 }
