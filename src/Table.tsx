@@ -13,7 +13,15 @@ export default function Table({ theadData, tbodyData }: any) {
           return (
             <tr key={index}>
               {theadData.map((key: any, index: any) => {
-                return <td key={row[key]}>{row[key]}</td>;
+                return (
+                  <td key={row[key]}>
+                    if({row[key]} === true || {row[key]} === false){
+                        <input type="checkbox" checked={row[key]}></input>}
+                    else {
+                        <td>{row[key]}</td>
+                    };
+                  </td>
+                );
               })}
             </tr>
           );
