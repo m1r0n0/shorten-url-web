@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Table from "../Table";
 
 export default class MyLinks extends Component<any, any, any> {
   constructor(props: any) {
@@ -29,6 +30,11 @@ export default class MyLinks extends Component<any, any, any> {
       );
   }
 
+  const getHeadings = () => {
+    const {items, isLoaded, error} = this.state;
+        return Object.keys(items[0]);
+    }
+
   render() {
     const { items, isLoaded, error } = this.state;
     var table = Object.keys(items);
@@ -40,7 +46,7 @@ export default class MyLinks extends Component<any, any, any> {
       return (
         <div>
           <h1>My links</h1>
-          <table>
+          <Table theadData={this.getHeadings()} tbodyData={items} />
             <thead>
               <tr>
                 <th>FullUrl</th>
