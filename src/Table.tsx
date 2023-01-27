@@ -15,11 +15,11 @@ export default function Table({ theadData, tbodyData }: any) {
               {theadData.map((key: any, index: any) => {
                 return (
                   <td key={row[key]}>
-                    if({row[key]} === true || {row[key]} === false){
-                        <input type="checkbox" checked={row[key]}></input>}
-                    else {
+                    {/* if({row[key]} === true || {row[key]} === false){ */}
+                        <input type="checkbox" checked={row[key]}></input>
+                        {/* }else { */}
                         <td>{row[key]}</td>
-                    };
+                    {/* }; */}
                   </td>
                 );
               })}

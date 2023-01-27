@@ -47,30 +47,6 @@ export default class MyLinks extends Component<any, any, any> {
         <div>
           <h1>My links</h1>
           <Table theadData={this.getHeadings()} tbodyData={items} />
-          {/* <thead>
-              <tr>
-                <th>FullUrl</th>
-                <th>ShortUrl</th>
-                <th>IsPrivate</th>
-              </tr>
-            </thead>
-            <tbody>
-                <tr>
-                  for(var i; i<table.length; i++){
-
-                  }
-                   {items.map((item:any) => (
-                    <tr key={item.FullUrl}> <td> {item.fullUrl}</td> </tr>
-                  ))}
-                  {items.map((item:any) => (
-                    <td key={item.ShortUr}> <td>{item.shortUrl}</td></td>
-                  ))}
-                  {items.map((item:any) => (
-                    <tr key={item.IsPrivate}> <td>{item.isPrivate}</td></tr>
-                  ))} 
-                </tr>
-            </tbody>
-          </table> */}
 
           {/* scripts {
     <script>
