@@ -1,4 +1,4 @@
-export default function Table({ theadData, tbodyData } : any) {
+export default function Table({ theadData, tbodyData }: any) {
   return (
     <table>
       <thead>
@@ -10,9 +10,13 @@ export default function Table({ theadData, tbodyData } : any) {
       </thead>
       <tbody>
         {tbodyData.map((row: any, index: any) => {
-          return <tr key={index}> 
-          <td> </td>
-          </tr>;
+          return (
+            <tr key={index}>
+              {theadData.map((key: any, index: any) => {
+                return <td key={row[key]}>{row[key]}</td>;
+              })}
+            </tr>
+          );
         })}
       </tbody>
     </table>

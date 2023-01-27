@@ -30,10 +30,10 @@ export default class MyLinks extends Component<any, any, any> {
       );
   }
 
-  const getHeadings = () => {
-    const {items, isLoaded, error} = this.state;
-        return Object.keys(items[0]);
-    }
+  getHeadings = () => {
+    const { items, isLoaded, error } = this.state;
+    return Object.keys(items[0]);
+  };
 
   render() {
     const { items, isLoaded, error } = this.state;
@@ -47,7 +47,7 @@ export default class MyLinks extends Component<any, any, any> {
         <div>
           <h1>My links</h1>
           <Table theadData={this.getHeadings()} tbodyData={items} />
-            <thead>
+          {/* <thead>
               <tr>
                 <th>FullUrl</th>
                 <th>ShortUrl</th>
@@ -59,7 +59,7 @@ export default class MyLinks extends Component<any, any, any> {
                   for(var i; i<table.length; i++){
 
                   }
-                  {/* {items.map((item:any) => (
+                   {items.map((item:any) => (
                     <tr key={item.FullUrl}> <td> {item.fullUrl}</td> </tr>
                   ))}
                   {items.map((item:any) => (
@@ -67,10 +67,10 @@ export default class MyLinks extends Component<any, any, any> {
                   ))}
                   {items.map((item:any) => (
                     <tr key={item.IsPrivate}> <td>{item.isPrivate}</td></tr>
-                  ))} */}
+                  ))} 
                 </tr>
             </tbody>
-          </table>
+          </table> */}
 
           {/* scripts {
     <script>
