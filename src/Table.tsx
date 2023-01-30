@@ -1,4 +1,14 @@
+import React from "react";
+
 export default function Table({ theadData, tbodyData }: any) {
+  const IsThereNeededCheckBox = (value: any): boolean => {
+    if (value === true || value === false) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   return (
     <table>
       <thead>
@@ -13,13 +23,15 @@ export default function Table({ theadData, tbodyData }: any) {
           return (
             <tr key={index}>
               {theadData.map((key: any, index: any) => {
-                return (
-                  <td key={row[key]}>
-                    {/* if({row[key]} === true || {row[key]} === false){ */}
-                        <input type="checkbox" checked={row[key]}></input>
-                        {/* }else { */}
-                        <td>{row[key]}</td>
-                    {/* }; */}
+                return row[key] ? (
+                  IsThereNeededCheckBox(row[key]) ? (
+                    <td key={row[key]}> {row[key]}</td>
+                  ) : (
+                    <input type="checkbox" checked={row[key]}></input>
+                  )
+                ) : (
+                  <td>
+                    <input type="checkbox" checked={row[key]}></input>
                   </td>
                 );
               })}
