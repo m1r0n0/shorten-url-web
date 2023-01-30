@@ -14,7 +14,7 @@ export default function Table({ theadData, tbodyData }: any) {
       <thead>
         <tr>
           {theadData.map((heading: any) => {
-            return <th key={heading}>{heading}</th>;
+            return heading[0] ? <th key={heading}>{heading}</th> : <></>; //hide id and userid
           })}
         </tr>
       </thead>
