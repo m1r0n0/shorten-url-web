@@ -10,7 +10,7 @@ export default function Table({ theadData, tbodyData }: any) {
   };
 
   return (
-    <table>
+    <table className="table text-white">
       <thead>
         <tr>
           {theadData.map((heading: any) => {
