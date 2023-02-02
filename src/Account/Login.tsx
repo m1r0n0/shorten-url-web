@@ -8,13 +8,13 @@ export default class Login extends Component {
   };
 
   render() {
-    function handleSubmit(event: any) {
-      const data = new FormData(event.target);
+    const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
+      // const data = new FormData(event.target);
 
-      const value = Object.fromEntries(data.entries());
+      // const value = Object.fromEntries(this.state);
 
-      console.log({ value });
-    }
+      console.log(this.state);
+    };
     return (
       <div>
         <h2> Enter the app</h2>
