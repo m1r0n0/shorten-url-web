@@ -13,7 +13,7 @@ export default class Login extends Component {
     }
 
     const form = document.querySelector("form");
-    form.addEventListener("submit", handleSubmit);
+    // form.addEventListener("submit", handleSubmit);
     return (
       <div>
         <h2> Enter the app</h2>
@@ -32,7 +32,11 @@ export default class Login extends Component {
             <input type="checkbox" name="rememberMe" id="rememberMe" />
           </div>
           <div>
-            <input type="submit" value="Log in" />
+            <input
+              type="submit"
+              value="Log in"
+              onClick={form!.handleSubmit(this.setState)}
+            />
           </div>
         </form>
       </div>
