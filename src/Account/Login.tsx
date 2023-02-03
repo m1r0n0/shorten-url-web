@@ -11,9 +11,7 @@ export default class Login extends Component {
     const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
       // this.state.setState({...this.state, rememberMe: event.target.value === 'on'}) ;
 
-      console.log(event);
-
-      //console.log(this.state); //remember me 'on'
+      console.log(this.state);
     };
     return (
       <div>
@@ -46,11 +44,12 @@ export default class Login extends Component {
           <label htmlFor="rememberMe">Remember me?</label> <br />
           <input
             onChange={(event) =>
-              this.setState({ ...this.state, rememberMe: event.target.value })
+              this.setState({ ...this.state, rememberMe: event.target.checked })
             }
             type="checkbox"
             name="rememberMe"
             id="rememberMe"
+            // onClick={handleSubmit}
           />
         </div>
         <div>
