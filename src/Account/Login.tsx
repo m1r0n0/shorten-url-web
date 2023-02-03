@@ -9,11 +9,11 @@ export default class Login extends Component {
 
   render() {
     const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
-      // const data = new FormData(event.target);
+      // this.state.setState({...this.state, rememberMe: event.target.value === 'on'}) ;
 
-      // const value = Object.fromEntries(this.state);
+      console.log(event);
 
-      console.log(this.state);
+      //console.log(this.state); //remember me 'on'
     };
     return (
       <div>
