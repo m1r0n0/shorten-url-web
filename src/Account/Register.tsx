@@ -7,7 +7,17 @@ export default class Register extends Component {
     year: 0,
   };
 
+  passwordConfirm: string = "";
+
   render() {
+    const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
+      if (this.state.password === this.passwordConfirm) {
+        console.log(this.state);
+      } else {
+        console.log("Passwords don't match");
+      }
+    };
+
     return (
       <div>
         <h2>Register</h2>
@@ -53,16 +63,20 @@ export default class Register extends Component {
               name="password"
               id="password"
             />
-            <span asp-validation-for="Password"></span>
           </div>
           <div>
-            <label asp-for="PasswordConfirm"></label>
+            <label htmlFor="PasswordConfirm">Password Confirm</label>
             <br />
-            <input asp-for="PasswordConfirm" />
-            <span asp-validation-for="PasswordConfirm"></span>
+            <input
+              onChange={(event) => (this.passwordConfirm = event.target.value)}
+              type="password"
+              name="passwordConfirm"
+              id="passwordConfirm"
+            />
           </div>
+          <br></br>
           <div>
-            <input type="submit" value="Register" />
+            <input type="button" value="Register" onClick={handleSubmit} />
           </div>
         </form>
       </div>
