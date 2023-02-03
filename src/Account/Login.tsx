@@ -16,7 +16,6 @@ export default class Login extends Component {
     return (
       <div>
         <h2> Enter the app</h2>
-        <div asp-validation-summary="ModelOnly"></div>
         <div>
           <label htmlFor="email">Email</label> <br />
           <input
