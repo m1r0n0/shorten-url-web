@@ -46,7 +46,6 @@ export default class Login extends Component {
             type="checkbox"
             name="rememberMe"
             id="rememberMe"
-            // onClick={handleSubmit}
           />
         </div>
         <div>
