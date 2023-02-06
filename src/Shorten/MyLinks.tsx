@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Table from "../Table";
 
-export default class MyLinks extends Component<any, any, any> {
+export default class MyLinks extends Component<any, any, null> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -47,24 +47,6 @@ export default class MyLinks extends Component<any, any, any> {
         <div>
           <h1>My links</h1>
           <Table theadData={this.getHeadings()} tbodyData={items} />
-
-          {/* scripts {
-    <script>
-        $(function() {
-            $('.toggle').change(function() {
-                var self = $(this);
-                var url = self.data('url');
-                var id = self.attr('id');
-                var value = self.prop('checked');
-
-                $.ajax({
-                    url: url,
-                    data: { id: id },
-                    type: 'PATCH',
-                });
-            });
-        });
-    </script> */}
         </div>
       );
     }

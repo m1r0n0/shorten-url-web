@@ -9,12 +9,27 @@ export default function Table({ theadData, tbodyData }: any) {
     }
   };
 
+  // $(function () {
+  //   $(".toggle").change(function () {
+  //     var self = $(this);
+  //     var url = self.data("url");
+  //     var id = self.attr("id");
+  //     var value = self.prop("checked");
+
+  //     $.ajax({
+  //       url: url,
+  //       data: { id: id },
+  //       type: "PATCH",
+  //     });
+  //   });
+  // });
+
   return (
     <table className="table text-white">
       <thead>
         <tr>
           {theadData.map((heading: any) => {
-            return <th key={heading}>{heading}</th>; //hide id and userid
+            return <th key={heading}>{heading}</th>;
           })}
         </tr>
       </thead>
@@ -27,11 +42,21 @@ export default function Table({ theadData, tbodyData }: any) {
                   IsThereNeededCheckBox(row[key]) ? (
                     <td key={row[key]}> {row[key]}</td>
                   ) : (
-                    <input type="checkbox" checked={row[key]}></input>
+                    <td>
+                      <input
+                        className="toogle"
+                        type="checkbox"
+                        checked={row[key]}
+                      ></input>
+                    </td>
                   )
                 ) : (
                   <td>
-                    <input type="checkbox" checked={row[key]}></input>
+                    <input
+                      className="toogle"
+                      type="checkbox"
+                      checked={row[key]}
+                    ></input>
                   </td>
                 );
               })}
