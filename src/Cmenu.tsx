@@ -5,8 +5,48 @@ import CreateLink from "./Shorten/CreateLink";
 import MyLinks from "./Shorten/MyLinks";
 import Login from "./Account/Login";
 import Register from "./Account/Register";
+import { API, ACCOUNT, IS_LOGON, GET_USER_EMAIL } from "./JS/routeConstants";
 
 export default class Cmenu extends Component {
+  public state: { userName: string; isLogon: boolean };
+
+  private isLogonURI: string = `${API}/${ACCOUNT}/${IS_LOGON}`;
+  private getUserEmailURI: string = `${API}/${ACCOUNT}/${GET_USER_EMAIL}`;
+
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      userName: "",
+      isLogon: false,
+    };
+  }
+
+  componentDidMount(): void {
+    fetch(this.isLogonURI)
+      .then((res) => res.json())
+      .then((result) => {
+        this.setState({
+          isLogon: result,
+        });
+      });
+
+    fetch(this.getUserEmailURI)
+      .then((res) => res.json())
+      .then((result) => {
+        this.setState({
+          userEmail: result,
+        });
+      });
+  }
+
+  // IsUserLogon = (value: boolean): boolean => {
+  //   if (value){
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
   render() {
     return (
       <Router>
@@ -36,12 +76,13 @@ export default class Cmenu extends Component {
                       </Link>
                     </li>
                     <li className="navi-item">
-                      @if (User.Identity.IsAuthenticated)
-                      {
+                      {this.state.isLogon ? (
                         <Link to="/MyLinks" className="navi-link">
                           My links
                         </Link>
-                      }
+                      ) : (
+                        <></>
+                      )}
                     </li>
                   </ul>
                 </div>
@@ -49,17 +90,28 @@ export default class Cmenu extends Component {
               <div className="d-sm-inline-flex justify-content-between">
                 <ul className="navbar-nav flex-grow-1 align-items-end">
                   <li className="nav-item">
-                    @if (User.Identity.IsAuthenticated)
-                    {<p className="username">@User.Identity.Name</p>}
-                    else
-                    {
+                    {this.state.isLogon ? (
+                      <p className="username"> this.state.userEmail </p>
+                    ) : (
                       <Link to="/Login" className="navi-link">
                         Login
                       </Link>
-                    }
+                    )}
                   </li>
                   <li className="nav-item">
-                    @if (User.Identity.IsAuthenticated)
+                    {this.state.isLogon ? (
+                      <input
+                        className="btn-primary"
+                        type="submit"
+                        value="Logout"
+                      />
+                    ) : (
+                      <Link to="/Register" className="navi-link">
+                        Register
+                      </Link>
+                    )}
+
+                    {/* @if (User.Identity.IsAuthenticated)
                     {
                       <form
                         method="post"
@@ -78,7 +130,7 @@ export default class Cmenu extends Component {
                       <Link to="/Register" className="navi-link">
                         Register
                       </Link>
-                    }
+                    } */}
                   </li>
                 </ul>
               </div>

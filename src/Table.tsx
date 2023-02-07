@@ -44,7 +44,7 @@ export default function Table({ theadData, tbodyData }: any) {
                   ) : (
                     <td>
                       <input
-                        className="toogle"
+                        // className="toogle"
                         type="checkbox"
                         checked={row[key]}
                       ></input>
@@ -53,7 +53,7 @@ export default function Table({ theadData, tbodyData }: any) {
                 ) : (
                   <td>
                     <input
-                      className="toogle"
+                      // className="toogle"
                       type="checkbox"
                       checked={row[key]}
                     ></input>

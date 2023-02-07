@@ -12,7 +12,7 @@ export default class MyLinks extends Component<any, any, null> {
   }
 
   componentDidMount(): void {
-    fetch("https://localhost:7161/api/Links/GetAllLinks")
+    fetch("https://localhost:7161/api/Shorten/GetAllLinks")
       .then((res) => res.json())
       .then(
         (result) => {
