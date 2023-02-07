@@ -8,6 +8,13 @@ export default class CreateLink extends Component {
 
   render() {
     const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
+      fetch("https://localhost:7161/api/Links/CreateLink", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(this.state),
+      }).then(() => {
+        console.log("link created");
+      });
       console.log(this.state);
     };
     return (
@@ -50,7 +57,7 @@ export default class CreateLink extends Component {
               }
             </div>
             <div>
-              <input type="button" value="Log in" onClick={handleSubmit} />
+              <input type="button" value="Create" onClick={handleSubmit} />
             </div>
             <br />
             <div>
