@@ -5,47 +5,46 @@ import CreateLink from "./Shorten/CreateLink";
 import MyLinks from "./Shorten/MyLinks";
 import Login from "./Account/Login";
 import Register from "./Account/Register";
-import { API, ACCOUNT, IS_LOGON, GET_USER_EMAIL } from "./JS/routeConstants";
+import {
+  API,
+  ACCOUNT,
+  LOGON_USER_INFO,
+  GET_USER_EMAIL,
+} from "./JS/routeConstants";
 
 export default class Cmenu extends Component {
-  public state: { userName: string; isLogon: boolean };
+  public state: { userEmail: string; isLogon: boolean };
 
-  private isLogonURI: string = `${API}/${ACCOUNT}/${IS_LOGON}`;
-  private getUserEmailURI: string = `${API}/${ACCOUNT}/${GET_USER_EMAIL}`;
+  private UserLoginInfoURI: string = `${API}/${ACCOUNT}/${LOGON_USER_INFO}`;
+  // private getUserEmailURI: string = `${API}/${ACCOUNT}/${GET_USER_EMAIL}`;
 
   constructor(props: any) {
     super(props);
     this.state = {
-      userName: "",
+      userEmail: "",
       isLogon: false,
     };
   }
 
   componentDidMount(): void {
-    fetch(this.isLogonURI)
+    fetch(this.UserLoginInfoURI)
       .then((res) => res.json())
       .then((result) => {
         this.setState({
-          isLogon: result,
+          userEmail: result.userEmail,
+          isLogon: result.isLogon,
         });
-      });
+      })
+      .then(() => console.log(document.cookie));
 
-    fetch(this.getUserEmailURI)
-      .then((res) => res.json())
-      .then((result) => {
-        this.setState({
-          userEmail: result,
-        });
-      });
+    // fetch(this.getUserEmailURI)
+    //   .then((res) => res.json())
+    //   .then((result) => {
+    //     this.setState({
+
+    //     });
+    //   });
   }
-
-  // IsUserLogon = (value: boolean): boolean => {
-  //   if (value){
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
 
   render() {
     return (

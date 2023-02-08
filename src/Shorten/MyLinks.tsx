@@ -1,7 +1,16 @@
 import React, { Component } from "react";
 import Table from "../Table";
+import { API, SHORTEN, GET_ALL_LINKS } from "../JS/routeConstants";
 
-export default class MyLinks extends Component<any, any, null> {
+export default class MyLinks extends Component {
+  public state = {
+    items: [],
+    isLoaded: false,
+    error: null,
+  };
+
+  private getAllLinksURI: string = `${API}/${SHORTEN}/${GET_ALL_LINKS}`;
+
   constructor(props: any) {
     super(props);
     this.state = {
@@ -12,7 +21,7 @@ export default class MyLinks extends Component<any, any, null> {
   }
 
   componentDidMount(): void {
-    fetch("https://localhost:7161/api/Shorten/GetAllLinks")
+    fetch(this.getAllLinksURI)
       .then((res) => res.json())
       .then(
         (result) => {
@@ -31,16 +40,14 @@ export default class MyLinks extends Component<any, any, null> {
   }
 
   getHeadings = () => {
-    const { items, isLoaded, error } = this.state;
+    const { items } = this.state;
     return Object.keys(items[0]);
   };
 
   render() {
-    const { items, isLoaded, error } = this.state;
+    const { items, isLoaded } = this.state;
     var table = Object.keys(items);
-    if (error) {
-      return <p> Error {error.message}</p>;
-    } else if (!isLoaded) {
+    if (!isLoaded) {
       return <p>Loading...</p>;
     } else {
       return (

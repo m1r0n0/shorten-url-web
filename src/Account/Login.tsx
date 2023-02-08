@@ -1,16 +1,33 @@
 import React, { Component } from "react";
+import {
+  API,
+  ACCOUNT,
+  LOGIN,
+} from "../JS/routeConstants";
 
 export default class Login extends Component {
-  state = {
+  public state = {
     email: "",
     password: "",
     rememberMe: false,
   };
 
+  private LoginURI: string = `${API}/${ACCOUNT}/${LOGIN}`;
+
   render() {
     const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
-      console.log(this.state);
+      event.preventDefault();
+
+      fetch(this.LoginURI, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(this.state),
+        credentials: "include",
+      }).then(() => {
+        console.log(document.cookie);
+      });
     };
+
     return (
       <div>
         <h2> Enter the app</h2>
