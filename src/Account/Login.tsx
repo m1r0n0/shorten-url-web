@@ -1,9 +1,6 @@
 import React, { Component } from "react";
-import {
-  API,
-  ACCOUNT,
-  LOGIN,
-} from "../JS/routeConstants";
+import Cmenu from "../Cmenu";
+import { API, ACCOUNT, LOGIN } from "../JS/routeConstants";
 
 export default class Login extends Component {
   public state = {
@@ -23,9 +20,25 @@ export default class Login extends Component {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(this.state),
         credentials: "include",
-      }).then(() => {
-        console.log(document.cookie);
-      });
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not OK");
+          } else {
+            return response.json();
+          }
+        })
+        .catch((error) => {
+          console.error(
+            "There has been a problem with your fetch operation:",
+            error
+          );
+        })
+        .then((res) => {
+          console.log(res);
+        });
+
+      console.log(this.state);
     };
 
     return (

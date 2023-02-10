@@ -5,24 +5,18 @@ import CreateLink from "./Shorten/CreateLink";
 import MyLinks from "./Shorten/MyLinks";
 import Login from "./Account/Login";
 import Register from "./Account/Register";
-import {
-  API,
-  ACCOUNT,
-  LOGON_USER_INFO,
-  GET_USER_EMAIL,
-} from "./JS/routeConstants";
+import { API, ACCOUNT, LOGON_USER_INFO } from "./JS/routeConstants";
 
 export default class Cmenu extends Component {
   public state: { userEmail: string; isLogon: boolean };
 
   private UserLoginInfoURI: string = `${API}/${ACCOUNT}/${LOGON_USER_INFO}`;
-  // private getUserEmailURI: string = `${API}/${ACCOUNT}/${GET_USER_EMAIL}`;
 
   constructor(props: any) {
     super(props);
     this.state = {
       userEmail: "",
-      isLogon: false,
+      isLogon: true,
     };
   }
 
@@ -36,14 +30,6 @@ export default class Cmenu extends Component {
         });
       })
       .then(() => console.log(document.cookie));
-
-    // fetch(this.getUserEmailURI)
-    //   .then((res) => res.json())
-    //   .then((result) => {
-    //     this.setState({
-
-    //     });
-    //   });
   }
 
   render() {
