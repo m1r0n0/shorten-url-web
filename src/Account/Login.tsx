@@ -9,11 +9,14 @@ export default class Login extends Component {
     rememberMe: false,
   };
 
+  //public handleToUpdate = { userEmail: "", isLogon: false };
+
   private LoginURI: string = `${API}/${ACCOUNT}/${LOGIN}`;
 
   render() {
     const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
       event.preventDefault();
+      const {handleToUpdate} = this.props
 
       fetch(this.LoginURI, {
         method: "POST",
@@ -36,10 +39,13 @@ export default class Login extends Component {
         })
         .then((res) => {
           console.log(res);
+          handleToUpdate(res)
         });
 
       console.log(this.state);
     };
+
+    //var handleToUpdate = this.props.handleToUpdate;
 
     return (
       <div>

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Home from "./Home";
 import CreateLink from "./Shorten/CreateLink";
@@ -9,6 +9,7 @@ import { API, ACCOUNT, LOGON_USER_INFO } from "./JS/routeConstants";
 
 export default class Cmenu extends Component {
   public state: { userEmail: string; isLogon: boolean };
+  const [loginData: object, setLoginData: void] = useState({userEmail: any});
 
   private UserLoginInfoURI: string = `${API}/${ACCOUNT}/${LOGON_USER_INFO}`;
 
@@ -18,6 +19,16 @@ export default class Cmenu extends Component {
       userEmail: "",
       isLogon: true,
     };
+  }
+
+  handleToUpdate(userEmail: string, isLogon: boolean) {
+    alert(
+      "We pass argument from Child to Parent: " +
+        userEmail +
+        " and he is" +
+        isLogon
+    );
+    this.setState({ userEmail: userEmail, isLogon: isLogon });
   }
 
   componentDidMount(): void {
@@ -78,7 +89,7 @@ export default class Cmenu extends Component {
                     {this.state.isLogon ? (
                       <p className="username"> this.state.userEmail </p>
                     ) : (
-                      <Link to="/Login" className="navi-link">
+                      <Link to="/Login" className={"navi-link"} >
                         Login
                       </Link>
                     )}
@@ -125,7 +136,8 @@ export default class Cmenu extends Component {
             <Route path="/" element={<Home />} />
             <Route path="/CreateLink" element={<CreateLink />} />
             <Route path="/MyLinks" element={<MyLinks />} />
-            <Route path="/Login" element={<Login />} />
+            {/* <Route path="/Login" element={<Login handleToUpdate = {this.handleToUpdate}/>} /> */}
+            <Route path="/Login" render = {<Login handleToUpdate = {this.handleToUpdate}} />
             <Route path="/Register" element={<Register />} />
           </Routes>
         </div>
