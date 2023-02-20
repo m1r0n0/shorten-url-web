@@ -21,7 +21,7 @@ export default class MyLinks extends Component {
     };
   }
 
-  componentDidMount(): void {
+  componentDidMount() {
     fetch(this.getAllLinksURI)
       .then((res) => res.json())
       .then(

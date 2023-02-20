@@ -1,0 +1,1 @@
+export const lifeTimeOfCookie = 315360000;

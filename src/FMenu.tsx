@@ -5,31 +5,55 @@ import CreateLink from "./Shorten/CreateLink";
 import MyLinks from "./Shorten/MyLinks";
 import { Login } from "./Account/Login";
 import { Register } from "./Account/Register";
-import { API, ACCOUNT, LOGON_USER_INFO } from "./JS/routeConstants";
+import { API, ACCOUNT, GET_USER_ID, GET_USER_EMAIL } from "./JS/routeConstants";
+import { lifeTimeOfCookie } from "./JS/constants";
 
 export function FMenu() {
+  const GetUserIdURI: string = `${API}/${ACCOUNT}/${GET_USER_ID}?userEmail=`;
+  const GetUserEmailURI: string = `${API}/${ACCOUNT}/${GET_USER_EMAIL}?userID=`;
   const [state, setState] = useState({ userEmail: "", isLogon: false });
-  //const UserLoginInfoURI: string = `${API}/${ACCOUNT}/${LOGON_USER_INFO}`;
+  const [userID, setUserID] = useState();
+  const splittedCookies: string[] = document.cookie.split("; ");
 
   const handleToLogin = (userEmail: string, rememberMe: boolean) => {
     setState({ userEmail: userEmail, isLogon: true });
     if (rememberMe) {
-      document.cookie = "userEmail=" + userEmail + "; max-age=315360000";
-      document.cookie = "isLogon=true; max-age=315360000";
+      setUserIDFromUserEmail(state.userEmail);
+      document.cookie = "userID" + userID + "; max-age=" + lifeTimeOfCookie;
+      document.cookie =
+        "userEmail=" + userEmail + "; max-age=" + lifeTimeOfCookie;
+      document.cookie = "isLogon=true; max-age=" + lifeTimeOfCookie;
     } else {
+      document.cookie = "userID= ; max-age=0";
       document.cookie = "userEmail= ; max-age=0";
       document.cookie = "isLogon=false; max-age=0";
     }
   };
 
-  const setStateBasedOnCookies = () =>{
-    
-  }
+  const setUserIDFromUserEmail = (userEmail: string) => {
+    fetch(GetUserIdURI + userEmail)
+      .then((res) => res.json())
+      .then((result) => {
+        setUserID(result.userID);
+      });
+  };
 
-  useEffect(() => {
-    const splittedCookies: string[] = document.cookie.split("; ");
+  const setUserEmailFromUserID = (userID: string) => {
+    fetch(GetUserEmailURI + userID)
+      .then((res) => res.json())
+      .then((result) => {
+        setState({ userEmail: result.userEmail, isLogon: state.isLogon });
+      });
+  };
+
+  const settingStateBasedOnCookies = () => {
     let tempUserEmail: string = "";
+    let tempUserID: string = "";
     splittedCookies.forEach((cookie) => {
+      if (cookie.startsWith("userId=")) {
+        tempUserID = cookie.split("=").pop()!;
+        setUserEmailFromUserID(tempUserID);
+      }
       if (cookie.startsWith("userEmail=")) {
         tempUserEmail = cookie.split("=").pop()!;
       }
@@ -37,14 +61,11 @@ export function FMenu() {
         setState({ userEmail: tempUserEmail, isLogon: true });
       }
     });
+  };
 
-    // fetch(UserLoginInfoURI)
-    //   .then((res) => res.json())
-    //   .then((result) => {
-    //     setState({ userEmail: result.userEmail, isLogon: result.isLogon });
-    //   });
-    //.then(() => console.log(document.cookie));
-  }, [state.userEmail]);
+  useEffect(() => {
+    settingStateBasedOnCookies();
+  }, [state, settingStateBasedOnCookies()]);
 
   return (
     <Router>
@@ -142,7 +163,6 @@ export function FMenu() {
             path="/Login"
             element={<Login handleToUpdate={handleToLogin} />}
           />
-          {/* <Route path="/Login" render = {<Login handleToUpdate = {handleToUpdate}} /> */}
           <Route path="/Register" element={<Register />} />
         </Routes>
       </div>
