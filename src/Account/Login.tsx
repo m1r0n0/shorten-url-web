@@ -1,93 +1,89 @@
-import React, { Component } from "react";
-import Cmenu from "../Cmenu";
+import React, { Component, useState } from "react";
+import { FMenu } from "../FMenu";
 import { API, ACCOUNT, LOGIN } from "../JS/routeConstants";
 
-export default class Login extends Component {
-  public state = {
+interface LoginProps {
+  handleToUpdate: (userEmail: string, isLogon: boolean) => void;
+}
+
+export const Login: React.FC<LoginProps> = ({ handleToUpdate, ...rest }) => {
+  const [state, setState] = useState({
     email: "",
     password: "",
     rememberMe: false,
-  };
+  });
 
-  //public handleToUpdate = { userEmail: "", isLogon: false };
+  const LoginURI: string = `${API}/${ACCOUNT}/${LOGIN}`;
 
-  private LoginURI: string = `${API}/${ACCOUNT}/${LOGIN}`;
-
-  render() {
-    const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
-      event.preventDefault();
-      const {handleToUpdate} = this.props
-
-      fetch(this.LoginURI, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(this.state),
-        credentials: "include",
+  const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
+    fetch(LoginURI, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(state),
+      credentials: "include",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not OK");
+        } else {
+          return response.json();
+        }
       })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not OK");
-          } else {
-            return response.json();
-          }
-        })
-        .catch((error) => {
-          console.error(
-            "There has been a problem with your fetch operation:",
-            error
-          );
-        })
-        .then((res) => {
-          console.log(res);
-          handleToUpdate(res)
-        });
+      .catch((error) => {
+        console.error(
+          "There has been a problem with your fetch operation:",
+          error
+        );
+      })
+      .then((res) => {
+        console.log(res);
+        handleToUpdate(res.email, res.rememberMe);
+      });
 
-      console.log(this.state);
-    };
+    //console.log(state);
+  };
+  //var handleToUpdate = this.props.handleToUpdate;
 
-    //var handleToUpdate = this.props.handleToUpdate;
-
-    return (
+  return (
+    <div>
+      <h2> Enter the app</h2>
       <div>
-        <h2> Enter the app</h2>
-        <div>
-          <label htmlFor="email">Email</label> <br />
-          <input
-            value={this.state.email}
-            onChange={(event) =>
-              this.setState({ ...this.state, email: event.target.value })
-            }
-            type="text"
-            name="email"
-            id="email"
-          />
-        </div>
-        <div>
-          <label htmlFor="password"></label>Password <br />
-          <input
-            onChange={(event) =>
-              this.setState({ ...this.state, password: event.target.value })
-            }
-            type="password"
-            name="password"
-            id="password"
-          />
-        </div>
-        <div>
-          <label htmlFor="rememberMe">Remember me?</label> <br />
-          <input
-            onChange={(event) =>
-              this.setState({ ...this.state, rememberMe: event.target.checked })
-            }
-            type="checkbox"
-            name="rememberMe"
-            id="rememberMe"
-          />
-        </div>
-        <div>
-          <input type="button" value="Log in" onClick={handleSubmit} />
-        </div>
+        <label htmlFor="email">Email</label> <br />
+        <input
+          value={state.email}
+          onChange={(event) =>
+            setState({ ...state, email: event.target.value })
+          }
+          type="text"
+          name="email"
+          id="email"
+        />
       </div>
-    );
-  }
-}
+      <div>
+        <label htmlFor="password"></label>Password <br />
+        <input
+          onChange={(event) =>
+            setState({ ...state, password: event.target.value })
+          }
+          type="password"
+          name="password"
+          id="password"
+        />
+      </div>
+      <div>
+        <label htmlFor="rememberMe">Remember me?</label> <br />
+        <input
+          onChange={(event) =>
+            setState({ ...state, rememberMe: event.target.checked })
+          }
+          type="checkbox"
+          name="rememberMe"
+          id="rememberMe"
+        />
+      </div>
+      <div>
+        <input type="button" value="Log in" onClick={handleSubmit} />
+      </div>
+    </div>
+  );
+};
