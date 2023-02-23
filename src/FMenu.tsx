@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Home from "./Home";
 import CreateLink from "./Shorten/CreateLink";
@@ -7,14 +7,15 @@ import { Login } from "./Account/Login";
 import { Register } from "./Account/Register";
 import { API, ACCOUNT, GET_USER_ID, GET_USER_EMAIL } from "./JS/routeConstants";
 import { lifeTimeOfCookie } from "./JS/constants";
+import { UserIDContext } from "./App";
 
 export function FMenu() {
   const GetUserIdURI: string = `${API}/${ACCOUNT}/${GET_USER_ID}?userEmail=`;
   const GetUserEmailURI: string = `${API}/${ACCOUNT}/${GET_USER_EMAIL}?userID=`;
   const [state, setState] = useState({ userEmail: "", isLogon: false });
-  //const [userID, setUserID] = useState("");
   const splittedCookies: string[] = document.cookie.split("; ");
-  var userID: string = "";
+  //var userID: string = "";
+  const { userID, setUserID } = useContext(UserIDContext);
 
   const handleToLogin = (userEmail: string, rememberMe: boolean) => {
     setState({ userEmail: userEmail, isLogon: true });
@@ -30,11 +31,8 @@ export function FMenu() {
       fetch(GetUserIdURI + userEmail)
         .then((res) => res.json())
         .then((result) => {
-          userID = result.userID;
-          setUserCookies(userID);
-        })
-        .then(() => {
-          console.log("UserID =" + userID);
+          setUserID(result.userID);
+          setUserCookies(String(result.userID));
         });
     }
   };
@@ -65,7 +63,7 @@ export function FMenu() {
     splittedCookies.forEach((cookie) => {
       if (cookie.startsWith("userID=") && tempIsLogon) {
         tempUserID = cookie.split("=").pop()!;
-        if (tempUserID !== "") setUserEmailFromUserID(tempUserID);
+        if (!(tempUserID === undefined)) setUserEmailFromUserID(tempUserID);
       }
     });
   };

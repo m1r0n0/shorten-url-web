@@ -10,15 +10,15 @@ import "./App.css";
 import { FMenu } from "./FMenu";
 
 interface IUserIDContextType {
-  userID: undefined;
+  userID: string | undefined;
   setUserID: Dispatch<SetStateAction<undefined>>;
 }
 
 const defaultUserIDContextValue = {
-  setUserID: () => undefined,
   userID: undefined,
+  setUserID: () => undefined,
 };
-const UserIDContext = createContext<IUserIDContextType>(
+export const UserIDContext = createContext<IUserIDContextType>(
   defaultUserIDContextValue
 );
 
@@ -27,15 +27,14 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        {/* <UserIDContext.Provider
+        <UserIDContext.Provider
           value={{
             userID,
             setUserID,
           }}
         >
-          
-        </UserIDContext.Provider> */}
-        <FMenu />
+          <FMenu />
+        </UserIDContext.Provider>
       </header>
     </div>
   );
