@@ -3,10 +3,13 @@ import { FMenu } from "../FMenu";
 import { API, ACCOUNT, LOGIN } from "../JS/routeConstants";
 
 interface LoginProps {
-  handleToUpdate: (userEmail: string, isLogon: boolean) => void;
+  handleToLogin: (userEmail: string, isLogon: boolean) => void;
 }
 
-export const Login: React.FC<LoginProps> = ({ handleToUpdate, ...rest }) => {
+export const Login: React.FC<LoginProps> = ({
+  handleToLogin: handleToLogin,
+  ...rest
+}) => {
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -36,13 +39,9 @@ export const Login: React.FC<LoginProps> = ({ handleToUpdate, ...rest }) => {
         );
       })
       .then((res) => {
-        console.log(res);
-        handleToUpdate(res.email, res.rememberMe);
+        handleToLogin(res.email, res.rememberMe);
       });
-
-    //console.log(state);
   };
-  //var handleToUpdate = this.props.handleToUpdate;
 
   return (
     <div>

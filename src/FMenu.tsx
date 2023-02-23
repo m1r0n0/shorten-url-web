@@ -12,60 +12,71 @@ export function FMenu() {
   const GetUserIdURI: string = `${API}/${ACCOUNT}/${GET_USER_ID}?userEmail=`;
   const GetUserEmailURI: string = `${API}/${ACCOUNT}/${GET_USER_EMAIL}?userID=`;
   const [state, setState] = useState({ userEmail: "", isLogon: false });
-  const [userID, setUserID] = useState();
+  //const [userID, setUserID] = useState("");
   const splittedCookies: string[] = document.cookie.split("; ");
+  var userID: string = "";
 
   const handleToLogin = (userEmail: string, rememberMe: boolean) => {
     setState({ userEmail: userEmail, isLogon: true });
     if (rememberMe) {
-      setUserIDFromUserEmail(state.userEmail);
-      document.cookie = "userID" + userID + "; max-age=" + lifeTimeOfCookie;
-      document.cookie =
-        "userEmail=" + userEmail + "; max-age=" + lifeTimeOfCookie;
-      document.cookie = "isLogon=true; max-age=" + lifeTimeOfCookie;
+      setCookiesAndUserIDFromUserEmail(userEmail);
     } else {
-      document.cookie = "userID= ; max-age=0";
-      document.cookie = "userEmail= ; max-age=0";
-      document.cookie = "isLogon=false; max-age=0";
+      deleteUserCookies();
     }
   };
 
-  const setUserIDFromUserEmail = (userEmail: string) => {
-    fetch(GetUserIdURI + userEmail)
-      .then((res) => res.json())
-      .then((result) => {
-        setUserID(result.userID);
-      });
+  const setCookiesAndUserIDFromUserEmail = (userEmail: string) => {
+    if (userEmail !== "") {
+      fetch(GetUserIdURI + userEmail)
+        .then((res) => res.json())
+        .then((result) => {
+          userID = result.userID;
+          setUserCookies(userID);
+        })
+        .then(() => {
+          console.log("UserID =" + userID);
+        });
+    }
+  };
+
+  const setUserCookies = (userID: string) => {
+    document.cookie = "userID=" + userID + "; max-age=" + lifeTimeOfCookie;
+    document.cookie = "isLogon=true; max-age=" + lifeTimeOfCookie;
+  };
+
+  const deleteUserCookies = () => {
+    document.cookie = "userID= ; max-age=0";
+    document.cookie = "isLogon=false; max-age=0";
+  };
+
+  useEffect(() => {
+    settingStateBasedOnCookies();
+  }, [userID, state.userEmail]);
+
+  const settingStateBasedOnCookies = () => {
+    let tempUserID: string = "";
+    let tempIsLogon: boolean = false;
+
+    splittedCookies.forEach((cookie) => {
+      if (cookie === "isLogon=true") {
+        tempIsLogon = true;
+      }
+    });
+    splittedCookies.forEach((cookie) => {
+      if (cookie.startsWith("userID=") && tempIsLogon) {
+        tempUserID = cookie.split("=").pop()!;
+        if (tempUserID !== "") setUserEmailFromUserID(tempUserID);
+      }
+    });
   };
 
   const setUserEmailFromUserID = (userID: string) => {
     fetch(GetUserEmailURI + userID)
       .then((res) => res.json())
       .then((result) => {
-        setState({ userEmail: result.userEmail, isLogon: state.isLogon });
+        setState({ userEmail: result.userEmail, isLogon: true });
       });
   };
-
-  const settingStateBasedOnCookies = () => {
-    let tempUserEmail: string = "";
-    let tempUserID: string = "";
-    splittedCookies.forEach((cookie) => {
-      if (cookie.startsWith("userId=")) {
-        tempUserID = cookie.split("=").pop()!;
-        setUserEmailFromUserID(tempUserID);
-      }
-      if (cookie.startsWith("userEmail=")) {
-        tempUserEmail = cookie.split("=").pop()!;
-      }
-      if (cookie === "isLogon=true") {
-        setState({ userEmail: tempUserEmail, isLogon: true });
-      }
-    });
-  };
-
-  useEffect(() => {
-    settingStateBasedOnCookies();
-  }, [state, settingStateBasedOnCookies()]);
 
   return (
     <Router>
@@ -161,7 +172,7 @@ export function FMenu() {
           <Route path="/MyLinks" element={<MyLinks />} />
           <Route
             path="/Login"
-            element={<Login handleToUpdate={handleToLogin} />}
+            element={<Login handleToLogin={handleToLogin} />}
           />
           <Route path="/Register" element={<Register />} />
         </Routes>
