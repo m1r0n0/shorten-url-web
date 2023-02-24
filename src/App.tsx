@@ -11,7 +11,7 @@ import { FMenu } from "./FMenu";
 
 interface IUserIDContextType {
   userID: string | undefined;
-  setUserID: Dispatch<SetStateAction<undefined>>;
+  setUserID: Dispatch<SetStateAction<undefined>> | Dispatch<SetStateAction<string>>;
 }
 
 const defaultUserIDContextValue = {

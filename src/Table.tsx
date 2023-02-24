@@ -42,20 +42,20 @@ export default function Table({ theadData, tbodyData }: any) {
                   IsThereNeededCheckBox(row[key]) ? (
                     <td key={row[key]}> {row[key]}</td>
                   ) : (
-                    <td>
+                    <td key={row[key]}>
                       <input
                         // className="toogle"
                         type="checkbox"
-                        checked={row[key]}
+                        defaultChecked={row[key]}
                       ></input>
                     </td>
                   )
                 ) : (
-                  <td>
+                  <td key={row[key]}>
                     <input
                       // className="toogle"
                       type="checkbox"
-                      checked={row[key]}
+                      defaultChecked={row[key]}
                     ></input>
                   </td>
                 );

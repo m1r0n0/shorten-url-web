@@ -4,4 +4,4 @@ export const GET_USER_ID =  "GetUserID";
 export const GET_USER_EMAIL = "GetUserEmail";
 export const LOGIN = "Login";
 export const SHORTEN = "Shorten";
-export const GET_ALL_LINKS = "GetAllLinks";
+export const GET_USER_LINKS = "GetLinksForCurrentUser";

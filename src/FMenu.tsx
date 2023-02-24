@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { SetStateAction, useContext, useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Home from "./Home";
-import CreateLink from "./Shorten/CreateLink";
-import MyLinks from "./Shorten/MyLinks";
+import { CreateLink } from "./Shorten/CreateLink";
+import { MyLinks } from "./Shorten/MyLinks";
 import { Login } from "./Account/Login";
 import { Register } from "./Account/Register";
 import { API, ACCOUNT, GET_USER_ID, GET_USER_EMAIL } from "./JS/routeConstants";
@@ -10,29 +10,31 @@ import { lifeTimeOfCookie } from "./JS/constants";
 import { UserIDContext } from "./App";
 
 export function FMenu() {
+  const { userID, setUserID } = useContext(UserIDContext);
   const GetUserIdURI: string = `${API}/${ACCOUNT}/${GET_USER_ID}?userEmail=`;
   const GetUserEmailURI: string = `${API}/${ACCOUNT}/${GET_USER_EMAIL}?userID=`;
   const [state, setState] = useState({ userEmail: "", isLogon: false });
   const splittedCookies: string[] = document.cookie.split("; ");
-  //var userID: string = "";
-  const { userID, setUserID } = useContext(UserIDContext);
 
   const handleToLogin = (userEmail: string, rememberMe: boolean) => {
     setState({ userEmail: userEmail, isLogon: true });
-    if (rememberMe) {
-      setCookiesAndUserIDFromUserEmail(userEmail);
-    } else {
-      deleteUserCookies();
-    }
+    setCookiesAndUserIDFromUserEmail(userEmail, rememberMe);
   };
 
-  const setCookiesAndUserIDFromUserEmail = (userEmail: string) => {
+  const setCookiesAndUserIDFromUserEmail = (
+    userEmail: string,
+    rememberMe: boolean
+  ) => {
     if (userEmail !== "") {
       fetch(GetUserIdURI + userEmail)
         .then((res) => res.json())
         .then((result) => {
           setUserID(result.userID);
-          setUserCookies(String(result.userID));
+          if (rememberMe) {
+            setUserCookies(String(result.userID));
+          } else {
+            deleteUserCookies();
+          }
         });
     }
   };
@@ -52,7 +54,7 @@ export function FMenu() {
   }, [userID, state.userEmail]);
 
   const settingStateBasedOnCookies = () => {
-    let tempUserID: string = "";
+    let tempUserID: string | SetStateAction<string> = "";
     let tempIsLogon: boolean = false;
 
     splittedCookies.forEach((cookie) => {
@@ -63,13 +65,14 @@ export function FMenu() {
     splittedCookies.forEach((cookie) => {
       if (cookie.startsWith("userID=") && tempIsLogon) {
         tempUserID = cookie.split("=").pop()!;
+        //setUserID(tempUserID);
         if (!(tempUserID === undefined)) setUserEmailFromUserID(tempUserID);
       }
     });
   };
 
-  const setUserEmailFromUserID = (userID: string) => {
-    fetch(GetUserEmailURI + userID)
+  const setUserEmailFromUserID = (tempUserID: string) => {
+    fetch(GetUserEmailURI + tempUserID)
       .then((res) => res.json())
       .then((result) => {
         setState({ userEmail: result.userEmail, isLogon: true });
