@@ -1,6 +1,7 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import { FMenu } from "../FMenu";
 import { API, ACCOUNT, LOGIN } from "../JS/routeConstants";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 
 interface LoginProps {
   handleToLogin: (userEmail: string, isLogon: boolean) => void;
@@ -81,7 +82,10 @@ export const Login: React.FC<LoginProps> = ({
         />
       </div>
       <div>
-        <input type="button" value="Log in" onClick={handleSubmit} />
+        <Link to="/">
+          <input type="button" value="Log in" onClick={handleSubmit} />
+        </Link>
+        <Link to="/"></Link>
       </div>
     </div>
   );

@@ -16,7 +16,6 @@ export const MyLinks = () => {
 
   const getHeadings = () => {
     const { items } = state;
-    console.log(items);
     return Object.keys(items[0]);
   };
 
@@ -43,7 +42,6 @@ export const MyLinks = () => {
       );
   }, []);
 
-  //var table = Object.keys(items);
   if (!isLoaded) {
     return <p>Loading...</p>;
   } else {

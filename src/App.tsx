@@ -11,7 +11,7 @@ import { FMenu } from "./FMenu";
 
 interface IUserIDContextType {
   userID: string | undefined;
-  setUserID: Dispatch<SetStateAction<undefined>> | Dispatch<SetStateAction<string>>;
+  setUserID: Dispatch<SetStateAction<string | undefined>>;
 }
 
 const defaultUserIDContextValue = {
@@ -23,7 +23,7 @@ export const UserIDContext = createContext<IUserIDContextType>(
 );
 
 function App() {
-  const [userID, setUserID] = useState();
+  const [userID, setUserID] = useState<string>();
   return (
     <div className="App">
       <header className="App-header">

@@ -1,14 +1,51 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
+import { API, ACCOUNT, REGISTER } from "../JS/routeConstants";
 
-export function Register() {
-  const [state, setState] = useState({ email: "", password: "", year: "0" });
+interface LoginProps {
+  handleToLogin: (userEmail: string, isLogon: boolean) => void;
+}
+
+export const Register: React.FC<LoginProps> = ({
+  handleToLogin: handleToLogin,
+  ...rest
+}) => {
+  const [state, setState] = useState({
+    email: "",
+    password: "",
+    year: "",
+  });
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [showIncorrectInputDisclaimer, setShowIncorrectInputDisclaimer] =
+    useState(false);
+  const LoginURI: string = `${API}/${ACCOUNT}/${REGISTER}`;
 
-  const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
+  const handleRegister: React.MouseEventHandler<HTMLInputElement> = (event) => {
     if (state.password === passwordConfirm) {
-      console.log(state);
+      console.log(JSON.stringify(state));
+      fetch(LoginURI, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(state),
+        credentials: "include",
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not OK");
+          } else {
+            return response.json();
+          }
+        })
+        .catch((error) => {
+          console.error(
+            "There has been a problem with your fetch operation:",
+            error
+          );
+        })
+        .then((res) => {
+          handleToLogin(res.email, true);
+        });
     } else {
-      console.log("Passwords don't match");
+      setShowIncorrectInputDisclaimer(true);
     }
   };
 
@@ -62,7 +99,7 @@ export function Register() {
           <label htmlFor="PasswordConfirm">Password Confirm</label>
           <br />
           <input
-            onChange={(event) => (setPasswordConfirm(event.target.value))}
+            onChange={(event) => setPasswordConfirm(event.target.value)}
             type="password"
             name="passwordConfirm"
             id="passwordConfirm"
@@ -70,9 +107,18 @@ export function Register() {
         </div>
         <br></br>
         <div>
-          <input type="button" value="Register" onClick={handleSubmit} />
+          <input type="button" value="Register" onClick={handleRegister} />
+        </div>
+        <div>
+          {showIncorrectInputDisclaimer ? (
+            <div>
+              <p>Passwords don't match!</p>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       </form>
     </div>
   );
-}
+};

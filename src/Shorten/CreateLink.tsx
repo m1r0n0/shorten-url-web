@@ -1,71 +1,80 @@
 import React, { useState, useContext } from "react";
+import { addUrl } from "../API";
 import { UserIDContext } from "../App";
+import { API, CREATE_LINK, SHORTEN } from "../JS/routeConstants";
 
 export const CreateLink = () => {
+  const CreateLinkURI: string = `${API}/${SHORTEN}/${CREATE_LINK}`;
   const { userID, setUserID } = useContext(UserIDContext);
   const [state, setState] = useState({
     fullUrl: "",
     isPrivate: false,
     userId: userID,
   });
+  const [shortenedLink, setShortenedLink] = useState("");
+
+  const isAuthorized = (): boolean => {
+    if (userID === undefined) {
+      return false;
+    } else {
+      return true;
+    }
+  };
 
   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
-    fetch("https://localhost:7161/api/Shorten/CreateLink", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(state),
-    }).then(() => {
-      console.log(JSON.stringify(state));
+    addUrl(state).then((res) => {
+      setShortenedLink(res.shortUrl);
     });
   };
   return (
     <div>
       <h1>Create your Short URL!</h1>
       <div className="row">
-        <div className="col-md-4">
-          <div asp-validation-summary="ModelOnly"></div>
-          <div>
-            <label htmlFor="FullUrl">Your Full URL: </label>
-            <input
-              value={state.fullUrl}
-              onChange={(event) =>
-                setState({
-                  ...state,
-                  fullUrl: event.target.value,
-                })
-              }
-              type="text"
-              name="fullUrl"
-              id="fullUrl"
-            />
-            <span asp-validation-for="FullUrl" className="text-danger"></span>
-            @if (User.Identity.IsAuthenticated)
-            {
-              <div>
-                <label htmlFor="IsPrivate">Private link?</label> <br />
-                <input
-                  onChange={(event) =>
-                    setState({
-                      ...state,
-                      isPrivate: event.target.checked,
-                    })
-                  }
-                  type="checkbox"
-                  name="isPrivate"
-                  id="isPrivate"
-                />
-              </div>
+        {/* <div className="col-md-4"> */}
+        <div>
+          <label htmlFor="FullUrl">Your Full URL: </label>
+          <input
+            value={state.fullUrl}
+            onChange={(event) =>
+              setState({
+                ...state,
+                fullUrl: event.target.value,
+              })
             }
-          </div>
-          <div>
-            <input type="button" value="Create" onClick={handleSubmit} />
-          </div>
+            type="text"
+            name="fullUrl"
+            id="fullUrl"
+          />
+          <span asp-validation-for="FullUrl" className="text-danger"></span>
           <br />
-          <div>
-            <h3> Your shortened Url: @Model?.ShortUrl</h3>
-            <br />
-          </div>
+          {isAuthorized() ? (
+            <div>
+              <label htmlFor="IsPrivate">Private link?</label> <br />
+              <input
+                onChange={(event) =>
+                  setState({
+                    ...state,
+                    isPrivate: event.target.checked,
+                  })
+                }
+                type="checkbox"
+                name="isPrivate"
+                id="isPrivate"
+              />
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
+        <div>
+          <input type="button" value="Create" onClick={handleSubmit} />
+        </div>
+        <br />
+        <div>
+          <h3> Your shortened Url: {shortenedLink}</h3>
+          <br />
+        </div>
+        {/* </div> */}
       </div>
     </div>
   );

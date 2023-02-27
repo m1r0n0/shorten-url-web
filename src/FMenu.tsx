@@ -1,4 +1,4 @@
-import React, { SetStateAction, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Home from "./Home";
 import { CreateLink } from "./Shorten/CreateLink";
@@ -54,7 +54,6 @@ export function FMenu() {
   }, [userID, state.userEmail]);
 
   const settingStateBasedOnCookies = () => {
-    let tempUserID: string | SetStateAction<string> = "";
     let tempIsLogon: boolean = false;
 
     splittedCookies.forEach((cookie) => {
@@ -64,8 +63,8 @@ export function FMenu() {
     });
     splittedCookies.forEach((cookie) => {
       if (cookie.startsWith("userID=") && tempIsLogon) {
-        tempUserID = cookie.split("=").pop()!;
-        //setUserID(tempUserID);
+        let tempUserID = cookie.split("=").pop()!;
+        setUserID(tempUserID);
         if (!(tempUserID === undefined)) setUserEmailFromUserID(tempUserID);
       }
     });
@@ -77,6 +76,14 @@ export function FMenu() {
       .then((result) => {
         setState({ userEmail: result.userEmail, isLogon: true });
       });
+  };
+
+  const proceedLogOut:
+    | React.MouseEventHandler<HTMLInputElement>
+    | undefined = () => {
+    deleteUserCookies();
+    setState({ userEmail: "", isLogon: false });
+    setUserID(undefined);
   };
 
   return (
@@ -131,37 +138,19 @@ export function FMenu() {
                 </li>
                 <li className="nav-item">
                   {state.isLogon ? (
-                    <input
-                      className="btn-primary"
-                      type="submit"
-                      value="Logout"
-                    />
+                    <Link to="/">
+                      <input
+                        className="btn-primary"
+                        type="submit"
+                        value="Logout"
+                        onClick={proceedLogOut}
+                      />
+                    </Link>
                   ) : (
                     <Link to="/Register" className="navi-link">
                       Register
                     </Link>
                   )}
-
-                  {/* @if (User.Identity.IsAuthenticated)
-            {
-              <form
-                method="post"
-                asp-controller="Account"
-                asp-action="Logout"
-              >
-                <input
-                  className="btn-primary"
-                  type="submit"
-                  value="Logout"
-                />
-              </form>
-            }
-            else
-            {
-              <Link to="/Register" className="navi-link">
-                Register
-              </Link>
-            } */}
                 </li>
               </ul>
             </div>
@@ -175,7 +164,7 @@ export function FMenu() {
             path="/Login"
             element={<Login handleToLogin={handleToLogin} />}
           />
-          <Route path="/Register" element={<Register />} />
+          <Route path="/Register" element={<Register handleToLogin={handleToLogin}/>} />
         </Routes>
       </div>
     </Router>
