@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { API, ACCOUNT, REGISTER } from "../JS/routeConstants";
+import { Link, Navigate } from "react-router-dom";
+import { proceedRegister } from "../../API";
+import { IncorrectInputDisclaimer } from "./IncorrectInputDisclaimer/IncorrectInputDisclaimer";
+import { NoMatchingPasswordsDisclaimer } from "./NoMatchingPasswordsDisclaimer";
 
 interface LoginProps {
   handleToLogin: (userEmail: string, isLogon: boolean) => void;
@@ -15,37 +18,38 @@ export const Register: React.FC<LoginProps> = ({
     year: "",
   });
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [
+    showNoMatchingPasswordsDisclaimer,
+    setShowNoMatchingPasswordsDisclaimer,
+  ] = useState(false);
   const [showIncorrectInputDisclaimer, setShowIncorrectInputDisclaimer] =
     useState(false);
-  const LoginURI: string = `${API}/${ACCOUNT}/${REGISTER}`;
+  const [isReadyToRedirect, setIsReadyToRedirect] = useState(false);
 
-  const handleRegister: React.MouseEventHandler<HTMLInputElement> = (event) => {
+  const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
+    var properState = {
+      email: state.email,
+      password: state.password,
+      year: state.year.slice(0, 4),
+    };
     if (state.password === passwordConfirm) {
-      console.log(JSON.stringify(state));
-      fetch(LoginURI, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(state),
-        credentials: "include",
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not OK");
-          } else {
-            return response.json();
-          }
-        })
+      setShowNoMatchingPasswordsDisclaimer(false);
+      proceedRegister(properState)
         .catch((error) => {
           console.error(
             "There has been a problem with your fetch operation:",
             error
           );
+          setShowIncorrectInputDisclaimer(true);
         })
         .then((res) => {
           handleToLogin(res.email, true);
+          setIsReadyToRedirect(true);
+          setShowIncorrectInputDisclaimer(false);
+          setShowNoMatchingPasswordsDisclaimer(false);
         });
     } else {
-      setShowIncorrectInputDisclaimer(true);
+      setShowNoMatchingPasswordsDisclaimer(true);
     }
   };
 
@@ -68,7 +72,7 @@ export const Register: React.FC<LoginProps> = ({
           />
         </div>
         <div>
-          <label htmlFor="Year">Year of birth</label>
+          <label htmlFor="Year">Date of birth</label>
           <br />
           <input
             type="date"
@@ -79,7 +83,10 @@ export const Register: React.FC<LoginProps> = ({
             asp-for="Year"
             value={state.year}
             onChange={(event) =>
-              setState({ ...state, year: event.target.value })
+              setState({
+                ...state,
+                year: event.target.value,
+              })
             }
           />
         </div>
@@ -107,16 +114,21 @@ export const Register: React.FC<LoginProps> = ({
         </div>
         <br></br>
         <div>
-          <input type="button" value="Register" onClick={handleRegister} />
+          {isReadyToRedirect ? (
+            <Navigate to="/" />
+          ) : (
+            <input type="button" value="Register" onClick={handleSubmit} />
+          )}
         </div>
         <div>
-          {showIncorrectInputDisclaimer ? (
-            <div>
-              <p>Passwords don't match!</p>
-            </div>
+          {showNoMatchingPasswordsDisclaimer ? (
+            <NoMatchingPasswordsDisclaimer />
           ) : (
             <></>
           )}
+        </div>
+        <div>
+          {showIncorrectInputDisclaimer ? <IncorrectInputDisclaimer /> : <></>}
         </div>
       </form>
     </div>

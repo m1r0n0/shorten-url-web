@@ -1,8 +1,8 @@
 import React, { Component, useContext, useEffect, useState } from "react";
-import Table from "../Table";
-import { FMenu } from "../FMenu";
-import { API, SHORTEN, GET_USER_LINKS } from "../JS/routeConstants";
-import { UserIDContext } from "../App";
+import Table from "./Table";
+import { FMenu } from "../../FMenu";
+import { API, SHORTEN, GET_USER_LINKS } from "../../JS/routeConstants";
+import { UserIDContext } from "../../App";
 
 export const MyLinks = () => {
   const { userID, setUserID } = useContext(UserIDContext);
@@ -17,6 +17,14 @@ export const MyLinks = () => {
   const getHeadings = () => {
     const { items } = state;
     return Object.keys(items[0]);
+  };
+
+  const isTBodyEmpty = () => {
+    if (items.length === 0 || items == null) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const getAllLinksURI: string = `${API}/${SHORTEN}/${GET_USER_LINKS}?userID=${userID}`;
@@ -48,7 +56,11 @@ export const MyLinks = () => {
     return (
       <div>
         <h1>My links</h1>
-        <Table theadData={getHeadings()} tbodyData={items} />
+        {isTBodyEmpty() ? (
+          <p>You haven't created any link yet!</p>
+        ) : (
+          <Table theadData={getHeadings()} tbodyData={items} />
+        )}
       </div>
     );
   }

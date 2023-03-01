@@ -1,7 +1,12 @@
-import React, { useState } from "react";
-import { FMenu } from "../FMenu";
-import { API, ACCOUNT, LOGIN } from "../JS/routeConstants";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link,
+  Navigate,
+} from "react-router-dom";
+import { proceedLogin } from "../../API";
 
 interface LoginProps {
   handleToLogin: (userEmail: string, isLogon: boolean) => void;
@@ -16,33 +21,18 @@ export const Login: React.FC<LoginProps> = ({
     password: "",
     rememberMe: false,
   });
-
-  const LoginURI: string = `${API}/${ACCOUNT}/${LOGIN}`;
+  const [isReadyToRedirect, setIsReadyToRedirect] = useState(false);
 
   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
-    fetch(LoginURI, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(state),
-      credentials: "include",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not OK");
-        } else {
-          return response.json();
-        }
-      })
-      .catch((error) => {
-        console.error(
-          "There has been a problem with your fetch operation:",
-          error
-        );
-      })
-      .then((res) => {
-        handleToLogin(res.email, res.rememberMe);
-      });
+    proceedLogin(state).then((res) => {
+      handleToLogin(res.email, res.rememberMe);
+      setIsReadyToRedirect(true);
+    });
   };
+
+  // useEffect(() => {
+  //   if(isReadyToRedirect)
+  // })
 
   return (
     <div>
@@ -82,10 +72,11 @@ export const Login: React.FC<LoginProps> = ({
         />
       </div>
       <div>
-        <Link to="/">
+        {isReadyToRedirect ? (
+          <Navigate to="/" />
+        ) : (
           <input type="button" value="Log in" onClick={handleSubmit} />
-        </Link>
-        <Link to="/"></Link>
+        )}
       </div>
     </div>
   );

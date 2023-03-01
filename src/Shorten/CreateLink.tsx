@@ -4,7 +4,6 @@ import { UserIDContext } from "../App";
 import { API, CREATE_LINK, SHORTEN } from "../JS/routeConstants";
 
 export const CreateLink = () => {
-  const CreateLinkURI: string = `${API}/${SHORTEN}/${CREATE_LINK}`;
   const { userID, setUserID } = useContext(UserIDContext);
   const [state, setState] = useState({
     fullUrl: "",
@@ -30,7 +29,6 @@ export const CreateLink = () => {
     <div>
       <h1>Create your Short URL!</h1>
       <div className="row">
-        {/* <div className="col-md-4"> */}
         <div>
           <label htmlFor="FullUrl">Your Full URL: </label>
           <input
@@ -74,7 +72,6 @@ export const CreateLink = () => {
           <h3> Your shortened Url: {shortenedLink}</h3>
           <br />
         </div>
-        {/* </div> */}
       </div>
     </div>
   );
