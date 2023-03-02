@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
-import { proceedRegister } from "../../API";
-import { IncorrectInputDisclaimer } from "./IncorrectInputDisclaimer/IncorrectInputDisclaimer";
-import { NoMatchingPasswordsDisclaimer } from "./NoMatchingPasswordsDisclaimer";
+import { Navigate } from "react-router-dom";
+import { proceedRegister } from "../../../../API";
+import IncorrectInputDisclaimer from "../IncorrectInputDisclaimer";
+import NoMatchingPasswordsDisclaimer from "../NoMatchingPasswordsDisclaimer";
 
 interface LoginProps {
   handleToLogin: (userEmail: string, isLogon: boolean) => void;
 }
 
-export const Register: React.FC<LoginProps> = ({
+export const RegisterForm: React.FC<LoginProps> = ({
   handleToLogin: handleToLogin,
   ...rest
 }) => {

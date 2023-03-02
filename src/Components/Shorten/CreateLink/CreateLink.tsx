@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
-import { addUrl } from "../API";
-import { UserIDContext } from "../App";
-import { API, CREATE_LINK, SHORTEN } from "../JS/routeConstants";
+import { addUrl } from "../../../API";
+import { UserIDContext } from "../../../App";
+import { API, CREATE_LINK, SHORTEN } from "../../../JS/routeConstants";
 
 export const CreateLink = () => {
   const { userID, setUserID } = useContext(UserIDContext);

@@ -1,18 +1,12 @@
-import React, { useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-  Navigate,
-} from "react-router-dom";
-import { proceedLogin } from "../../API";
+import React, { useState } from "react";
+import { BrowserRouter as Router, Navigate } from "react-router-dom";
+import { proceedLogin } from "../../../../API";
 
 interface LoginProps {
   handleToLogin: (userEmail: string, isLogon: boolean) => void;
 }
 
-export const Login: React.FC<LoginProps> = ({
+export const LoginForm: React.FC<LoginProps> = ({
   handleToLogin: handleToLogin,
   ...rest
 }) => {
@@ -29,10 +23,6 @@ export const Login: React.FC<LoginProps> = ({
       setIsReadyToRedirect(true);
     });
   };
-
-  // useEffect(() => {
-  //   if(isReadyToRedirect)
-  // })
 
   return (
     <div>

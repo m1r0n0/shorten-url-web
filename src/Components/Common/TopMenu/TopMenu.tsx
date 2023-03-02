@@ -6,16 +6,16 @@ import {
   Link,
   redirect,
 } from "react-router-dom";
-import Home from "./Home";
-import { CreateLink } from "./Shorten/CreateLink";
-import { MyLinks } from "./Shorten/MyLinks/MyLinks";
-import { Login } from "./Account/Login/Login";
-import { Register } from "./Account/Register/Register";
-import { lifeTimeOfCookie } from "./JS/constants";
-import { UserIDContext } from "./App";
-import { fetchUserEmail, fetchUserID } from "./API";
+import Home from "../HomePage/";
+import CreateLink from "../../Shorten/CreateLink";
+import { MyLinksPage } from "../../Shorten/MyLinks/MyLinksPage/MyLinksPage";
+import LoginForm from "../../Account/Login/LoginForm";
+import RegisterForm from "../../Account/Register/RegisterForm";
+import { lifeTimeOfCookie } from "../../../JS/constants";
+import { UserIDContext } from "../../../App";
+import { fetchUserEmail, fetchUserID } from "../../../API";
 
-export function FMenu() {
+export function TopMenu() {
   const { userID, setUserID } = useContext(UserIDContext);
 
   const [state, setState] = useState({ userEmail: "", isLogon: false });
@@ -161,14 +161,14 @@ export function FMenu() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/CreateLink" element={<CreateLink />} />
-          <Route path="/MyLinks" element={<MyLinks />} />
+          <Route path="/MyLinks" element={<MyLinksPage />} />
           <Route
             path="/Login"
-            element={<Login handleToLogin={handleToLogin} />}
+            element={<LoginForm handleToLogin={handleToLogin} />}
           />
           <Route
             path="/Register"
-            element={<Register handleToLogin={handleToLogin} />}
+            element={<RegisterForm handleToLogin={handleToLogin} />}
           />
         </Routes>
       </div>

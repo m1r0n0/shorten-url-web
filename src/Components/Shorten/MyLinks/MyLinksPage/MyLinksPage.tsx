@@ -1,11 +1,10 @@
-import React, { Component, useContext, useEffect, useState } from "react";
-import Table from "./Table";
-import { FMenu } from "../../FMenu";
-import { API, SHORTEN, GET_USER_LINKS } from "../../JS/routeConstants";
-import { UserIDContext } from "../../App";
+import { useContext, useEffect, useState } from "react";
+import Table from "../Table/";
+import { API, SHORTEN, GET_USER_LINKS } from "../../../../JS/routeConstants";
+import { UserIDContext } from "../../../../App";
 
-export const MyLinks = () => {
-  const { userID, setUserID } = useContext(UserIDContext);
+export const MyLinksPage = () => {
+  const { userID } = useContext(UserIDContext);
   const [state, setState] = useState({
     items: [],
     isLoaded: false,
