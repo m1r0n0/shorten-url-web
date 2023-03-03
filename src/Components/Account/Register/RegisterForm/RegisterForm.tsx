@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { proceedRegister } from "../../../../API";
-import IncorrectInputDisclaimer from "../IncorrectInputDisclaimer";
+import {
+  checkEmailExisting as checkingEmailExisting,
+  proceedRegister,
+} from "../../../../API";
+import ExistingEmailDisclaimer from "../ExistingEmailDisclaimer";
+import IncorrectRegisterInputDisclaimer from "../IncorrectRegisterInputDisclaimer";
 import NoMatchingPasswordsDisclaimer from "../NoMatchingPasswordsDisclaimer";
 
 interface LoginProps {
@@ -25,6 +29,8 @@ export const RegisterForm: React.FC<LoginProps> = ({
   const [showIncorrectInputDisclaimer, setShowIncorrectInputDisclaimer] =
     useState(false);
   const [isReadyToRedirect, setIsReadyToRedirect] = useState(false);
+  const [showExistingEmailDisclaimer, setShowExistingEmailDisclaimer] =
+    useState(false);
 
   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
     var properState = {
@@ -34,24 +40,35 @@ export const RegisterForm: React.FC<LoginProps> = ({
     };
     if (state.password === passwordConfirm) {
       setShowNoMatchingPasswordsDisclaimer(false);
-      proceedRegister(properState)
-        .catch((error) => {
-          console.error(
-            "There has been a problem with your fetch operation:",
-            error
-          );
-          setShowIncorrectInputDisclaimer(true);
-        })
-        .then((res) => {
-          handleToLogin(res.email, true);
-          setIsReadyToRedirect(true);
-          setShowIncorrectInputDisclaimer(false);
-          setShowNoMatchingPasswordsDisclaimer(false);
-        });
+      checkingEmailExisting(properState.email).then((res) => {
+        if (!res.isExist) {
+          proceedRegister(properState)
+            .catch(() => {
+              setShowIncorrectInputDisclaimer(true);
+            })
+            .then((res) => {
+              handleToLogin(res.email, true);
+              setIsReadyToRedirect(true);
+              setShowIncorrectInputDisclaimer(false);
+              setShowNoMatchingPasswordsDisclaimer(false);
+              setShowExistingEmailDisclaimer(false);
+            });
+        } else {
+          setShowExistingEmailDisclaimer(true);
+        }
+      });
     } else {
       setShowNoMatchingPasswordsDisclaimer(true);
     }
   };
+
+  // const checkEmailForExisting = (email: string) => {
+  //   let isExistingEmail: boolean | undefined = undefined;
+  //   checkingEmailExisting(email).then((res) => (isExistingEmail = res.isExist));
+  //   if (!(isExistingEmail === undefined)) {
+  //     return isExistingEmail;
+  //   }
+  // };
 
   return (
     <div>
@@ -123,12 +140,15 @@ export const RegisterForm: React.FC<LoginProps> = ({
         <div>
           {showNoMatchingPasswordsDisclaimer ? (
             <NoMatchingPasswordsDisclaimer />
-          ) : (
-            <></>
-          )}
+          ) : null}
         </div>
         <div>
-          {showIncorrectInputDisclaimer ? <IncorrectInputDisclaimer /> : <></>}
+          {showExistingEmailDisclaimer ? <ExistingEmailDisclaimer /> : null}
+        </div>
+        <div>
+          {showIncorrectInputDisclaimer ? (
+            <IncorrectRegisterInputDisclaimer />
+          ) : null}
         </div>
       </form>
     </div>

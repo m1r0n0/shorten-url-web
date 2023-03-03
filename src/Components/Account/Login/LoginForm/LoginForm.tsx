@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Navigate } from "react-router-dom";
 import { proceedLogin } from "../../../../API";
+import IncorrectLoginInputDisclaimer from "../IncorrectLoginInputDisclaimer/";
 
 interface LoginProps {
   handleToLogin: (userEmail: string, isLogon: boolean) => void;
@@ -16,12 +17,19 @@ export const LoginForm: React.FC<LoginProps> = ({
     rememberMe: false,
   });
   const [isReadyToRedirect, setIsReadyToRedirect] = useState(false);
+  const [showIncorrectInputDisclaimer, setShowIncorrectInputDisclaimer] =
+    useState(false);
 
   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
-    proceedLogin(state).then((res) => {
-      handleToLogin(res.email, res.rememberMe);
-      setIsReadyToRedirect(true);
-    });
+    proceedLogin(state)
+      .catch(() => {
+        setShowIncorrectInputDisclaimer(true);
+      })
+      .then((res) => {
+        handleToLogin(res.email, res.rememberMe);
+        setIsReadyToRedirect(true);
+        setShowIncorrectInputDisclaimer(false);
+      });
   };
 
   return (
@@ -67,6 +75,11 @@ export const LoginForm: React.FC<LoginProps> = ({
         ) : (
           <input type="button" value="Log in" onClick={handleSubmit} />
         )}
+      </div>
+      <div>
+        {showIncorrectInputDisclaimer ? (
+          <IncorrectLoginInputDisclaimer />
+        ) : null}
       </div>
     </div>
   );

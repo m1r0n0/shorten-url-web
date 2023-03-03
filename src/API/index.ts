@@ -1,11 +1,12 @@
 import { Link, RegisterUser, User } from "../Models"
-import { ACCOUNT, API, CREATE_LINK, GET_USER_EMAIL, GET_USER_ID, LOGIN, REGISTER, SHORTEN } from "../JS/routeConstants";
+import { ACCOUNT, API, CHECK_EMAIL_EXISTING, CREATE_LINK, GET_USER_EMAIL, GET_USER_ID, LOGIN, REGISTER, SHORTEN } from "../JS/routeConstants";
 
 const GetUserIdURI: string = `${API}/${ACCOUNT}/${GET_USER_ID}?userEmail=`;
 const GetUserEmailURI: string = `${API}/${ACCOUNT}/${GET_USER_EMAIL}?userID=`;
 const CreateLinkURI: string = `${API}/${SHORTEN}/${CREATE_LINK}`;
 const LoginURI: string = `${API}/${ACCOUNT}/${LOGIN}`;
 const RegisterURI: string = `${API}/${ACCOUNT}/${REGISTER}`;
+const CheckEmailExistingURI: string = `${API}/${ACCOUNT}/${CHECK_EMAIL_EXISTING}?email=`
 
 export const fetchUserID = (userEmail: string) => {
   return fetch(GetUserIdURI + userEmail).then((res) => res.json())
@@ -50,12 +51,6 @@ export const proceedLogin = (body: User) => {
         return response.json();
       }
     })
-    .catch((error) => {
-      console.error(
-        "There has been a problem with your fetch operation:",
-        error
-      );
-    })
 }
 
 export const proceedRegister = (body: RegisterUser) => {
@@ -71,6 +66,9 @@ export const proceedRegister = (body: RegisterUser) => {
       } else {
         return response.json();
       }
-    })
-    
+    })   
+}
+
+export const checkEmailExisting = (email: string) => {
+return fetch(CheckEmailExistingURI + email).then((response) => response.json())
 }

@@ -35,17 +35,22 @@ export function TopMenu() {
       fetchUserID(userEmail).then((result) => {
         setUserID(result.userID);
         if (rememberMe) {
-          setUserCookies(String(result.userID));
+          setLongTermUserCookies(String(result.userID));
         } else {
-          deleteUserCookies();
+          setOnCloseUserCookies(String(result.userID));
         }
       });
     }
   };
 
-  const setUserCookies = (userID: string) => {
+  const setLongTermUserCookies = (userID: string) => {
     document.cookie = "userID=" + userID + "; max-age=" + lifeTimeOfCookie;
     document.cookie = "isLogon=true; max-age=" + lifeTimeOfCookie;
+  };
+
+  const setOnCloseUserCookies = (userID: string) => {
+    document.cookie = "userID=" + userID;
+    document.cookie = "isLogon=true";
   };
 
   const deleteUserCookies = () => {

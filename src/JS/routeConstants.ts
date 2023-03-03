@@ -7,3 +7,4 @@ export const REGISTER = "Register";
 export const SHORTEN = "Shorten";
 export const GET_USER_LINKS = "GetLinksForCurrentUser";
 export const CREATE_LINK = "CreateLink"
+export const CHECK_EMAIL_EXISTING = "CheckEmailExisting"
