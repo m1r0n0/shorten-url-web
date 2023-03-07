@@ -1,28 +1,23 @@
-import React from "react";
+import { useContext } from "react";
+import { changeParticularLinkPrivacy } from "../../../../API";
+import { UserIDContext } from "../../../../App";
 
 export default function Table({ theadData, tbodyData }: any) {
+  const { userID } = useContext(UserIDContext);
+
   const IsThereNeededCheckBox = (value: any): boolean => {
     if (value === true || value === false) {
-      return false;
-    } else {
       return true;
+    } else {
+      return false;
     }
   };
 
-  // $(function () {
-  //   $(".toggle").change(function () {
-  //     var self = $(this);
-  //     var url = self.data("url");
-  //     var id = self.attr("id");
-  //     var value = self.prop("checked");
-
-  //     $.ajax({
-  //       url: url,
-  //       data: { id: id },
-  //       type: "PATCH",
-  //     });
-  //   });
-  // });
+  const ChangePrivacyOfLink = (row: any): any => {
+    changeParticularLinkPrivacy(row, userID).then(() => {
+      //window.location.reload();
+    });
+  };
 
   return (
     <table className="table text-white">
@@ -38,25 +33,26 @@ export default function Table({ theadData, tbodyData }: any) {
           return (
             <tr key={index}>
               {theadData.map((key: any, index: any) => {
+                //non-boolean (non-checkbox) row[key] always equals true
                 return row[key] ? (
                   IsThereNeededCheckBox(row[key]) ? (
-                    <td key={row[key]}> {row[key]}</td>
-                  ) : (
                     <td key={row[key]}>
                       <input
-                        // className="toogle"
                         type="checkbox"
                         defaultChecked={row[key]}
-                      ></input>
+                        onClick={() => ChangePrivacyOfLink(row)}
+                      />
                     </td>
+                  ) : (
+                    <td key={row[key]}> {row[key]}</td>
                   )
                 ) : (
                   <td key={row[key]}>
                     <input
-                      // className="toogle"
                       type="checkbox"
                       defaultChecked={row[key]}
-                    ></input>
+                      onClick={() => ChangePrivacyOfLink(row)}
+                    />
                   </td>
                 );
               })}

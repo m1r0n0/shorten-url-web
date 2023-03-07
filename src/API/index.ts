@@ -1,12 +1,14 @@
 import { Link, RegisterUser, User } from "../Models"
-import { ACCOUNT, API, CHECK_EMAIL_EXISTING, CREATE_LINK, GET_USER_EMAIL, GET_USER_ID, LOGIN, REGISTER, SHORTEN } from "../JS/routeConstants";
+import { ACCOUNT, API, CHANGE_LINK_PRIVACY, CHECK_EMAIL_EXISTING, CREATE_LINK, GET_USER_EMAIL, GET_USER_ID, GET_USER_LINKS, LOGIN, REGISTER, SHORTEN } from "../JS/routeConstants";
 
 const GetUserIdURI: string = `${API}/${ACCOUNT}/${GET_USER_ID}?userEmail=`;
 const GetUserEmailURI: string = `${API}/${ACCOUNT}/${GET_USER_EMAIL}?userID=`;
 const CreateLinkURI: string = `${API}/${SHORTEN}/${CREATE_LINK}`;
 const LoginURI: string = `${API}/${ACCOUNT}/${LOGIN}`;
 const RegisterURI: string = `${API}/${ACCOUNT}/${REGISTER}`;
-const CheckEmailExistingURI: string = `${API}/${ACCOUNT}/${CHECK_EMAIL_EXISTING}?email=`
+const CheckEmailExistingURI: string = `${API}/${ACCOUNT}/${CHECK_EMAIL_EXISTING}?email=`;
+const ChangeLinkPrivacyURI: string = `${API}/${SHORTEN}/${CHANGE_LINK_PRIVACY}?`;
+const GetUserLinksURI: string = `${API}/${SHORTEN}/${GET_USER_LINKS}?userID=`;
 
 export const fetchUserID = (userEmail: string) => {
   return fetch(GetUserIdURI + userEmail).then((res) => res.json())
@@ -72,3 +74,19 @@ export const proceedRegister = (body: RegisterUser) => {
 export const checkEmailExisting = (email: string) => {
 return fetch(CheckEmailExistingURI + email).then((response) => response.json())
 }
+
+export const getItemsForMyLinksTable = (userID: string) => {
+  return fetch(GetUserLinksURI + userID)
+  .then((res) => res.json())
+}
+
+export const changeParticularLinkPrivacy = (body: Link, userID: string | undefined) => {
+  body.shortUrl = body.shortUrl.split(".com/").pop()!;
+  let fetchLink: string = ChangeLinkPrivacyURI + "shortUrl=" + body.shortUrl + "&state=" + body.isPrivate;
+  if (!(userID === undefined)) fetchLink += "&userID=" + userID;
+  body = {...body, userId: userID}
+return fetch(fetchLink, {
+  method: "POST",
+});
+}
+

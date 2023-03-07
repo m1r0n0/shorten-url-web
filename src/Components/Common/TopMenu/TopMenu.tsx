@@ -60,7 +60,7 @@ export function TopMenu() {
 
   useEffect(() => {
     settingStateBasedOnCookies();
-  }, [userID, state.userEmail]);
+  }, [userID]);
 
   const settingStateBasedOnCookies = () => {
     let tempIsLogon: boolean = false;

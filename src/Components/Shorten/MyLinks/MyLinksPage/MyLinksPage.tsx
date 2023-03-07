@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import Table from "../Table/";
-import { API, SHORTEN, GET_USER_LINKS } from "../../../../JS/routeConstants";
 import { UserIDContext } from "../../../../App";
+import { getItemsForMyLinksTable } from "../../../../API";
 
 export const MyLinksPage = () => {
   const { userID } = useContext(UserIDContext);
@@ -26,12 +26,9 @@ export const MyLinksPage = () => {
     }
   };
 
-  const getAllLinksURI: string = `${API}/${SHORTEN}/${GET_USER_LINKS}?userID=${userID}`;
-
   useEffect(() => {
-    fetch(getAllLinksURI)
-      .then((res) => res.json())
-      .then(
+    if (!(userID === undefined)) {
+      getItemsForMyLinksTable(userID).then(
         (result) => {
           setState({
             items: result.urlList,
@@ -47,7 +44,8 @@ export const MyLinksPage = () => {
           });
         }
       );
-  }, []);
+    }
+  }, [userID, isLoaded]);
 
   if (!isLoaded) {
     return <p>Loading...</p>;

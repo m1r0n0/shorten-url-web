@@ -1,5 +1,6 @@
 export interface Link{
     fullUrl: string,
+    shortUrl: string,
     isPrivate: boolean,
     userId: string | undefined,
 }

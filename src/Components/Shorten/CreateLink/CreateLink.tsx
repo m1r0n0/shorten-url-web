@@ -4,13 +4,14 @@ import { UserIDContext } from "../../../App";
 import { API, CREATE_LINK, SHORTEN } from "../../../JS/routeConstants";
 
 export const CreateLink = () => {
-  const { userID, setUserID } = useContext(UserIDContext);
+  const { userID } = useContext(UserIDContext);
   const [state, setState] = useState({
     fullUrl: "",
     isPrivate: false,
     userId: userID,
+    shortUrl: "",
   });
-  const [shortenedLink, setShortenedLink] = useState("");
+  //const [shortenedLink, setShortenedLink] = useState("");
 
   const isAuthorized = (): boolean => {
     if (userID === undefined) {
@@ -22,9 +23,15 @@ export const CreateLink = () => {
 
   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
     addUrl(state).then((res) => {
-      setShortenedLink(res.shortUrl);
+      setState({
+        fullUrl: state.fullUrl,
+        isPrivate: state.isPrivate,
+        userId: userID,
+        shortUrl: res.shortUrl,
+      });
     });
   };
+
   return (
     <div>
       <h1>Create your Short URL!</h1>
@@ -69,7 +76,7 @@ export const CreateLink = () => {
         </div>
         <br />
         <div>
-          <h3> Your shortened Url: {shortenedLink}</h3>
+          <h3> Your shortened Url: {state.shortUrl}</h3>
           <br />
         </div>
       </div>
