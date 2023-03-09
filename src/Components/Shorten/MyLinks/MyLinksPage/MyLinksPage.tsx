@@ -5,21 +5,13 @@ import { getItemsForMyLinksTable } from "../../../../API";
 import { Navigate } from "react-router-dom";
 
 export const MyLinksPage = () => {
-  const { userID } = useContext(UserIDContext);
+  const { userID, isLogon } = useContext(UserIDContext);
   const [state, setState] = useState({
     items: [],
     isLoaded: false,
     error: null,
   });
   const { items, isLoaded } = state;
-
-  const isLogon = (): boolean => {
-    if (userID === undefined || userID === "") {
-      return false;
-    } else {
-      return true;
-    }
-  };
 
   const getHeadings = () => {
     const { items } = state;
@@ -56,7 +48,7 @@ export const MyLinksPage = () => {
   }, [userID, isLoaded]);
 
   if (!isLoaded) {
-    return isLogon() ? <p>Loading...</p> : <Navigate to="/" />;
+    return isLogon() ? <p>Loading...</p> : <Navigate to="/Unauthorized" />;
   } else {
     return (
       <div>

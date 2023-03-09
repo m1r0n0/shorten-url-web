@@ -1,11 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-  redirect,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Home from "../HomePage/";
 import CreateLink from "../../Shorten/CreateLink";
 import { MyLinksPage } from "../../Shorten/MyLinks/MyLinksPage/MyLinksPage";
@@ -14,17 +8,17 @@ import RegisterForm from "../../Account/Register/RegisterForm";
 import { lifeTimeOfCookie } from "../../../JS/constants";
 import { UserIDContext } from "../../../App";
 import { fetchUserEmail, fetchUserID } from "../../../API";
+import Unauthorized from "../Errors/ClientErrors/401Unauthorized";
 
 export function TopMenu() {
-  const { userID, setUserID } = useContext(UserIDContext);
+  const { userID, setUserID, isLogon } = useContext(UserIDContext);
 
-  const [state, setState] = useState({ userEmail: "", isLogon: false });
+  const [state, setState] = useState({ userEmail: "" });
   const splittedCookies: string[] = document.cookie.split("; ");
 
   const handleToLogin = (userEmail: string, rememberMe: boolean) => {
-    setState({ userEmail: userEmail, isLogon: true });
+    setState({ userEmail: userEmail });
     setCookiesAndUserIDFromUserEmail(userEmail, rememberMe);
-    redirect("/");
   };
 
   const setCookiesAndUserIDFromUserEmail = (
@@ -45,17 +39,14 @@ export function TopMenu() {
 
   const setLongTermUserCookies = (userID: string) => {
     document.cookie = "userID=" + userID + "; max-age=" + lifeTimeOfCookie;
-    document.cookie = "isLogon=true; max-age=" + lifeTimeOfCookie;
   };
 
   const setOnCloseUserCookies = (userID: string) => {
     document.cookie = "userID=" + userID;
-    document.cookie = "isLogon=true";
   };
 
   const deleteUserCookies = () => {
     document.cookie = "userID= ; max-age=0";
-    document.cookie = "isLogon=false; max-age=0";
   };
 
   useEffect(() => {
@@ -63,25 +54,19 @@ export function TopMenu() {
   }, [userID]);
 
   const settingStateBasedOnCookies = () => {
-    let tempIsLogon: boolean = false;
-
     splittedCookies.forEach((cookie) => {
-      if (cookie === "isLogon=true") {
-        tempIsLogon = true;
-      }
-    });
-    splittedCookies.forEach((cookie) => {
-      if (cookie.startsWith("userID=") && tempIsLogon) {
+      if (cookie.startsWith("userID=")) {
         let tempUserID = cookie.split("=").pop()!;
         setUserID(tempUserID);
-        if (!(tempUserID === undefined)) setUserEmailFromUserID(tempUserID);
+        if (!(tempUserID === undefined || tempUserID === ""))
+          setUserEmailFromUserID(tempUserID);
       }
     });
   };
 
   const setUserEmailFromUserID = (tempUserID: string) => {
     fetchUserEmail(tempUserID).then((result) => {
-      setState({ userEmail: result.userEmail, isLogon: true });
+      setState({ userEmail: result.userEmail });
     });
   };
 
@@ -89,7 +74,7 @@ export function TopMenu() {
     | React.MouseEventHandler<HTMLInputElement>
     | undefined = () => {
     deleteUserCookies();
-    setState({ userEmail: "", isLogon: false });
+    setState({ userEmail: "" });
     setUserID(undefined);
   };
 
@@ -121,7 +106,7 @@ export function TopMenu() {
                     </Link>
                   </li>
                   <li className="navi-item">
-                    {state.isLogon ? (
+                    {isLogon() ? (
                       <Link to="/MyLinks" className="navi-link">
                         My links
                       </Link>
@@ -135,7 +120,7 @@ export function TopMenu() {
             <div className="d-sm-inline-flex justify-content-between">
               <ul className="navbar-nav flex-grow-1 align-items-end">
                 <li className="nav-item">
-                  {state.isLogon ? (
+                  {isLogon() ? (
                     <p className="username"> {state.userEmail} </p>
                   ) : (
                     <Link to="/Login" className={"navi-link"}>
@@ -144,7 +129,7 @@ export function TopMenu() {
                   )}
                 </li>
                 <li className="nav-item">
-                  {state.isLogon ? (
+                  {isLogon() ? (
                     <Link to="/">
                       <input
                         className="btn-primary"
@@ -175,6 +160,7 @@ export function TopMenu() {
             path="/Register"
             element={<RegisterForm handleToLogin={handleToLogin} />}
           />
+          <Route path="/Unauthorized" element={<Unauthorized />} />
         </Routes>
       </div>
     </Router>
