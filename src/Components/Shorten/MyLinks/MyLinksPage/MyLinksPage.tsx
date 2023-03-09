@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import Table from "../Table/";
 import { UserIDContext } from "../../../../App";
 import { getItemsForMyLinksTable } from "../../../../API";
+import { Navigate } from "react-router-dom";
 
 export const MyLinksPage = () => {
   const { userID } = useContext(UserIDContext);
@@ -10,8 +11,15 @@ export const MyLinksPage = () => {
     isLoaded: false,
     error: null,
   });
-
   const { items, isLoaded } = state;
+
+  const isLogon = (): boolean => {
+    if (userID === undefined || userID === "") {
+      return false;
+    } else {
+      return true;
+    }
+  };
 
   const getHeadings = () => {
     const { items } = state;
@@ -48,7 +56,7 @@ export const MyLinksPage = () => {
   }, [userID, isLoaded]);
 
   if (!isLoaded) {
-    return <p>Loading...</p>;
+    return isLogon() ? <p>Loading...</p> : <Navigate to="/" />;
   } else {
     return (
       <div>

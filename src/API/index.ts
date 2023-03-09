@@ -82,11 +82,18 @@ export const getItemsForMyLinksTable = (userID: string) => {
 
 export const changeParticularLinkPrivacy = (body: Link, userID: string | undefined) => {
   body.shortUrl = body.shortUrl.split(".com/").pop()!;
-  let fetchLink: string = ChangeLinkPrivacyURI + "shortUrl=" + body.shortUrl + "&state=" + body.isPrivate;
-  if (!(userID === undefined)) fetchLink += "&userID=" + userID;
+  if (!(userID === undefined)) userID = "";
+  let fetchLink: string = ChangeLinkPrivacyURI + 
+                          "shortUrl=" + body.shortUrl + 
+                          "&state=" + body.isPrivate + 
+                          "&userID=" + userID;
   body = {...body, userId: userID}
 return fetch(fetchLink, {
   method: "POST",
+}).then((response) => {
+  if (!response.ok) {
+    throw new Error(String(response.status));
+  }
 });
 }
 
