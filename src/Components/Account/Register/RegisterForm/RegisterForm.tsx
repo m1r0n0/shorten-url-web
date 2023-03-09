@@ -1,9 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Navigate } from "react-router-dom";
-import {
-  checkEmailExisting as checkingEmailExisting,
-  proceedRegister,
-} from "../../../../API";
+import { checkEmailExisting, proceedRegister } from "../../../../API";
+import { UserIDContext } from "../../../../App";
 import ExistingEmailDisclaimer from "../ExistingEmailDisclaimer";
 import IncorrectRegisterInputDisclaimer from "../IncorrectRegisterInputDisclaimer";
 import NoMatchingPasswordsDisclaimer from "../NoMatchingPasswordsDisclaimer";
@@ -13,7 +11,7 @@ interface LoginProps {
 }
 
 export const RegisterForm: React.FC<LoginProps> = ({
-  handleToLogin: handleToLogin,
+  handleToLogin,
   ...rest
 }) => {
   const [state, setState] = useState({
@@ -31,6 +29,7 @@ export const RegisterForm: React.FC<LoginProps> = ({
   const [isReadyToRedirect, setIsReadyToRedirect] = useState(false);
   const [showExistingEmailDisclaimer, setShowExistingEmailDisclaimer] =
     useState(false);
+  const { isLogon } = useContext(UserIDContext);
 
   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
     var properState = {
@@ -40,7 +39,7 @@ export const RegisterForm: React.FC<LoginProps> = ({
     };
     if (state.password === passwordConfirm) {
       setShowNoMatchingPasswordsDisclaimer(false);
-      checkingEmailExisting(properState.email).then((res) => {
+      checkEmailExisting(properState.email).then((res) => {
         if (!res.isExist) {
           proceedRegister(properState)
             .catch(() => {
@@ -62,15 +61,9 @@ export const RegisterForm: React.FC<LoginProps> = ({
     }
   };
 
-  // const checkEmailForExisting = (email: string) => {
-  //   let isExistingEmail: boolean | undefined = undefined;
-  //   checkingEmailExisting(email).then((res) => (isExistingEmail = res.isExist));
-  //   if (!(isExistingEmail === undefined)) {
-  //     return isExistingEmail;
-  //   }
-  // };
-
-  return (
+  return isLogon() ? (
+    <Navigate to="/" />
+  ) : (
     <div>
       <h2>Register</h2>
       <form method="post" asp-controller="Account" asp-action="Register">

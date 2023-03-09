@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { BrowserRouter as Router, Navigate } from "react-router-dom";
 import { proceedLogin } from "../../../../API";
+import { UserIDContext } from "../../../../App";
 import IncorrectLoginInputDisclaimer from "../IncorrectLoginInputDisclaimer/";
 
 interface LoginProps {
@@ -8,7 +9,7 @@ interface LoginProps {
 }
 
 export const LoginForm: React.FC<LoginProps> = ({
-  handleToLogin: handleToLogin,
+  handleToLogin,
   ...rest
 }) => {
   const [state, setState] = useState({
@@ -19,6 +20,7 @@ export const LoginForm: React.FC<LoginProps> = ({
   const [isReadyToRedirect, setIsReadyToRedirect] = useState(false);
   const [showIncorrectInputDisclaimer, setShowIncorrectInputDisclaimer] =
     useState(false);
+  const { isLogon } = useContext(UserIDContext);
 
   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
     proceedLogin(state)
@@ -32,7 +34,9 @@ export const LoginForm: React.FC<LoginProps> = ({
       });
   };
 
-  return (
+  return isLogon() ? (
+    <Navigate to="/" />
+  ) : (
     <div>
       <h2> Enter the app</h2>
       <div>
