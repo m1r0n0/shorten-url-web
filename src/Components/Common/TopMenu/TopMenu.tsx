@@ -1,11 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-  useParams,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Home from "../HomePage/";
 import CreateLink from "../../Shorten/CreateLink";
 import { MyLinksPage } from "../../Shorten/MyLinks/MyLinksPage/MyLinksPage";
@@ -14,8 +8,9 @@ import RegisterForm from "../../Account/Register/RegisterForm";
 import { lifeTimeOfCookie } from "../../../JS/constants";
 import { UserIDContext } from "../../../App";
 import { fetchUserEmail, fetchUserID } from "../../../API";
-import Unauthorized from "../Errors/ClientErrors/401Unauthorized";
-import NotFound from "../Errors/ClientErrors/404NotFound";
+import Unauthorized from "../Errors/Unauthorized";
+import NotFound from "../Errors/NotFound";
+import PageToRedirect from "./PageToRedirect";
 
 export function TopMenu() {
   const { userID, setUserID, isLogon } = useContext(UserIDContext);
@@ -169,21 +164,9 @@ export function TopMenu() {
           />
           <Route path="/Error/Unauthorized" element={<Unauthorized />} />
           <Route path="/Error/NotFound" element={<NotFound />} />
-          <Route
-            path="/short/:shortenedUrl?"
-            // loader={({ params }) => {
-            //  console.log("params: " + params.shortenedUrl);
-            // }}
-            element={<ShortenedLink />}
-          />
+          <Route path="/:shortenedUrl?" element={<PageToRedirect />} />
         </Routes>
       </div>
     </Router>
   );
-}
-
-function ShortenedLink() {
-  let params = useParams();
-  console.log(params.shortenedUrl);
-  return <></>;
 }

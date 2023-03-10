@@ -26,7 +26,7 @@ export const MyLinksPage = () => {
     }
   };
 
-  useEffect(() => {
+  const updateTableData = () => {
     if (!(userID === undefined)) {
       getItemsForMyLinksTable(userID).then(
         (result) => {
@@ -45,6 +45,10 @@ export const MyLinksPage = () => {
         }
       );
     }
+  };
+
+  useEffect(() => {
+    updateTableData();
   }, [userID, isLoaded]);
 
   if (!isLoaded) {
@@ -56,7 +60,7 @@ export const MyLinksPage = () => {
         {isTBodyEmpty() ? (
           <p>You haven't created any link yet!</p>
         ) : (
-          <Table theadData={getHeadings()} tbodyData={items} />
+          <Table theadData={getHeadings()} tbodyData={items} updateTableData={updateTableData} />
         )}
       </div>
     );

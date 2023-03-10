@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { changeParticularLinkPrivacy } from "../../../../API";
 import { UserIDContext } from "../../../../App";
 
-export default function Table({ theadData, tbodyData }: any) {
+export default function Table({ theadData, tbodyData, updateTableData }: any) {
   const { userID } = useContext(UserIDContext);
 
   const IsThereNeededCheckBox = (value: any): boolean => {
@@ -15,7 +15,7 @@ export default function Table({ theadData, tbodyData }: any) {
 
   const ChangePrivacyOfLink = (row: any): any => {
     changeParticularLinkPrivacy(row, userID).then(() => {
-      //window.location.reload();
+      updateTableData();
     });
   };
 
@@ -32,7 +32,7 @@ export default function Table({ theadData, tbodyData }: any) {
         {tbodyData.map((row: any, index: any) => {
           return (
             <tr key={index}>
-              {theadData.map((key: any, index: any) => {
+              {theadData.map((key: any) => {
                 //non-boolean (non-checkbox) row[key] always equals true
                 return row[key] ? (
                   IsThereNeededCheckBox(row[key]) ? (

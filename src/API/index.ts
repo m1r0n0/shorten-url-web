@@ -1,21 +1,22 @@
 import { Link, RegisterUser, User } from "../Models"
-import { ACCOUNT, API, CHANGE_LINK_PRIVACY, CHECK_EMAIL_EXISTING, CREATE_LINK, GET_USER_EMAIL, GET_USER_ID, GET_USER_LINKS, LOGIN, REGISTER, SHORTEN } from "../JS/routeConstants";
+import { ACCOUNT, API, CHANGE_LINK_PRIVACY, CHECK_EMAIL_EXISTING, CREATE_LINK, GET_USER_EMAIL, GET_USER_ID, GET_USER_LINKS, LOGIN, REDIRECT, REDIRECT_TO_ORIGINAL_URL, REGISTER, SHORTEN } from "../JS/routeConstants";
 
-const GetUserIdURI: string = `${API}/${ACCOUNT}/${GET_USER_ID}?userEmail=`;
-const GetUserEmailURI: string = `${API}/${ACCOUNT}/${GET_USER_EMAIL}?userID=`;
+const GetUserIdURI: string = `${API}/${ACCOUNT}/${GET_USER_ID}`;
+const GetUserEmailURI: string = `${API}/${ACCOUNT}/${GET_USER_EMAIL}`;
 const CreateLinkURI: string = `${API}/${SHORTEN}/${CREATE_LINK}`;
 const LoginURI: string = `${API}/${ACCOUNT}/${LOGIN}`;
 const RegisterURI: string = `${API}/${ACCOUNT}/${REGISTER}`;
-const CheckEmailExistingURI: string = `${API}/${ACCOUNT}/${CHECK_EMAIL_EXISTING}?email=`;
-const ChangeLinkPrivacyURI: string = `${API}/${SHORTEN}/${CHANGE_LINK_PRIVACY}?`;
-const GetUserLinksURI: string = `${API}/${SHORTEN}/${GET_USER_LINKS}?userID=`;
+const CheckEmailExistingURI: string = `${API}/${ACCOUNT}/${CHECK_EMAIL_EXISTING}`;
+const ChangeLinkPrivacyURI: string = `${API}/${SHORTEN}/${CHANGE_LINK_PRIVACY}`;
+const GetUserLinksURI: string = `${API}/${SHORTEN}/${GET_USER_LINKS}`;
+const RedirectToOriginalUrlURI: string = `${API}/${REDIRECT}/${REDIRECT_TO_ORIGINAL_URL}`;
 
 export const fetchUserID = (userEmail: string) => {
-  return fetch(GetUserIdURI + userEmail).then((res) => res.json())
+  return fetch(`${GetUserIdURI}?userEmail=${userEmail}`).then((res) => res.json())
 }
 
 export const fetchUserEmail = (tempUserID: string) => {
-  return fetch(GetUserEmailURI + tempUserID).then((res) => res.json())
+  return fetch(`${GetUserEmailURI}?userID=${tempUserID}`).then((res) => res.json())
 }
 
 export const addUrl = (body: Link) => {
@@ -72,21 +73,18 @@ export const proceedRegister = (body: RegisterUser) => {
 }
 
 export const checkEmailExisting = (email: string) => {
-return fetch(CheckEmailExistingURI + email).then((response) => response.json())
+return fetch(`${CheckEmailExistingURI}?email=${email}`).then((response) => response.json())
 }
 
 export const getItemsForMyLinksTable = (userID: string) => {
-  return fetch(GetUserLinksURI + userID)
+  return fetch(`${GetUserLinksURI}?userID=${userID}`)
   .then((res) => res.json())
 }
 
 export const changeParticularLinkPrivacy = (body: Link, userID: string | undefined) => {
   body.shortUrl = body.shortUrl.split(".com/").pop()!;
-  if (!(userID === undefined)) userID = "";
-  let fetchLink: string = ChangeLinkPrivacyURI + 
-                          "shortUrl=" + body.shortUrl + 
-                          "&state=" + body.isPrivate + 
-                          "&userID=" + userID;
+  if (userID === undefined) userID = "";
+  let fetchLink: string = `${ChangeLinkPrivacyURI}?shortUrl=${body.shortUrl}&state=${body.isPrivate}&userID=${userID}`;
   body = {...body, userId: userID}
 return fetch(fetchLink, {
   method: "POST",
@@ -95,5 +93,9 @@ return fetch(fetchLink, {
     throw new Error(String(response.status));
   }
 });
+}
+
+export const proceedRedirect = (shortUrl: string, userID: string) => {
+  window.location.href = `${RedirectToOriginalUrlURI}?shortUrl=${shortUrl}&userId=${userID}`;
 }
 
