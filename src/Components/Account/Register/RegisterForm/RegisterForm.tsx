@@ -2,8 +2,9 @@ import React, { useContext, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { checkEmailExisting, proceedRegister } from "../../../../API";
 import { UserIDContext } from "../../../../App";
-import ExistingEmailDisclaimer from "../ExistingEmailDisclaimer";
-import IncorrectRegisterInputDisclaimer from "../IncorrectRegisterInputDisclaimer";
+import InvalidEmailDisclaimer from "../ExistingEmailDisclaimer";
+import IncorrectDateOfBirthDisclaimer from "../IncorrectDateOfBirthDisclaimer";
+import InvalidPasswordInputDisclaimer from "../InvalidPasswordInputDisclaimer";
 import NoMatchingPasswordsDisclaimer from "../NoMatchingPasswordsDisclaimer";
 
 interface LoginProps {
@@ -24,10 +25,16 @@ export const RegisterForm: React.FC<LoginProps> = ({
     showNoMatchingPasswordsDisclaimer,
     setShowNoMatchingPasswordsDisclaimer,
   ] = useState(false);
-  const [showIncorrectInputDisclaimer, setShowIncorrectInputDisclaimer] =
-    useState(false);
+  const [
+    showInvalidPasswordInputDisclaimer,
+    setShowInvalidPasswordInputDisclaimer,
+  ] = useState(false);
   const [isReadyToRedirect, setIsReadyToRedirect] = useState(false);
   const [showExistingEmailDisclaimer, setShowExistingEmailDisclaimer] =
+    useState(false);
+  const [showIncorrectDateOfBirth, setShowIncorrectDateOfBirth] =
+    useState(false);
+  const [showInvalidEmailDisclaimer, setShowInvalidEmailDisclaimer] =
     useState(false);
   const { isLogon } = useContext(UserIDContext);
 
@@ -37,28 +44,50 @@ export const RegisterForm: React.FC<LoginProps> = ({
       password: state.password,
       year: state.year.slice(0, 4),
     };
-    if (state.password === passwordConfirm) {
-      setShowNoMatchingPasswordsDisclaimer(false);
-      checkEmailExisting(properState.email).then((res) => {
-        if (!res.isExist) {
-          proceedRegister(properState)
-            .catch(() => {
-              setShowIncorrectInputDisclaimer(true);
-            })
-            .then((res) => {
-              handleToLogin(res.email, true);
-              setIsReadyToRedirect(true);
-              setShowIncorrectInputDisclaimer(false);
-              setShowNoMatchingPasswordsDisclaimer(false);
-              setShowExistingEmailDisclaimer(false);
-            });
-        } else {
-          setShowExistingEmailDisclaimer(true);
-        }
-      });
+    if (
+      state.year === "0" ||
+      Number(properState.year) < 1910 ||
+      Number(properState.year) > 2023
+    ) {
+      setShowIncorrectDateOfBirth(true);
     } else {
-      setShowNoMatchingPasswordsDisclaimer(true);
+      setShowIncorrectDateOfBirth(false);
+      if (state.password === passwordConfirm) {
+        setShowNoMatchingPasswordsDisclaimer(false);
+        if (state.email === "") {
+          setShowInvalidEmailDisclaimer(true);
+        } else {
+          setShowInvalidEmailDisclaimer(false);
+          checkEmailExisting(properState.email).then((res) => {
+            if (!res.isExist) {
+              proceedRegister(properState)
+                .catch(() => {
+                  setShowInvalidPasswordInputDisclaimer(true);
+                  setShowExistingEmailDisclaimer(false);
+                })
+                .then((res) => {
+                  handleToLogin(res.email, true);
+                  setIsReadyToRedirect(true);
+                  ConcealDisclaimers();
+                });
+            } else {
+              setShowExistingEmailDisclaimer(true);
+            }
+          });
+        }
+      } else {
+        setShowNoMatchingPasswordsDisclaimer(true);
+      }
     }
+
+    const ConcealDisclaimers = () => {
+      setShowInvalidPasswordInputDisclaimer(false);
+      setShowNoMatchingPasswordsDisclaimer(false);
+      setShowExistingEmailDisclaimer(false);
+      setShowIncorrectDateOfBirth(false);
+      setShowInvalidEmailDisclaimer(false);
+    };
+    
   };
 
   return isLogon() ? (
@@ -136,12 +165,16 @@ export const RegisterForm: React.FC<LoginProps> = ({
           ) : null}
         </div>
         <div>
-          {showExistingEmailDisclaimer ? <ExistingEmailDisclaimer /> : null}
+          {showExistingEmailDisclaimer ? <InvalidEmailDisclaimer /> : null}
+          {showInvalidEmailDisclaimer ? <InvalidEmailDisclaimer /> : null}
         </div>
         <div>
-          {showIncorrectInputDisclaimer ? (
-            <IncorrectRegisterInputDisclaimer />
+          {showInvalidPasswordInputDisclaimer ? (
+            <InvalidPasswordInputDisclaimer />
           ) : null}
+        </div>
+        <div>
+          {showIncorrectDateOfBirth ? <IncorrectDateOfBirthDisclaimer /> : null}
         </div>
       </form>
     </div>

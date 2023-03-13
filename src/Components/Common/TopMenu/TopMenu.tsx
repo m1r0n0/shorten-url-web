@@ -8,8 +8,8 @@ import RegisterForm from "../../Account/Register/RegisterForm";
 import { lifeTimeOfCookie } from "../../../JS/constants";
 import { UserIDContext } from "../../../App";
 import { fetchUserEmail, fetchUserID } from "../../../API";
-import Unauthorized from "../Errors/Unauthorized";
-import NotFound from "../Errors/NotFound";
+import Unauthorized from "../HtmlErrors/Unauthorized";
+import NotFound from "../HtmlErrors/NotFound";
 import PageToRedirect from "./PageToRedirect";
 
 export function TopMenu() {
@@ -37,18 +37,14 @@ export function TopMenu() {
         }
       });
     }
-  };
 
-  const setLongTermUserCookies = (userID: string) => {
-    document.cookie = "userID=" + userID + "; max-age=" + lifeTimeOfCookie;
-  };
+    const setLongTermUserCookies = (userID: string) => {
+      document.cookie = "userID=" + userID + "; max-age=" + lifeTimeOfCookie;
+    };
 
-  const setOnCloseUserCookies = (userID: string) => {
-    document.cookie = "userID=" + userID;
-  };
-
-  const deleteUserCookies = () => {
-    document.cookie = "userID= ; max-age=0";
+    const setOnCloseUserCookies = (userID: string) => {
+      document.cookie = "userID=" + userID;
+    };
   };
 
   useEffect(() => {
@@ -64,18 +60,18 @@ export function TopMenu() {
           setUserEmailFromUserID(tempUserID);
       }
     });
-  };
 
-  const setUserEmailFromUserID = (tempUserID: string) => {
-    fetchUserEmail(tempUserID).then((result) => {
-      setState({ userEmail: result.userEmail });
-    });
+    const setUserEmailFromUserID = (tempUserID: string) => {
+      fetchUserEmail(tempUserID).then((result) => {
+        setState({ userEmail: result.userEmail });
+      });
+    };
   };
 
   const proceedLogOut:
     | React.MouseEventHandler<HTMLInputElement>
     | undefined = () => {
-    deleteUserCookies();
+    document.cookie = "userID= ; max-age=0";
     setState({ userEmail: "" });
     setUserID(undefined);
   };
@@ -162,8 +158,8 @@ export function TopMenu() {
             path="/Register"
             element={<RegisterForm handleToLogin={handleToLogin} />}
           />
-          <Route path="/Error/Unauthorized" element={<Unauthorized />} />
-          <Route path="/Error/NotFound" element={<NotFound />} />
+          <Route path="/Unauthorized" element={<Unauthorized />} />
+          <Route path="/NotFound" element={<NotFound />} />
           <Route path="/:shortenedUrl?" element={<PageToRedirect />} />
         </Routes>
       </div>

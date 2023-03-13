@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import { addUrl } from "../../../API";
 import { UserIDContext } from "../../../App";
-import { API, CREATE_LINK, SHORTEN } from "../../../JS/routeConstants";
 
 export const CreateLink = () => {
   const { userID } = useContext(UserIDContext);
@@ -11,7 +10,6 @@ export const CreateLink = () => {
     userId: userID,
     shortUrl: "",
   });
-  //const [shortenedLink, setShortenedLink] = useState("");
 
   const isAuthorized = (): boolean => {
     if (userID === undefined) {

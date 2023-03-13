@@ -1,6 +1,6 @@
-import "./IncorrectRegisterInputDisclaimer.css";
+import "./InvalidPasswordInputDisclaimer.css";
 
-export function IncorrectRegisterInputDisclaimer() {
+export function InvalidPasswordInputDisclaimer() {
   return (
     <ul>
       <li>Passwords must be at least 6 characters.</li>
