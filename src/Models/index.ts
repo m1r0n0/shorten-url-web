@@ -5,7 +5,7 @@ export interface Link{
     userId: string | undefined,
 }
 
-export interface User{
+export interface LoginUser{
     email: string,
     password: string,
     rememberMe: boolean,  
@@ -15,3 +15,9 @@ export interface RegisterUser{
     password: string,
     year: string,
 }
+
+export interface UserEmailId{
+    newEmail: string,
+    userId: string,
+}
+

@@ -11,15 +11,18 @@ import { fetchUserEmail, fetchUserID } from "../../../API";
 import Unauthorized from "../HtmlErrors/Unauthorized";
 import NotFound from "../HtmlErrors/NotFound";
 import PageToRedirect from "./PageToRedirect";
+import Profile from "../../Account/Profile";
+import "./TopMenu.css";
+import "../public/lib/bootstrap/dist/css/bootstrap.min.css";
 
 export function TopMenu() {
   const { userID, setUserID, isLogon } = useContext(UserIDContext);
 
-  const [state, setState] = useState({ userEmail: "" });
+  const [userEmail, setUserEmail] = useState("");
   const splittedCookies: string[] = document.cookie.split("; ");
 
   const handleToLogin = (userEmail: string, rememberMe: boolean) => {
-    setState({ userEmail: userEmail });
+    setUserEmail(userEmail);
     setCookiesAndUserIDFromUserEmail(userEmail, rememberMe);
   };
 
@@ -60,19 +63,23 @@ export function TopMenu() {
           setUserEmailFromUserID(tempUserID);
       }
     });
+  };
 
-    const setUserEmailFromUserID = (tempUserID: string) => {
-      fetchUserEmail(tempUserID).then((result) => {
-        setState({ userEmail: result.userEmail });
-      });
-    };
+  const setUserEmailFromUserID = (tempUserID: string) => {
+    fetchUserEmail(tempUserID).then((result) => {
+      setUserEmail(result.newEmail);
+    });
   };
 
   const proceedLogOut:
     | React.MouseEventHandler<HTMLInputElement>
     | undefined = () => {
-    document.cookie = "userID= ; max-age=0";
-    setState({ userEmail: "" });
+    const deleteCookies = () => {
+      document.cookie = "userID= ; max-age=0";
+    };
+
+    deleteCookies();
+    setUserEmail("");
     setUserID(undefined);
   };
 
@@ -119,7 +126,9 @@ export function TopMenu() {
               <ul className="navbar-nav flex-grow-1 align-items-end">
                 <li className="nav-item">
                   {isLogon() ? (
-                    <p className="username"> {state.userEmail} </p>
+                    <Link to="/Profile/ChangeEmail">
+                      <p className="username"> {userEmail} </p>
+                    </Link>
                   ) : (
                     <Link to="/Login" className={"navi-link"}>
                       Login
@@ -146,23 +155,27 @@ export function TopMenu() {
             </div>
           </div>
         </nav>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/CreateLink" element={<CreateLink />} />
-          <Route path="/MyLinks" element={<MyLinksPage />} />
-          <Route
-            path="/Login"
-            element={<LoginForm handleToLogin={handleToLogin} />}
-          />
-          <Route
-            path="/Register"
-            element={<RegisterForm handleToLogin={handleToLogin} />}
-          />
-          <Route path="/Unauthorized" element={<Unauthorized />} />
-          <Route path="/NotFound" element={<NotFound />} />
-          <Route path="/:shortenedUrl?" element={<PageToRedirect />} />
-        </Routes>
       </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/CreateLink" element={<CreateLink />} />
+        <Route path="/MyLinks" element={<MyLinksPage />} />
+        <Route
+          path="/Login"
+          element={<LoginForm handleToLogin={handleToLogin} />}
+        />
+        <Route
+          path="/Register"
+          element={<RegisterForm handleToLogin={handleToLogin} />}
+        />
+        <Route path="/Unauthorized" element={<Unauthorized />} />
+        <Route path="/NotFound" element={<NotFound />} />
+        <Route path="/:shortenedUrl?" element={<PageToRedirect />} />
+        <Route
+          path="/Profile/*"
+          element={<Profile setUserEmail={setUserEmail} />}
+        />
+      </Routes>
     </Router>
   );
 }
