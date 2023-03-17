@@ -1,11 +1,7 @@
 import { Link, Route, Routes } from "react-router-dom";
 import ChangeEmail from "./ChangeEmail";
 
-export interface ProfileProps {
-  setUserEmail: (userEmail: string) => void;
-}
-
-export const Profile: React.FC<ProfileProps> = ({ setUserEmail, ...rest }) => {
+export const Profile = () => {
   return (
     <>
       <div>
@@ -21,7 +17,7 @@ export const Profile: React.FC<ProfileProps> = ({ setUserEmail, ...rest }) => {
       <Routes>
         <Route
           path="/ChangeEmail"
-          element={<ChangeEmail setUserEmail={setUserEmail} />}
+          element={<ChangeEmail />}
         />
       </Routes>
     </>

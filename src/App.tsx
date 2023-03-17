@@ -1,24 +1,30 @@
 import { createContext, useState, SetStateAction, Dispatch } from "react";
 import "./App.css";
 import TopMenu from "./Components/Common/TopMenu";
+import { Routers } from "./Components/Utilities/Routers/Routers";
 
-interface IUserIDContextType {
+interface IUserContextType {
   userID: string | undefined;
   setUserID: Dispatch<SetStateAction<string | undefined>>;
+  userEmail: string | undefined;
+  setUserEmail: Dispatch<SetStateAction<string>>;
   isLogon: () => boolean;
 }
 
-const defaultUserIDContextValue = {
+const defaultUserContextValue = {
   userID: undefined,
   setUserID: () => undefined,
+  userEmail: "",
+  setUserEmail: () => "",
   isLogon: () => false,
 };
-export const UserIDContext = createContext<IUserIDContextType>(
-  defaultUserIDContextValue
+export const UserContext = createContext<IUserContextType>(
+  defaultUserContextValue
 );
 
 function App() {
   const [userID, setUserID] = useState<string>();
+  const [userEmail, setUserEmail] = useState<string>("");
   const isLogon = (): boolean => {
     if (userID === undefined || userID === "") {
       return false;
@@ -29,15 +35,18 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <UserIDContext.Provider
+        <UserContext.Provider
           value={{
             userID,
             setUserID,
+            userEmail,
+            setUserEmail,
             isLogon,
           }}
         >
-          <TopMenu />
-        </UserIDContext.Provider>
+          {/* <TopMenu /> */}
+          <Routers />
+        </UserContext.Provider>
       </header>
     </div>
   );

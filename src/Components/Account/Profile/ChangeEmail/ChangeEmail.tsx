@@ -1,17 +1,10 @@
 import { useContext, useState } from "react";
 import { proceedEmailChange } from "../../../../API";
-import { UserIDContext } from "../../../../App";
+import { UserContext } from "../../../../App";
 import EmailChangedDisclaimer from "./EmailChangedDisclaimer";
 
-export interface ChangeEmailProps {
-  setUserEmail: (userEmail: string) => void;
-}
-
-export const ChangeEmail: React.FC<ChangeEmailProps> = ({
-  setUserEmail,
-  ...rest
-}) => {
-  const { userID } = useContext(UserIDContext);
+export const ChangeEmail = () => {
+  const { userID, setUserEmail } = useContext(UserContext);
   const [state, setState] = useState({
     newEmail: "",
     userId: String(userID),

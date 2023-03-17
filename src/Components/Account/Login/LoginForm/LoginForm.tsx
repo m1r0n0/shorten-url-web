@@ -1,17 +1,11 @@
 import React, { useContext, useState } from "react";
 import { BrowserRouter as Router, Navigate } from "react-router-dom";
 import { proceedLogin } from "../../../../API";
-import { UserIDContext } from "../../../../App";
+import { UserContext } from "../../../../App";
 import IncorrectLoginInputDisclaimer from "../IncorrectLoginInputDisclaimer/";
+import { handleToLogin } from "../../../Utilities/TopMenuUtils/TopMenuUtils";
 
-interface LoginProps {
-  handleToLogin: (userEmail: string, isLogon: boolean) => void;
-}
-
-export const LoginForm: React.FC<LoginProps> = ({
-  handleToLogin,
-  ...rest
-}) => {
+export const LoginForm = () => {
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -20,7 +14,7 @@ export const LoginForm: React.FC<LoginProps> = ({
   const [isReadyToRedirect, setIsReadyToRedirect] = useState(false);
   const [showIncorrectInputDisclaimer, setShowIncorrectInputDisclaimer] =
     useState(false);
-  const { isLogon } = useContext(UserIDContext);
+  const { isLogon, setUserEmail, setUserID } = useContext(UserContext);
 
   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
     proceedLogin(state)
@@ -28,7 +22,7 @@ export const LoginForm: React.FC<LoginProps> = ({
         setShowIncorrectInputDisclaimer(true);
       })
       .then((res) => {
-        handleToLogin(res.email, res.rememberMe);
+        handleToLogin(res.email, res.rememberMe, setUserEmail, setUserID);
         setIsReadyToRedirect(true);
         setShowIncorrectInputDisclaimer(false);
       });

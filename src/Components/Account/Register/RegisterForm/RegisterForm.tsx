@@ -1,20 +1,15 @@
 import React, { useContext, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { checkEmailExisting, proceedRegister } from "../../../../API";
-import { UserIDContext } from "../../../../App";
+import { UserContext } from "../../../../App";
 import InvalidEmailDisclaimer from "../ExistingEmailDisclaimer";
 import IncorrectDateOfBirthDisclaimer from "../IncorrectDateOfBirthDisclaimer";
 import InvalidPasswordInputDisclaimer from "../InvalidPasswordInputDisclaimer";
 import NoMatchingPasswordsDisclaimer from "../NoMatchingPasswordsDisclaimer";
+import { handleToLogin } from "../../../Utilities/TopMenuUtils/TopMenuUtils";
 
-interface LoginProps {
-  handleToLogin: (userEmail: string, isLogon: boolean) => void;
-}
-
-export const RegisterForm: React.FC<LoginProps> = ({
-  handleToLogin,
-  ...rest
-}) => {
+export const RegisterForm = () => {
+  const {setUserEmail, setUserID} = useContext(UserContext);
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -36,7 +31,7 @@ export const RegisterForm: React.FC<LoginProps> = ({
     useState(false);
   const [showInvalidEmailDisclaimer, setShowInvalidEmailDisclaimer] =
     useState(false);
-  const { isLogon } = useContext(UserIDContext);
+  const { isLogon } = useContext(UserContext);
 
   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
     var properState = {
@@ -66,7 +61,7 @@ export const RegisterForm: React.FC<LoginProps> = ({
                   setShowExistingEmailDisclaimer(false);
                 })
                 .then((res) => {
-                  handleToLogin(res.email, true);
+                  handleToLogin(res.email, true, setUserEmail, setUserID);
                   setIsReadyToRedirect(true);
                   ConcealDisclaimers();
                 });
@@ -87,7 +82,6 @@ export const RegisterForm: React.FC<LoginProps> = ({
       setShowIncorrectDateOfBirth(false);
       setShowInvalidEmailDisclaimer(false);
     };
-    
   };
 
   return isLogon() ? (

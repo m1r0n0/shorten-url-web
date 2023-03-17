@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { changeParticularLinkPrivacy } from "../../../../API";
-import { UserIDContext } from "../../../../App";
+import { UserContext } from "../../../../App";
 
 export default function Table({ theadData, tbodyData, updateTableData }: any) {
-  const { userID } = useContext(UserIDContext);
+  const { userID } = useContext(UserContext);
 
   const IsThereNeededCheckBox = (value: any): boolean => {
     if (value === true || value === false) {

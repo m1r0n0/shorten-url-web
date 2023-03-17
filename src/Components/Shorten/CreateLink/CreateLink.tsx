@@ -1,9 +1,9 @@
 import React, { useState, useContext } from "react";
 import { addUrl } from "../../../API";
-import { UserIDContext } from "../../../App";
+import { UserContext } from "../../../App";
 
 export const CreateLink = () => {
-  const { userID } = useContext(UserIDContext);
+  const { userID } = useContext(UserContext);
   const [state, setState] = useState({
     fullUrl: "",
     isPrivate: false,
