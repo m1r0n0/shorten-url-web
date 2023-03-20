@@ -1,9 +1,16 @@
-import { Link, RegisterUser, LoginUser, UserEmailId } from "../Models";
+import {
+  Link,
+  RegisterUser,
+  LoginUser,
+  UserEmailId,
+  UserPasswordId,
+} from "../Models";
 import {
   ACCOUNT,
   API,
   CHANGE_LINK_PRIVACY,
   CHANGE_USER_EMAIL,
+  CHANGE_USER_PASSWORD,
   CHECK_EMAIL_EXISTING,
   CREATE_LINK,
   GET_USER_EMAIL,
@@ -26,6 +33,7 @@ const ChangeLinkPrivacyURI: string = `${API}/${SHORTEN}/${CHANGE_LINK_PRIVACY}`;
 const GetUserLinksURI: string = `${API}/${SHORTEN}/${GET_USER_LINKS}`;
 const RedirectToOriginalUrlURI: string = `${API}/${REDIRECT}/${REDIRECT_TO_ORIGINAL_URL}`;
 const ChangeUserEmailURI: string = `${API}/${ACCOUNT}/${CHANGE_USER_EMAIL}`;
+const ChangeUserPasswordURI: string = `${API}/${ACCOUNT}/${CHANGE_USER_PASSWORD}`;
 
 export async function fetchUserID(userEmail: string) {
   const response = await fetch(`${GetUserIdURI}?userEmail=${userEmail}`);
@@ -110,6 +118,19 @@ export function proceedRedirect(shortUrl: string, userID: string) {
 
 export async function proceedEmailChange(body: UserEmailId) {
   const response = await fetch(ChangeUserEmailURI, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) {
+    throw new Error("Network response was not OK");
+  } else {
+    return await response.json();
+  }
+}
+
+export async function proceedPasswordChange(body: UserPasswordId) {
+  const response = await fetch(ChangeUserPasswordURI, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),

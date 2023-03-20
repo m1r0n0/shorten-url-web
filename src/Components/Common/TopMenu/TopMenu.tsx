@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../../App";
-import { fetchUserEmail, fetchUserID } from "../../../API";
+import { fetchUserEmail } from "../../../API";
 import "./TopMenu.css";
 
 export function TopMenu() {

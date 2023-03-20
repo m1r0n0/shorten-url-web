@@ -1,6 +1,6 @@
 export const API = "https://localhost:7161/api";
 export const ACCOUNT = "Account";
-export const GET_USER_ID =  "GetUserID";
+export const GET_USER_ID = "GetUserID";
 export const GET_USER_EMAIL = "GetUserEmail";
 export const LOGIN = "Login";
 export const REGISTER = "Register";
@@ -12,3 +12,4 @@ export const CHANGE_LINK_PRIVACY = "ChangeLinkPrivacy";
 export const REDIRECT = "Redirect";
 export const REDIRECT_TO_ORIGINAL_URL = "RedirectToOriginalUrl";
 export const CHANGE_USER_EMAIL = "ChangeUserEmail";
+export const CHANGE_USER_PASSWORD = "ChangeUserPassword";
