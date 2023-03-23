@@ -1,11 +1,21 @@
 import { fetchUserID } from "../../../API";
+import { useAppDispatch } from "../../../hooks";
 import { lifeTimeOfCookie } from "../../../JS/constants";
+import { IUserEmailAction } from "../../../Store/UserEmailReducer";
+
+export const isLogon = (userId: string): boolean => {
+  if (userId === undefined || userId === "") {
+    return false;
+  } else {
+    return true;
+  }
+};
 
 export const handleToLogin = (
   userEmail: string,
   rememberMe: boolean,
-  setUserEmail: (email: string) => void,
-  setUserID: (Id: string) => void
+  setUserEmail: (userEmail: string)
+  // setUserID: (Id: string) => void
 ) => {
   setUserEmail(userEmail);
   setCookiesAndUserIDFromUserEmail(userEmail, rememberMe, setUserID);

@@ -1,24 +1,33 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { UserContext } from "../../../App";
+// import { UserContext } from "../../../App";
 import { fetchUserEmail } from "../../../API";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { setUserEmailAction } from "../../../Store/UserEmailReducer";
+import { setUserIdAction } from "../../../Store/UserIdReducer";
+import { isLogon } from "../../Utilities/TopMenuUtils/TopMenuUtils";
 import "./TopMenu.css";
 
 export function TopMenu() {
-  const { userID, setUserID, userEmail, setUserEmail, isLogon } =
-    useContext(UserContext);
+  // const { userID, setUserID, userEmail, setUserEmail, isLogon } =
+  //   useContext(UserContext);
+
+  const dispatch = useAppDispatch();
+  const userId = useAppSelector((state) => state.userId.userId);
+  const userEmail = useAppSelector((state) => state.userEmail.userEmail);
 
   const splittedCookies: string[] = document.cookie.split("; ");
 
   useEffect(() => {
     settingStateBasedOnCookies();
-  }, [userID]);
+  }, [userId]);
 
   const settingStateBasedOnCookies = () => {
     splittedCookies.forEach((cookie) => {
       if (cookie.startsWith("userID=")) {
         let tempUserID = cookie.split("=").pop()!;
-        setUserID(tempUserID);
+        dispatch(setUserIdAction(tempUserID));
+        //setUserID(tempUserID);
         if (!(tempUserID === undefined || tempUserID === ""))
           setUserEmailFromUserID(tempUserID);
       }
@@ -27,7 +36,8 @@ export function TopMenu() {
 
   const setUserEmailFromUserID = (tempUserID: string) => {
     fetchUserEmail(tempUserID).then((result) => {
-      setUserEmail(result.newEmail);
+      dispatch(setUserEmailAction(result.newEmail));
+      //setUserEmail(result.newEmail);
     });
   };
 
@@ -39,8 +49,10 @@ export function TopMenu() {
     };
 
     deleteCookies();
-    setUserEmail("");
-    setUserID(undefined);
+    dispatch(setUserEmailAction(""));
+    dispatch(setUserIdAction(""))
+    // setUserEmail("");
+    // setUserID(undefined);
   };
 
   return (
@@ -70,7 +82,7 @@ export function TopMenu() {
                   </Link>
                 </li>
                 <li className="navi-item">
-                  {isLogon() ? (
+                  {isLogon(userId) ? (
                     <Link to="/MyLinks" className="navi-link">
                       My links
                     </Link>
@@ -84,7 +96,7 @@ export function TopMenu() {
           <div className="d-sm-inline-flex justify-content-between">
             <ul className="navbar-nav flex-grow-1 align-items-end">
               <li className="nav-item">
-                {isLogon() ? (
+                {isLogon(userId) ? (
                   <Link to="/Profile/ChangeEmail">
                     <p className="username"> {userEmail} </p>
                   </Link>
@@ -95,7 +107,7 @@ export function TopMenu() {
                 )}
               </li>
               <li className="nav-item">
-                {isLogon() ? (
+                {isLogon(userId) ? (
                   <Link to="/">
                     <input
                       className="btn-primary"
