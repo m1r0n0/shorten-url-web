@@ -1,11 +1,9 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import { UserIdReducer } from "./UserIdReducer";
-import { userEmailReducer } from "./UserEmailReducer";
+import { userReducer } from "./UserReducer";
 import thunk from "redux-thunk";
 
 const rootReducer = combineReducers({
-  userId: UserIdReducer,
-  userEmail: userEmailReducer,
+  user: userReducer,
 });
 
 export const store = configureStore({

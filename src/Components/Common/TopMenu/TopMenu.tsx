@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 // import { UserContext } from "../../../App";
 import { fetchUserEmail } from "../../../API";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { setUserEmailAction } from "../../../Store/UserEmailReducer";
-import { setUserIdAction } from "../../../Store/UserIdReducer";
+import { setUserEmailAction, setUserIdAction } from "../../../Store/UserReducer";
 import { isLogon } from "../../Utilities/TopMenuUtils/TopMenuUtils";
 import "./TopMenu.css";
 
@@ -13,8 +12,8 @@ export function TopMenu() {
   //   useContext(UserContext);
 
   const dispatch = useAppDispatch();
-  const userId = useAppSelector((state) => state.userId.userId);
-  const userEmail = useAppSelector((state) => state.userEmail.userEmail);
+  const userId = useAppSelector((state) => state.user.userId);
+  const userEmail = useAppSelector((state) => state.user.userEmail);
 
   const splittedCookies: string[] = document.cookie.split("; ");
 
@@ -50,7 +49,7 @@ export function TopMenu() {
 
     deleteCookies();
     dispatch(setUserEmailAction(""));
-    dispatch(setUserIdAction(""))
+    dispatch(setUserIdAction(""));
     // setUserEmail("");
     // setUserID(undefined);
   };

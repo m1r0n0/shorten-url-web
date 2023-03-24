@@ -1,27 +1,28 @@
-export interface Link {
+export interface ILink {
   fullUrl: string;
   shortUrl: string;
   isPrivate: boolean;
   userId: string | undefined;
 }
 
-export interface LoginUser {
+export interface ILoginUser {
   email: string;
   password: string;
   rememberMe: boolean;
+  userId: string;
 }
-export interface RegisterUser {
+export interface IRegisterUser {
   email: string;
   password: string;
   year: string;
 }
 
-export interface UserEmailId {
+export interface IUserEmailId {
   newEmail: string;
   userId: string;
 }
 
-export interface UserPasswordId {
+export interface IUserPasswordId {
   newPassword: string;
   userId: string;
 }

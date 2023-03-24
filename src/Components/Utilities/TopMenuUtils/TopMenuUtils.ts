@@ -14,8 +14,8 @@ export const isLogon = (userId: string): boolean => {
 export const handleToLogin = (
   userEmail: string,
   rememberMe: boolean,
-  setUserEmail: (userEmail: string)
-  // setUserID: (Id: string) => void
+  setUserEmail: (userEmail: string),
+  setUserID: (Id: string) => void
 ) => {
   setUserEmail(userEmail);
   setCookiesAndUserIDFromUserEmail(userEmail, rememberMe, setUserID);

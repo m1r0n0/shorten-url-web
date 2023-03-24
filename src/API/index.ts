@@ -1,9 +1,9 @@
 import {
-  Link,
-  RegisterUser,
-  LoginUser,
-  UserEmailId,
-  UserPasswordId,
+  ILink,
+  IRegisterUser,
+  ILoginUser,
+  IUserEmailId,
+  IUserPasswordId,
 } from "../Models";
 import {
   ACCOUNT,
@@ -45,7 +45,7 @@ export async function fetchUserEmail(tempUserID: string) {
   return await response.json();
 }
 
-export async function addUrl(body: Link) {
+export async function addUrl(body: ILink) {
   const response = await fetch(CreateLinkURI, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -58,7 +58,7 @@ export async function addUrl(body: Link) {
   }
 }
 
-export async function proceedLogin(body: LoginUser) {
+export async function proceedLogin(body: ILoginUser) {
   const response = await fetch(LoginURI, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -72,7 +72,7 @@ export async function proceedLogin(body: LoginUser) {
   }
 }
 
-export async function proceedRegister(body: RegisterUser) {
+export async function proceedRegister(body: IRegisterUser) {
   const response = await fetch(RegisterURI, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -97,7 +97,7 @@ export async function getItemsForMyLinksTable(userID: string) {
 }
 
 export async function changeParticularLinkPrivacy(
-  body: Link,
+  body: ILink,
   userID: string | undefined
 ) {
   body.shortUrl = body.shortUrl.split(".com/").pop()!;
@@ -116,7 +116,7 @@ export function proceedRedirect(shortUrl: string, userID: string) {
   window.location.href = `${RedirectToOriginalUrlURI}?shortUrl=${shortUrl}&userId=${userID}`;
 }
 
-export async function proceedEmailChange(body: UserEmailId) {
+export async function proceedEmailChange(body: IUserEmailId) {
   const response = await fetch(ChangeUserEmailURI, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
@@ -129,7 +129,7 @@ export async function proceedEmailChange(body: UserEmailId) {
   }
 }
 
-export async function proceedPasswordChange(body: UserPasswordId) {
+export async function proceedPasswordChange(body: IUserPasswordId) {
   const response = await fetch(ChangeUserPasswordURI, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
