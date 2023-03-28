@@ -1,18 +1,23 @@
 import React, { useContext, useState } from "react";
 import { BrowserRouter as Router, Navigate } from "react-router-dom";
-import { proceedLogin } from "../../../../API";
-import IncorrectLoginInputDisclaimer from "../IncorrectLoginInputDisclaimer/";
-import {
-  handleToLogin,
-  isLogon,
-} from "../../../Utilities/TopMenuUtils/TopMenuUtils";
-import { useAppDispatch } from "../../../../hooks";
-import { setUserEmailAction } from "../../../../Store/UserEmailReducer";
-import { setUserIdAction } from "../../../../Store/UserReducer";
-import { handleLogin } from "../../../../Services/user";
+import { proceedLogin } from "../../../API";
+import IncorrectLoginInputDisclaimer from "./IncorrectLoginInputDisclaimer";
+import { isLogon } from "../../Utilities/TopMenuUtils/TopMenuUtils";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { setUserIdAction } from "../../../Store/UserReducer";
+import { handleLogin } from "../../../Services/user";
 
-export const LoginForm = () => {
+export const Login = () => {
   const dispatch = useAppDispatch();
+  const userId = useAppSelector((state) => state.user.user.userId);
+  const isLoginFinished = useAppSelector((state) => state.user.isLoginFinished);
+  const isLoginRequested = useAppSelector(
+    (state) => state.user.isLoginRequested
+  );
+  const isLoginSuccessful = useAppSelector(
+    (state) => state.user.isLoginSuccessful
+  );
+
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -24,25 +29,27 @@ export const LoginForm = () => {
   //const { isLogon, setUserEmail, setUserID } = useContext(UserContext);
 
   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
-    dispatch(handleLogin(state))
-    proceedLogin(state)
-      .catch(() => {
-        setShowIncorrectInputDisclaimer(true);
-      })
-      .then((res) => {
-        handleToLogin(
-          res.email,
-          res.rememberMe,
-          dispatch(setUserIdAction),
-          dispatch(setUserEmailAction)
-          //setUserEmail, setUserID
-        );
-        setIsReadyToRedirect(true);
-        setShowIncorrectInputDisclaimer(false);
-      });
+    dispatch(handleLogin(state)).then();
+    // proceedLogin(state)
+    //   .catch(() => {
+    //     setShowIncorrectInputDisclaimer(true);
+    //   })
+    //   .then((res) => {
+    //     handleToLogin(
+    //       res.email,
+    //       res.rememberMe,
+    //       dispatch(setUserIdAction),
+    //       dispatch(setUserEmailAction)
+    //       //setUserEmail, setUserID
+    //     );
+    //     setIsReadyToRedirect(true);
+    //     setShowIncorrectInputDisclaimer(false);
+    //   });
   };
 
-  return isLogon() ? (
+  const defineDisclaimerBasedOnLoginResult = () => {};
+
+  return isLogon(userId) ? (
     <Navigate to="/" />
   ) : (
     <div>
@@ -82,17 +89,15 @@ export const LoginForm = () => {
         />
       </div>
       <div>
-        {isReadyToRedirect ? (
+        {isLoginFinished ? (
           <Navigate to="/" />
+        ) : isLoginRequested ? (
+          <p>Loading...</p>
         ) : (
           <input type="button" value="Log in" onClick={handleSubmit} />
         )}
       </div>
-      <div>
-        {showIncorrectInputDisclaimer ? (
-          <IncorrectLoginInputDisclaimer />
-        ) : null}
-      </div>
+      <div>{isLoginSuccessful ? null : <IncorrectLoginInputDisclaimer />}</div>
     </div>
   );
 };

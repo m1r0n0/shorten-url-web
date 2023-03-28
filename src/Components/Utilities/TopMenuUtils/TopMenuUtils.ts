@@ -11,7 +11,7 @@ export const isLogon = (userId: string): boolean => {
   }
 };
 
-export const handleToLogin = (
+'export const handleToLogin = (
   userEmail: string,
   rememberMe: boolean,
   setUserEmail: (userEmail: string),
@@ -19,7 +19,7 @@ export const handleToLogin = (
 ) => {
   setUserEmail(userEmail);
   setCookiesAndUserIDFromUserEmail(userEmail, rememberMe, setUserID);
-};
+};'
 
 const setCookiesAndUserIDFromUserEmail = (
   userEmail: string,

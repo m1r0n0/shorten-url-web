@@ -1,5 +1,4 @@
 import { proceedLogin } from "../API";
-import { useAppDispatch } from "../hooks";
 import { lifeTimeOfCookie } from "../JS/constants";
 import { ILoginUser } from "../Models";
 import { AppDispatch } from "../Store";
@@ -8,8 +7,6 @@ import {
   handleLoginRequestAction,
   handleLoginSuccessAction,
 } from "../Store/UserReducer";
-
-export {};
 
 export const handleLogin =
   (loginData: ILoginUser) => async (dispatch: AppDispatch) => {
@@ -33,4 +30,12 @@ const setLongTermUserCookies = (userID: string) => {
 
 const setOnCloseUserCookies = (userID: string) => {
   document.cookie = "userID=" + userID;
+};
+
+export const isLogon = (userId: string): boolean => {
+  if (userId === undefined || userId === "") {
+    return false;
+  } else {
+    return true;
+  }
 };

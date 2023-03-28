@@ -1,15 +1,15 @@
 import React, { useContext, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { checkEmailExisting, proceedRegister } from "../../../../API";
-import { UserContext } from "../../../../App";
-import InvalidEmailDisclaimer from "../ExistingEmailDisclaimer";
-import IncorrectDateOfBirthDisclaimer from "../IncorrectDateOfBirthDisclaimer";
-import InvalidPasswordInputDisclaimer from "../InvalidPasswordInputDisclaimer";
-import NoMatchingPasswordsDisclaimer from "../NoMatchingPasswordsDisclaimer";
-import { handleToLogin } from "../../../Utilities/TopMenuUtils/TopMenuUtils";
+import { checkEmailExisting, proceedRegister } from "../../../API";
+//import { UserContext } from "../../../App";
+import InvalidEmailDisclaimer from "./ExistingEmailDisclaimer";
+import IncorrectDateOfBirthDisclaimer from "./IncorrectDateOfBirthDisclaimer";
+import InvalidPasswordInputDisclaimer from "./InvalidPasswordInputDisclaimer";
+import NoMatchingPasswordsDisclaimer from "./NoMatchingPasswordsDisclaimer";
+import { handleToLogin } from "../../Utilities/TopMenuUtils/TopMenuUtils";
 
-export const RegisterForm = () => {
-  const {setUserEmail, setUserID} = useContext(UserContext);
+export const Register = () => {
+  // const { setUserEmail, setUserID } = useContext(UserContext);
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -20,18 +20,22 @@ export const RegisterForm = () => {
     showNoMatchingPasswordsDisclaimer,
     setShowNoMatchingPasswordsDisclaimer,
   ] = useState(false);
-  const [
-    showInvalidPasswordInputDisclaimer,
-    setShowInvalidPasswordInputDisclaimer,
-  ] = useState(false);
-  const [isReadyToRedirect, setIsReadyToRedirect] = useState(false);
+  // const [
+  //   showInvalidPasswordInputDisclaimer,
+  //   setShowInvalidPasswordInputDisclaimer,
+  // ] = useState(false);
+  //const [isReadyToRedirect, setIsReadyToRedirect] = useState(false);
   const [showExistingEmailDisclaimer, setShowExistingEmailDisclaimer] =
     useState(false);
-  const [showIncorrectDateOfBirth, setShowIncorrectDateOfBirth] =
-    useState(false);
+  // const [showIncorrectDateOfBirth, setShowIncorrectDateOfBirth] =
+  //   useState(false);
   const [showInvalidEmailDisclaimer, setShowInvalidEmailDisclaimer] =
     useState(false);
-  const { isLogon } = useContext(UserContext);
+  //const { isLogon } = useContext(UserContext);
+
+  let showIncorrectDateOfBirth = state.year === "0" ||
+  Number(state.year.slice(0, 4)) < 1910 ||
+  Number(state.year.slice(0, 4)) > 2023
 
   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
     var properState = {
@@ -39,14 +43,14 @@ export const RegisterForm = () => {
       password: state.password,
       year: state.year.slice(0, 4),
     };
-    if (
-      state.year === "0" ||
-      Number(properState.year) < 1910 ||
-      Number(properState.year) > 2023
-    ) {
-      setShowIncorrectDateOfBirth(true);
-    } else {
-      setShowIncorrectDateOfBirth(false);
+    // if (
+    //   state.year === "0" ||
+    //   Number(properState.year) < 1910 ||
+    //   Number(properState.year) > 2023
+    // ) {
+    //   setShowIncorrectDateOfBirth(true);
+    // } else {
+    //   setShowIncorrectDateOfBirth(false);
       if (state.password === passwordConfirm) {
         setShowNoMatchingPasswordsDisclaimer(false);
         if (state.email === "") {
@@ -63,7 +67,7 @@ export const RegisterForm = () => {
                 .then((res) => {
                   handleToLogin(res.email, true, setUserEmail, setUserID);
                   setIsReadyToRedirect(true);
-                  ConcealDisclaimers();
+                  HideDisclaimers();
                 });
             } else {
               setShowExistingEmailDisclaimer(true);
@@ -75,7 +79,7 @@ export const RegisterForm = () => {
       }
     }
 
-    const ConcealDisclaimers = () => {
+    const HideDisclaimers = () => {
       setShowInvalidPasswordInputDisclaimer(false);
       setShowNoMatchingPasswordsDisclaimer(false);
       setShowExistingEmailDisclaimer(false);

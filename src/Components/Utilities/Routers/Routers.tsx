@@ -1,7 +1,7 @@
 import { Router, Routes, Route, Link, BrowserRouter } from "react-router-dom";
-import LoginForm from "../../Account/Login/LoginForm";
+import LoginForm from "../../Account/Login/Login";
 import Profile from "../../Account/Profile";
-import RegisterForm from "../../Account/Register/RegisterForm";
+import RegisterForm from "../../Account/Register/Register";
 import NotFound from "../../Common/HtmlErrors/NotFound";
 import Unauthorized from "../../Common/HtmlErrors/Unauthorized";
 import PageToRedirect from "../../Common/TopMenu/PageToRedirect";

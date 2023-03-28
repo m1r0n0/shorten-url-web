@@ -3,7 +3,10 @@ import { Link } from "react-router-dom";
 // import { UserContext } from "../../../App";
 import { fetchUserEmail } from "../../../API";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { setUserEmailAction, setUserIdAction } from "../../../Store/UserReducer";
+import {
+  setUserEmailAction,
+  setUserIdAction,
+} from "../../../Store/UserReducer";
 import { isLogon } from "../../Utilities/TopMenuUtils/TopMenuUtils";
 import "./TopMenu.css";
 
@@ -12,9 +15,8 @@ export function TopMenu() {
   //   useContext(UserContext);
 
   const dispatch = useAppDispatch();
-  const userId = useAppSelector((state) => state.user.userId);
-  const userEmail = useAppSelector((state) => state.user.userEmail);
-
+  const userId = useAppSelector((state) => state.user.user.userId);
+  const userEmail = useAppSelector((state) => state.user.user.userEmail);
   const splittedCookies: string[] = document.cookie.split("; ");
 
   useEffect(() => {
@@ -81,7 +83,7 @@ export function TopMenu() {
                   </Link>
                 </li>
                 <li className="navi-item">
-                  {isLogon(userId) ? (
+                  {isLogon(String(userId)) ? (
                     <Link to="/MyLinks" className="navi-link">
                       My links
                     </Link>
@@ -95,7 +97,7 @@ export function TopMenu() {
           <div className="d-sm-inline-flex justify-content-between">
             <ul className="navbar-nav flex-grow-1 align-items-end">
               <li className="nav-item">
-                {isLogon(userId) ? (
+                {isLogon(String(userId)) ? (
                   <Link to="/Profile/ChangeEmail">
                     <p className="username"> {userEmail} </p>
                   </Link>
@@ -106,7 +108,7 @@ export function TopMenu() {
                 )}
               </li>
               <li className="nav-item">
-                {isLogon(userId) ? (
+                {isLogon(String(userId)) ? (
                   <Link to="/">
                     <input
                       className="btn-primary"
