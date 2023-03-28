@@ -1,94 +1,77 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { checkEmailExisting, proceedRegister } from "../../../API";
-//import { UserContext } from "../../../App";
 import InvalidEmailDisclaimer from "./ExistingEmailDisclaimer";
 import IncorrectDateOfBirthDisclaimer from "./IncorrectDateOfBirthDisclaimer";
 import InvalidPasswordInputDisclaimer from "./InvalidPasswordInputDisclaimer";
 import NoMatchingPasswordsDisclaimer from "./NoMatchingPasswordsDisclaimer";
-import { handleToLogin } from "../../Utilities/TopMenuUtils/TopMenuUtils";
+import { handleLogin, isLogon } from "../../../Services/user";
+import { ILoginUser } from "../../../Models";
+import { useAppSelector } from "../../../hooks";
 
 export const Register = () => {
-  // const { setUserEmail, setUserID } = useContext(UserContext);
+  const userId = useAppSelector((state) => state.user.user.userId);
   const [state, setState] = useState({
     email: "",
     password: "",
     year: "",
   });
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [
-    showNoMatchingPasswordsDisclaimer,
-    setShowNoMatchingPasswordsDisclaimer,
-  ] = useState(false);
-  // const [
-  //   showInvalidPasswordInputDisclaimer,
-  //   setShowInvalidPasswordInputDisclaimer,
-  // ] = useState(false);
-  //const [isReadyToRedirect, setIsReadyToRedirect] = useState(false);
-  const [showExistingEmailDisclaimer, setShowExistingEmailDisclaimer] =
-    useState(false);
-  // const [showIncorrectDateOfBirth, setShowIncorrectDateOfBirth] =
-  //   useState(false);
-  const [showInvalidEmailDisclaimer, setShowInvalidEmailDisclaimer] =
-    useState(false);
-  //const { isLogon } = useContext(UserContext);
 
-  let showIncorrectDateOfBirth = state.year === "0" ||
-  Number(state.year.slice(0, 4)) < 1910 ||
-  Number(state.year.slice(0, 4)) > 2023
+  let passwordConfirm = "";
+  let showNoMatchingPasswordsDisclaimer = state.password !== passwordConfirm;
+  let showIncorrectDateOfBirth =
+    state.year === "0" ||
+    Number(state.year.slice(0, 4)) < 1910 ||
+    Number(state.year.slice(0, 4)) > 2023;
+  let showInvalidEmailDisclaimer = state.email === "";
+  let showInvalidPasswordInputDisclaimer = false;
+  let showExistingEmailDisclaimer = false;
+  let isReadyToRedirect = false;
 
   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
+    const HideDisclaimers = () => {
+      showInvalidPasswordInputDisclaimer = false;
+      showNoMatchingPasswordsDisclaimer = false;
+      showExistingEmailDisclaimer = false;
+      showInvalidEmailDisclaimer = false;
+      showIncorrectDateOfBirth = false;
+    };
+
     var properState = {
       email: state.email,
       password: state.password,
       year: state.year.slice(0, 4),
     };
-    // if (
-    //   state.year === "0" ||
-    //   Number(properState.year) < 1910 ||
-    //   Number(properState.year) > 2023
-    // ) {
-    //   setShowIncorrectDateOfBirth(true);
-    // } else {
-    //   setShowIncorrectDateOfBirth(false);
-      if (state.password === passwordConfirm) {
-        setShowNoMatchingPasswordsDisclaimer(false);
-        if (state.email === "") {
-          setShowInvalidEmailDisclaimer(true);
-        } else {
-          setShowInvalidEmailDisclaimer(false);
+
+    if (!showIncorrectDateOfBirth) {
+      if (!showNoMatchingPasswordsDisclaimer) {
+        if (!showInvalidEmailDisclaimer) {
           checkEmailExisting(properState.email).then((res) => {
-            if (!res.isExist) {
+            showExistingEmailDisclaimer = res.isExist;
+            if (!showExistingEmailDisclaimer) {
               proceedRegister(properState)
                 .catch(() => {
-                  setShowInvalidPasswordInputDisclaimer(true);
-                  setShowExistingEmailDisclaimer(false);
+                  showInvalidPasswordInputDisclaimer = true;
+                  showExistingEmailDisclaimer = false;
                 })
                 .then((res) => {
-                  handleToLogin(res.email, true, setUserEmail, setUserID);
-                  setIsReadyToRedirect(true);
+                  const user: ILoginUser = {
+                    email: res.email,
+                    password: res.password,
+                    rememberMe: true,
+                  };
+                  handleLogin(user);
+                  isReadyToRedirect = true;
                   HideDisclaimers();
                 });
-            } else {
-              setShowExistingEmailDisclaimer(true);
             }
           });
         }
-      } else {
-        setShowNoMatchingPasswordsDisclaimer(true);
       }
     }
-
-    const HideDisclaimers = () => {
-      setShowInvalidPasswordInputDisclaimer(false);
-      setShowNoMatchingPasswordsDisclaimer(false);
-      setShowExistingEmailDisclaimer(false);
-      setShowIncorrectDateOfBirth(false);
-      setShowInvalidEmailDisclaimer(false);
-    };
   };
 
-  return isLogon() ? (
+  return isLogon(userId) ? (
     <Navigate to="/" />
   ) : (
     <div>
@@ -143,7 +126,7 @@ export const Register = () => {
           <label htmlFor="PasswordConfirm">Password Confirm</label>
           <br />
           <input
-            onChange={(event) => setPasswordConfirm(event.target.value)}
+            onChange={(event) => (passwordConfirm = event.target.value)}
             type="password"
             name="passwordConfirm"
             id="passwordConfirm"
