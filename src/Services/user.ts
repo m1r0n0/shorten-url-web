@@ -15,9 +15,9 @@ export const handleLogin =
       const user = await proceedLogin(loginData);
       dispatch(handleLoginSuccessAction(user));
       if (loginData.rememberMe) {
-        setLongTermUserCookies(String(user.userID));
+        setLongTermUserCookies(String(user.userId));
       } else {
-        setOnCloseUserCookies(String(user.userID));
+        setOnCloseUserCookies(String(user.userId));
       }
     } catch (error) {
       dispatch(handleLoginFailureAction(error as Error));

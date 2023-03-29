@@ -25,7 +25,7 @@ interface UserState {
 const defaultState: UserState = {
   user: { userId: "", userEmail: "" },
   isLoginRequested: false,
-  isLoginSuccessful: false,
+  isLoginSuccessful: true,
   isLoginFinished: false,
 };
 
@@ -58,6 +58,7 @@ export const userReducer: Reducer<UserState, IUserAction> = (
       return {
         ...state,
         isLoginSuccessful: false,
+        isLoginRequested: false,
       };
     default:
       return state;

@@ -1,11 +1,9 @@
 import React, { useContext, useState } from "react";
 import { BrowserRouter as Router, Navigate } from "react-router-dom";
-import { proceedLogin } from "../../../API";
 import IncorrectLoginInputDisclaimer from "./IncorrectLoginInputDisclaimer";
-import { isLogon } from "../../Utilities/TopMenuUtils/TopMenuUtils";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { setUserIdAction } from "../../../Store/UserReducer";
-import { handleLogin } from "../../../Services/user";
+import { handleLogin, isLogon } from "../../../Services/user";
 
 export const Login = () => {
   const dispatch = useAppDispatch();
@@ -26,10 +24,9 @@ export const Login = () => {
   const [isReadyToRedirect, setIsReadyToRedirect] = useState(false);
   const [showIncorrectInputDisclaimer, setShowIncorrectInputDisclaimer] =
     useState(false);
-  //const { isLogon, setUserEmail, setUserID } = useContext(UserContext);
 
   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
-    dispatch(handleLogin(state)).then();
+    dispatch(handleLogin(state));
     // proceedLogin(state)
     //   .catch(() => {
     //     setShowIncorrectInputDisclaimer(true);
@@ -46,8 +43,6 @@ export const Login = () => {
     //     setShowIncorrectInputDisclaimer(false);
     //   });
   };
-
-  const defineDisclaimerBasedOnLoginResult = () => {};
 
   return isLogon(userId) ? (
     <Navigate to="/" />

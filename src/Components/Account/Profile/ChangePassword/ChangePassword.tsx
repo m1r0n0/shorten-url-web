@@ -1,13 +1,13 @@
-import { useContext, useState } from "react";
-import { proceedEmailChange, proceedPasswordChange } from "../../../../API";
-import { UserContext } from "../../../../App";
+import { useState } from "react";
+import { proceedPasswordChange } from "../../../../API";
+import { useAppSelector } from "../../../../hooks";
 import PasswordChangedDisclaimer from "./PasswordChangedDisclaimer";
 
 export const ChangePassword = () => {
-  const { userID } = useContext(UserContext);
+  const userId = useAppSelector((state) => state.user.user.userId);
   const [state, setState] = useState({
     newPassword: "",
-    userId: String(userID),
+    userId: String(userId),
   });
   const [isPasswordChangedSuccessfully, setIsPasswordChangedSuccessfully] =
     useState(false);

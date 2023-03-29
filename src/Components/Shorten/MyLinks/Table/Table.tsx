@@ -1,9 +1,8 @@
-import { useContext } from "react";
 import { changeParticularLinkPrivacy } from "../../../../API";
-import { UserContext } from "../../../../App";
+import { useAppSelector } from "../../../../hooks";
 
 export default function Table({ theadData, tbodyData, updateTableData }: any) {
-  const { userID } = useContext(UserContext);
+  const userID = useAppSelector((state) => state.user.user.userId);
 
   const IsThereNeededCheckBox = (value: any): boolean => {
     if (value === true || value === false) {

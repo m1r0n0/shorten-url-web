@@ -1,9 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { addUrl } from "../../../API";
-import { UserContext } from "../../../App";
+import { useAppSelector } from "../../../hooks";
 
 export const CreateLink = () => {
-  const { userID } = useContext(UserContext);
+  const userID = useAppSelector((state) => state.user.user.userId);
   const [state, setState] = useState({
     fullUrl: "",
     isPrivate: false,

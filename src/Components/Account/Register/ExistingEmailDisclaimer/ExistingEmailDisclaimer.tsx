@@ -1,3 +1,3 @@
 export function ExistingEmailDisclaimer() {
-  return <p>This email is already taken!</p>;
+  return <p>Email is already taken!</p>;
 }

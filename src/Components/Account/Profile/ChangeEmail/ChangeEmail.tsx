@@ -1,13 +1,15 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { proceedEmailChange } from "../../../../API";
-import { UserContext } from "../../../../App";
+import { useAppDispatch, useAppSelector } from "../../../../hooks";
+import { setUserEmailAction } from "../../../../Store/UserReducer";
 import EmailChangedDisclaimer from "./EmailChangedDisclaimer";
 
 export const ChangeEmail = () => {
-  const { userID, setUserEmail } = useContext(UserContext);
+  const dispatch = useAppDispatch();
+  const userId = useAppSelector((state) => state.user.user.userId);
   const [state, setState] = useState({
     newEmail: "",
-    userId: String(userID),
+    userId: String(userId),
   });
   const [isEmailChangedSuccessfully, setIsEmailChangedSuccessfully] =
     useState(false);
@@ -21,7 +23,7 @@ export const ChangeEmail = () => {
       })
       .then((response) => {
         if (response.newEmail !== null) {
-          setUserEmail(response.newEmail);
+          dispatch(setUserEmailAction(response.newEmail));
           setIsEmailChangedSuccessfully(true);
         }
         setShowEmailChangedDisclaimer(true);

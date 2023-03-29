@@ -1,11 +1,12 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Table from "../Table/";
-import { UserContext } from "../../../../App";
 import { getItemsForMyLinksTable } from "../../../../API";
 import { Navigate } from "react-router-dom";
+import { useAppSelector } from "../../../../hooks";
+import { isLogon } from "../../../../Services/user";
 
 export const MyLinksPage = () => {
-  const { userID, isLogon } = useContext(UserContext);
+  const userID = useAppSelector((state) => state.user.user.userId);
   const [state, setState] = useState({
     items: [],
     isLoaded: false,
@@ -52,7 +53,11 @@ export const MyLinksPage = () => {
   }, [userID, isLoaded]);
 
   if (!isLoaded) {
-    return isLogon() ? <p>Loading...</p> : <Navigate to="/Unauthorized" />;
+    return isLogon(userID) ? (
+      <p>Loading...</p>
+    ) : (
+      <Navigate to="/Unauthorized" />
+    );
   } else {
     return (
       <div>

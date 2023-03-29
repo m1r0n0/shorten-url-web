@@ -80,7 +80,7 @@ export async function proceedRegister(body: IRegisterUser) {
     credentials: "include",
   });
   if (!response.ok) {
-    throw new Error("Network response was not OK");
+    throw new Error(String(response.status));
   } else {
     return await response.json();
   }

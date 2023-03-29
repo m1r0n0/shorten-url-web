@@ -1,7 +1,7 @@
 import { Router, Routes, Route, Link, BrowserRouter } from "react-router-dom";
-import LoginForm from "../../Account/Login/Login";
+import Login from "../../Account/Login";
 import Profile from "../../Account/Profile";
-import RegisterForm from "../../Account/Register/Register";
+import Register from "../../Account/Register";
 import NotFound from "../../Common/HtmlErrors/NotFound";
 import Unauthorized from "../../Common/HtmlErrors/Unauthorized";
 import PageToRedirect from "../../Common/TopMenu/PageToRedirect";
@@ -18,8 +18,8 @@ export const Routers = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/CreateLink" element={<CreateLink />} />
         <Route path="/MyLinks" element={<MyLinksPage />} />
-        <Route path="/Login" element={<LoginForm />} />
-        <Route path="/Register" element={<RegisterForm />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Register" element={<Register />} />
         <Route path="/Unauthorized" element={<Unauthorized />} />
         <Route path="/NotFound" element={<NotFound />} />
         <Route path="/:shortenedUrl?" element={<PageToRedirect />} />

@@ -1,19 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-// import { UserContext } from "../../../App";
 import { fetchUserEmail } from "../../../API";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { isLogon } from "../../../Services/user";
 import {
   setUserEmailAction,
   setUserIdAction,
 } from "../../../Store/UserReducer";
-import { isLogon } from "../../Utilities/TopMenuUtils/TopMenuUtils";
 import "./TopMenu.css";
 
 export function TopMenu() {
-  // const { userID, setUserID, userEmail, setUserEmail, isLogon } =
-  //   useContext(UserContext);
-
   const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => state.user.user.userId);
   const userEmail = useAppSelector((state) => state.user.user.userEmail);
@@ -28,7 +24,6 @@ export function TopMenu() {
       if (cookie.startsWith("userID=")) {
         let tempUserID = cookie.split("=").pop()!;
         dispatch(setUserIdAction(tempUserID));
-        //setUserID(tempUserID);
         if (!(tempUserID === undefined || tempUserID === ""))
           setUserEmailFromUserID(tempUserID);
       }
@@ -38,7 +33,6 @@ export function TopMenu() {
   const setUserEmailFromUserID = (tempUserID: string) => {
     fetchUserEmail(tempUserID).then((result) => {
       dispatch(setUserEmailAction(result.newEmail));
-      //setUserEmail(result.newEmail);
     });
   };
 
@@ -52,8 +46,6 @@ export function TopMenu() {
     deleteCookies();
     dispatch(setUserEmailAction(""));
     dispatch(setUserIdAction(""));
-    // setUserEmail("");
-    // setUserID(undefined);
   };
 
   return (
