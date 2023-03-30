@@ -15,13 +15,16 @@ export const ChangePassword = () => {
     useState(false);
 
   const handleSubmit = () => {
+    console.log(state);
+    let isFetchResponseOk = true;
     proceedPasswordChange(state)
-      .then(() => {
-        setIsPasswordChangedSuccessfully(true);
-        setShowPasswordChangedDisclaimer(true);
-      })
       .catch(() => {
+        isFetchResponseOk = false;
         setIsPasswordChangedSuccessfully(false);
+      })
+      .then(() => {
+        if (isFetchResponseOk) setIsPasswordChangedSuccessfully(true);
+        setShowPasswordChangedDisclaimer(true);
       });
   };
 
