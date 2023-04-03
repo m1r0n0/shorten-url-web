@@ -28,7 +28,7 @@ export const MyLinksPage = () => {
   };
 
   const updateTableData = () => {
-    if (!(userID === undefined)) {
+    if (userID !== "") {
       getItemsForMyLinksTable(userID).then(
         (result) => {
           setState({
@@ -53,10 +53,11 @@ export const MyLinksPage = () => {
   }, [userID, isLoaded]);
 
   if (!isLoaded) {
-    return isLogon(userID) ? (
-      <p>Loading...</p>
-    ) : (
-      <Navigate to="/Unauthorized" />
+    return (
+      <div>
+        <p>Loading...</p>
+        {isLogon(userID) ? null : <Navigate to="/Unauthorized" />}
+      </div>
     );
   } else {
     return (

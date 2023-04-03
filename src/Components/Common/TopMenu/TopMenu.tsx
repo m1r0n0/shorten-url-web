@@ -13,28 +13,6 @@ export function TopMenu() {
   const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => state.user.user.userId);
   const userEmail = useAppSelector((state) => state.user.user.userEmail);
-  const splittedCookies: string[] = document.cookie.split("; ");
-
-  useEffect(() => {
-    settingStateBasedOnCookies();
-  }, [userId]);
-
-  const settingStateBasedOnCookies = () => {
-    splittedCookies.forEach((cookie) => {
-      if (cookie.startsWith("userID=")) {
-        let tempUserID = cookie.split("=").pop()!;
-        dispatch(setUserIdAction(tempUserID));
-        if (!(tempUserID === undefined || tempUserID === ""))
-          setUserEmailFromUserID(tempUserID);
-      }
-    });
-  };
-
-  const setUserEmailFromUserID = (tempUserID: string) => {
-    fetchUserEmail(tempUserID).then((result) => {
-      dispatch(setUserEmailAction(result.newEmail));
-    });
-  };
 
   const proceedLogOut:
     | React.MouseEventHandler<HTMLInputElement>

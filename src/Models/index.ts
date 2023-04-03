@@ -5,6 +5,11 @@ export interface ILink {
   userId: string | undefined;
 }
 
+export interface IUser {
+  userId: string;
+  userEmail: string;
+}
+
 export interface ILoginUser {
   email: string;
   password: string;

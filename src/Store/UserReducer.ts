@@ -1,25 +1,24 @@
 import { Reducer } from "redux";
-import { ILoginUserResponse } from "../Models";
+import { ILoginUserResponse, IUser } from "../Models";
 
 const SET_USER_ID = "SET_USER_ID";
 const SET_USER_EMAIL = "SET_USER_EMAIL";
 const HANDLE_LOGIN_REQUEST = "HANDLE_LOGIN_REQUEST";
 const HANDLE_LOGIN_SUCCESS = "HANDLE_LOGIN_SUCCESS";
 const HANDLE_LOGIN_FAILURE = "HANDLE_LOGIN_FAILURE";
+const HANDLE_APP_READINESS = "HANDLE_APP_READINESS";
 
 interface IUserAction {
   type: string;
-  payload: ILoginUserResponse | string | Error;
+  payload: ILoginUserResponse | string | Error | IUser;
 }
 
 interface UserState {
-  user: {
-    userId: string;
-    userEmail: string;
-  };
+  user: IUser;
   isLoginRequested: boolean;
   isLoginSuccessful: boolean;
   isLoginFinished: boolean;
+  isAppLoaded: boolean;
 }
 
 const defaultState: UserState = {
@@ -27,6 +26,7 @@ const defaultState: UserState = {
   isLoginRequested: false,
   isLoginSuccessful: true,
   isLoginFinished: false,
+  isAppLoaded: false,
 };
 
 export const userReducer: Reducer<UserState, IUserAction> = (
@@ -41,10 +41,13 @@ export const userReducer: Reducer<UserState, IUserAction> = (
         user: { ...state.user, userId: action.payload as string },
       };
     case SET_USER_EMAIL:
-      return {
-        ...state,
-        user: { ...state.user, userEmail: action.payload as string },
-      };
+      if (action.payload !== "") {
+        return {
+          ...state,
+          user: { ...state.user, userEmail: action.payload as string },
+        };
+      } else return { ...state };
+
     case HANDLE_LOGIN_REQUEST:
       return { ...state, isLoginRequested: true };
     case HANDLE_LOGIN_SUCCESS:
@@ -60,6 +63,8 @@ export const userReducer: Reducer<UserState, IUserAction> = (
         isLoginSuccessful: false,
         isLoginRequested: false,
       };
+    case HANDLE_APP_READINESS:
+      return { ...state, isAppLoaded: true };
     default:
       return state;
   }
@@ -87,4 +92,8 @@ export const handleLoginSuccessAction = (payload: ILoginUserResponse) => ({
 export const handleLoginFailureAction = (payload: Error) => ({
   type: HANDLE_LOGIN_FAILURE,
   payload,
+});
+
+export const handleAppReadinessAction = () => ({
+  type: HANDLE_APP_READINESS,
 });

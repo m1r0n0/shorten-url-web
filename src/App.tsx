@@ -1,54 +1,60 @@
-import { createContext, useState, SetStateAction, Dispatch } from "react";
 import "./App.css";
-import TopMenu from "./Components/Common/TopMenu";
 import { Routers } from "./Components/Utilities/Routers/Routers";
-
-// interface IUserContextType {
-//   userID: string | undefined;
-//   setUserID: Dispatch<SetStateAction<string | undefined>>;
-//   userEmail: string | undefined;
-//   setUserEmail: Dispatch<SetStateAction<string>>;
-//   isLogon: () => boolean;
-// }
-
-// const defaultUserContextValue = {
-//   userID: undefined,
-//   setUserID: () => undefined,
-//   userEmail: "",
-//   setUserEmail: () => "",
-//   isLogon: () => false,
-// };
-// export const UserContext = createContext<IUserContextType>(
-//   defaultUserContextValue
-// );
+import { ClipLoader } from "react-spinners";
+import { useAppDispatch, useAppSelector } from "./hooks";
+import { useEffect } from "react";
+import { fetchUserEmail } from "./API";
+import {
+  setUserIdAction,
+  setUserEmailAction,
+  handleAppReadinessAction,
+} from "./Store/UserReducer";
 
 function App() {
-  // const [userID, setUserID] = useState<string>();
-  // const [userEmail, setUserEmail] = useState<string>("");
-  // const isLogon = (): boolean => {
-  //   if (userID === undefined || userID === "") {
-  //     return false;
-  //   } else {
-  //     return true;
-  //   }
-  // };
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.user);
+  const isAppLoaded = useAppSelector((state) => state.user.isAppLoaded);
+  const splittedCookies: string[] = document.cookie.split("; ");
+
+  const settingStateBasedOnCookies = () => {
+    splittedCookies.forEach((cookie) => {
+      if (cookie.startsWith("userID=")) {
+        let tempUserID = cookie.split("=").pop()!;
+        dispatch(setUserIdAction(tempUserID));
+        if (!(tempUserID === undefined || tempUserID === ""))
+          setUserEmailFromUserID(tempUserID);
+      }
+    });
+  };
+
+  const setUserEmailFromUserID = (tempUserID: string) => {
+    fetchUserEmail(tempUserID).then((result) => {
+      dispatch(setUserEmailAction(result.newEmail));
+    });
+  };
+
+  useEffect(() => {
+    settingStateBasedOnCookies();
+    if (user.userEmail !== "" && user.userEmail !== "")
+      dispatch(handleAppReadinessAction());
+  }, [user.userId, user.userEmail]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        {/* <UserContext.Provider
-          value={{
-            userID,
-            setUserID,
-            userEmail,
-            setUserEmail,
-            isLogon,
-          }}
-        > */}
-          {/* <TopMenu /> */}
+    <body>
+      {isAppLoaded ? (
+        <div className="App">
           <Routers />
-        {/* </UserContext.Provider> */}
-      </header>
-    </div>
+        </div>
+      ) : (
+        <ClipLoader
+          size={300}
+          loading={true}
+          color={"#000000"}
+          cssOverride={{}}
+          speedMultiplier={1}
+        />
+      )}
+    </body>
   );
 }
 
