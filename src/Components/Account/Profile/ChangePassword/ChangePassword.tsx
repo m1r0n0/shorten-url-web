@@ -30,7 +30,7 @@ export const ChangePassword = () => {
 
   return (
     <div>
-      <div>
+      <div className="mb-4">
         <label htmlFor="password">Enter new Password:</label> <br />
         <input
           value={state.newPassword}

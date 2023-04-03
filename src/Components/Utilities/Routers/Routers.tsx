@@ -9,22 +9,25 @@ import CreateLink from "../../Shorten/CreateLink";
 import MyLinksPage from "../../Shorten/MyLinks/MyLinksPage";
 import HomePage from "../../Common/HomePage";
 import TopMenu from "../../Common/TopMenu";
+import "./Routers.css";
 
 export const Routers = () => {
   return (
     <BrowserRouter>
       <TopMenu />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/CreateLink" element={<CreateLink />} />
-        <Route path="/MyLinks" element={<MyLinksPage />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/Register" element={<Register />} />
-        <Route path="/Unauthorized" element={<Unauthorized />} />
-        <Route path="/NotFound" element={<NotFound />} />
-        <Route path="/:shortenedUrl?" element={<PageToRedirect />} />
-        <Route path="/Profile/*" element={<Profile />} />
-      </Routes>
+      <div className="app-body">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/CreateLink" element={<CreateLink />} />
+          <Route path="/MyLinks" element={<MyLinksPage />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/Register" element={<Register />} />
+          <Route path="/Unauthorized" element={<Unauthorized />} />
+          <Route path="/NotFound" element={<NotFound />} />
+          <Route path="/:shortenedUrl?" element={<PageToRedirect />} />
+          <Route path="/Profile/*" element={<Profile />} />
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 };

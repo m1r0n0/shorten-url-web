@@ -6,7 +6,7 @@ export const EmailChangedDisclaimer: React.FC<EmailChangedDisclaimerProps> = ({
   isEmailChanged,
 }) => {
   return (
-    <div>
+    <div className="mt-5">
       {isEmailChanged ? (
         <p>Email changed successfully!</p>
       ) : (

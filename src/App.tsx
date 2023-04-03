@@ -35,26 +35,32 @@ function App() {
 
   useEffect(() => {
     settingStateBasedOnCookies();
-    if (user.userEmail !== "" && user.userEmail !== "")
+    if (
+      (user.userEmail !== "" && user.userEmail !== "") ||
+      splittedCookies.at(0) === ""
+    )
       dispatch(handleAppReadinessAction());
   }, [user.userId, user.userEmail]);
 
   return (
-    <body>
+    <div>
       {isAppLoaded ? (
         <div className="App">
           <Routers />
         </div>
       ) : (
-        <ClipLoader
-          size={300}
-          loading={true}
-          color={"#000000"}
-          cssOverride={{}}
-          speedMultiplier={1}
-        />
+        <div className="container">
+          <ClipLoader
+            size={300}
+            loading={true}
+            color={"#000000"}
+            cssOverride={{}}
+            speedMultiplier={1}
+            className="loader"
+          />
+        </div>
       )}
-    </body>
+    </div>
   );
 }
 

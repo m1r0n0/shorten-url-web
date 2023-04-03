@@ -145,7 +145,7 @@ export const Register = () => {
           />
         </div>
         <br />
-        <div>
+        <div className="mb-4">
           {isReadyToRedirect ? (
             <Navigate to="/" />
           ) : (

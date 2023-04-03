@@ -21,27 +21,9 @@ export const Login = () => {
     password: "",
     rememberMe: false,
   });
-  const [isReadyToRedirect, setIsReadyToRedirect] = useState(false);
-  const [showIncorrectInputDisclaimer, setShowIncorrectInputDisclaimer] =
-    useState(false);
 
   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
     dispatch(handleLogin(state));
-    // proceedLogin(state)
-    //   .catch(() => {
-    //     setShowIncorrectInputDisclaimer(true);
-    //   })
-    //   .then((res) => {
-    //     handleToLogin(
-    //       res.email,
-    //       res.rememberMe,
-    //       dispatch(setUserIdAction),
-    //       dispatch(setUserEmailAction)
-    //       //setUserEmail, setUserID
-    //     );
-    //     setIsReadyToRedirect(true);
-    //     setShowIncorrectInputDisclaimer(false);
-    //   });
   };
 
   return isLogon(userId) ? (
@@ -83,7 +65,7 @@ export const Login = () => {
           id="rememberMe"
         />
       </div>
-      <div>
+      <div className="mb-3">
         {isLoginFinished ? (
           <Navigate to="/" />
         ) : isLoginRequested ? (

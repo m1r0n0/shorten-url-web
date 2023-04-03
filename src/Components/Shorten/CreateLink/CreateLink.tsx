@@ -33,9 +33,11 @@ export const CreateLink = () => {
   return (
     <div>
       <h1>Create your Short URL!</h1>
+      <br />
       <div className="row">
         <div>
-          <label htmlFor="FullUrl">Your Full URL: </label>
+          <label htmlFor="FullUrl"> Your Full URL: </label>
+          <br />
           <input
             value={state.fullUrl}
             onChange={(event) =>
@@ -49,6 +51,7 @@ export const CreateLink = () => {
             id="fullUrl"
           />
           <span asp-validation-for="FullUrl" className="text-danger"></span>
+          <br />
           <br />
           {isAuthorized() ? (
             <div>
@@ -64,14 +67,18 @@ export const CreateLink = () => {
                 name="isPrivate"
                 id="isPrivate"
               />
+              <br />
+              <br />
             </div>
           ) : (
             <></>
           )}
         </div>
+        <br />
         <div>
           <input type="button" value="Create" onClick={handleSubmit} />
         </div>
+        <br />
         <br />
         <div>
           <h3> Your shortened Url: {state.shortUrl}</h3>

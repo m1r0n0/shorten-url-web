@@ -8,7 +8,7 @@ export const PasswordChangedDisclaimer: React.FC<
   PasswordChangedDisclaimerProps
 > = ({ isPasswordChanged }) => {
   return (
-    <div>
+    <div className="mt-5">
       {isPasswordChanged ? (
         <p>Password changed successfully!</p>
       ) : (

@@ -32,7 +32,7 @@ export const ChangeEmail = () => {
 
   return (
     <div>
-      <div>
+      <div className="mb-4">
         <label htmlFor="email">Enter new Email:</label> <br />
         <input
           value={state.newEmail}
