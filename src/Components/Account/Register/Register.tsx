@@ -42,8 +42,6 @@ export const Register = () => {
       setShowInvalidPasswordInputDisclaimer(false);
       setShowExistingEmailDisclaimer(false);
       setShowInvalidEmailDisclaimer(false);
-      showIncorrectDateOfBirth = false;
-      showNoMatchingPasswordsDisclaimer = false;
     };
 
     HideDisclaimers();
@@ -62,7 +60,7 @@ export const Register = () => {
       !showNoMatchingPasswordsDisclaimer &&
       isEmailSuitable
     ) {
-      proceedRegister(properState)
+      proceedRegister(properState) //thunk
         .catch((error) => {
           isEmailSuitable = error.message !== "409";
           if (isEmailSuitable) setShowInvalidPasswordInputDisclaimer(true);

@@ -4,7 +4,7 @@ import { useAppSelector } from "../../../../hooks";
 export default function Table({ theadData, tbodyData, updateTableData }: any) {
   const userID = useAppSelector((state) => state.user.user.userId);
 
-  const IsThereNeededCheckBox = (value: any): boolean => {
+  const IsThereNeededCheckBox = (value: any): boolean => { //to different JSON
     if (value === true || value === false) {
       return true;
     } else {
@@ -18,7 +18,7 @@ export default function Table({ theadData, tbodyData, updateTableData }: any) {
     });
   };
 
-  return (
+  return ( //css flex
     <table className="table">
       <thead>
         <tr>

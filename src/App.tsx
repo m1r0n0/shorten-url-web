@@ -33,6 +33,8 @@ function App() {
     });
   };
 
+  //Put to thunk
+
   useEffect(() => {
     settingStateBasedOnCookies();
     if (

@@ -4,14 +4,14 @@ import { useAppSelector } from "../../../hooks";
 
 export const CreateLink = () => {
   const userID = useAppSelector((state) => state.user.user.userId);
-  const [state, setState] = useState({
+  const [state, setState] = useState({ //Interafe for type
     fullUrl: "",
     isPrivate: false,
     userId: userID,
     shortUrl: "",
   });
 
-  const isAuthorized = (): boolean => {
+  const isAuthorized = (): boolean => { //make a variable
     if (userID === undefined) {
       return false;
     } else {
@@ -20,7 +20,7 @@ export const CreateLink = () => {
   };
 
   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
-    addUrl(state).then((res) => {
+    addUrl(state).then((res) => { //to thunk; return shorturl to page
       setState({
         fullUrl: state.fullUrl,
         isPrivate: state.isPrivate,
@@ -30,7 +30,7 @@ export const CreateLink = () => {
     });
   };
 
-  return (
+  return ( //css flex
     <div>
       <h1>Create your Short URL!</h1>
       <br />

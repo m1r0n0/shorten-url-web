@@ -8,6 +8,7 @@ import { isLogon } from "../../../../Services/user";
 export const MyLinksPage = () => {
   const userID = useAppSelector((state) => state.user.user.userId);
   const [state, setState] = useState({
+    // to redux
     items: [],
     isLoaded: false,
     error: null,
@@ -19,17 +20,13 @@ export const MyLinksPage = () => {
     return Object.keys(items[0]);
   };
 
-  const isTBodyEmpty = () => {
-    if (items.length === 0 || items == null) {
-      return true;
-    } else {
-      return false;
-    }
+  const isTBodyEmpty = () => { //var
+    return items.length === 0 || items == null
   };
 
   const updateTableData = () => {
     if (userID !== "") {
-      getItemsForMyLinksTable(userID).then(
+      getItemsForMyLinksTable(userID).then( //thunk
         (result) => {
           setState({
             items: result.urlList,
