@@ -1,12 +1,42 @@
-import { proceedLogin } from "../API";
+import { fetchUserEmail, proceedLogin } from "../API";
 import { lifeTimeOfCookie } from "../JS/constants";
-import { ILoginUser } from "../Models";
+import { ILoginUser, IUser } from "../Models";
 import { AppDispatch } from "../Store";
 import {
+  handleAppReadinessAction,
   handleLoginFailureAction,
   handleLoginRequestAction,
   handleLoginSuccessAction,
+  setUserEmailAction,
+  setUserIdAction,
 } from "../Store/UserReducer";
+
+const splittedCookies: string[] = document.cookie.split("; ");
+
+export const prepareAppToLoad =
+  (user: IUser) => async (dispatch: AppDispatch) => {
+    setUserStateBasedOnCookies();
+    if (user.userEmail !== "" || splittedCookies.at(0) === "")
+      dispatch(handleAppReadinessAction());
+  };
+
+export const setUserStateBasedOnCookies =
+  () => async (dispatch: AppDispatch) => {
+    const setUserEmailFromUserID = (tempUserID: string) => {
+      fetchUserEmail(tempUserID).then((result) => {
+        dispatch(setUserEmailAction(result.newEmail));
+      });
+    };
+
+    splittedCookies.forEach((cookie) => {
+      if (cookie.startsWith("userID=")) {
+        let tempUserID = cookie.split("=").pop()!;
+        dispatch(setUserIdAction(tempUserID));
+        if (!(tempUserID === undefined || tempUserID === ""))
+          setUserEmailFromUserID(tempUserID);
+      }
+    });
+  };
 
 export const handleLogin =
   (loginData: ILoginUser) => async (dispatch: AppDispatch) => {
@@ -33,9 +63,5 @@ const setOnCloseUserCookies = (userID: string) => {
 };
 
 export const isLogon = (userId: string): boolean => {
-  if (userId === undefined || userId === "") {
-    return false;
-  } else {
-    return true;
-  }
+  return userId !== "";
 };

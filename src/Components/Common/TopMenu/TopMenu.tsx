@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchUserEmail } from "../../../API";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { isLogon } from "../../../Services/user";
 import {
@@ -57,9 +55,7 @@ export function TopMenu() {
                     <Link to="/MyLinks" className="navi-link">
                       My links
                     </Link>
-                  ) : (
-                    <></>
-                  )}
+                  ) : null}
                 </li>
               </ul>
             </div>

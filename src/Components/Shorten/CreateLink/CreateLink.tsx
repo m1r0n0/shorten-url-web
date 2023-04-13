@@ -1,26 +1,21 @@
 import React, { useState } from "react";
 import { addUrl } from "../../../API";
 import { useAppSelector } from "../../../hooks";
+import { ILink } from "../../../Models";
+import { isLogon } from "../../../Services/user";
 
 export const CreateLink = () => {
   const userID = useAppSelector((state) => state.user.user.userId);
-  const [state, setState] = useState({ //Interafe for type
+  const [state, setState] = useState<ILink>({
     fullUrl: "",
     isPrivate: false,
     userId: userID,
     shortUrl: "",
   });
 
-  const isAuthorized = (): boolean => { //make a variable
-    if (userID === undefined) {
-      return false;
-    } else {
-      return true;
-    }
-  };
-
-  const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
-    addUrl(state).then((res) => { //to thunk; return shorturl to page
+   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
+    addUrl(state).then((res) => {
+      //to thunk; return shorturl to page
       setState({
         fullUrl: state.fullUrl,
         isPrivate: state.isPrivate,
@@ -30,7 +25,8 @@ export const CreateLink = () => {
     });
   };
 
-  return ( //css flex
+  return (
+    //css flex
     <div>
       <h1>Create your Short URL!</h1>
       <br />
@@ -53,7 +49,7 @@ export const CreateLink = () => {
           <span asp-validation-for="FullUrl" className="text-danger"></span>
           <br />
           <br />
-          {isAuthorized() ? (
+          {isLogon(userID) ? (
             <div>
               <label htmlFor="IsPrivate">Private link?</label> <br />
               <input
