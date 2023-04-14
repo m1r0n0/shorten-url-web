@@ -5,7 +5,7 @@ import { linkReducer } from "./LinkReducer";
 
 const rootReducer = combineReducers({
   user: userReducer,
-  goal: linkReducer,
+  link: linkReducer,
 });
 
 export const store = configureStore({

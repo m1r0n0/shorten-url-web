@@ -22,18 +22,21 @@ export const prepareAppToLoad =
 
 export const setUserStateBasedOnCookies =
   () => async (dispatch: AppDispatch) => {
-    const setUserEmailFromUserID = (tempUserID: string) => {
-      fetchUserEmail(tempUserID).then((result) => {
-        dispatch(setUserEmailAction(result.newEmail));
-      });
-    };
+    // const setUserEmail = (UserID: string) => async (dispatch: AppDispatch) => {
+    //   fetchUserEmail(UserID).then((result) => {
+    //     dispatch(setUserEmailAction(result.newEmail));
+    //   });
+    // };
 
     splittedCookies.forEach((cookie) => {
       if (cookie.startsWith("userID=")) {
         let tempUserID = cookie.split("=").pop()!;
         dispatch(setUserIdAction(tempUserID));
         if (!(tempUserID === undefined || tempUserID === ""))
-          setUserEmailFromUserID(tempUserID);
+          //dispatch(setUserEmail(tempUserID));
+          fetchUserEmail(tempUserID).then((result) => {
+            dispatch(setUserEmailAction(result.newEmail));
+          });
       }
     });
   };

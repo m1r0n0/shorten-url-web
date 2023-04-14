@@ -7,7 +7,7 @@ import { createNewShortUrl } from "../../../Services/link";
 
 export const CreateLink = () => {
   const userID = useAppSelector((state) => state.user.user.userId);
-  const shortUrl = useAppSelector((state) => state.goal.shortUrl);
+  const shortUrl = useAppSelector((state) => state.link.shortUrl);
   const dispatch = useAppDispatch();
   const [state, setState] = useState<ILink>({
     fullUrl: "",
@@ -16,7 +16,7 @@ export const CreateLink = () => {
     shortUrl: "",
   });
 
-   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
+  const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
     dispatch(createNewShortUrl(state));
   };
 
