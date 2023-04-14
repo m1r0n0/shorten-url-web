@@ -15,7 +15,7 @@ const splittedCookies: string[] = document.cookie.split("; ");
 
 export const prepareAppToLoad =
   (user: IUser) => async (dispatch: AppDispatch) => {
-    setUserStateBasedOnCookies();
+    dispatch(setUserStateBasedOnCookies());
     if (user.userEmail !== "" || splittedCookies.at(0) === "")
       dispatch(handleAppReadinessAction());
   };

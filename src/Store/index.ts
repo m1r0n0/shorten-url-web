@@ -1,9 +1,11 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { userReducer } from "./UserReducer";
 import thunk from "redux-thunk";
+import { linkReducer } from "./LinkReducer";
 
 const rootReducer = combineReducers({
   user: userReducer,
+  goal: linkReducer,
 });
 
 export const store = configureStore({

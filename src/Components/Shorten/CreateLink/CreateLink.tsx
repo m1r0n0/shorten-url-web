@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { addUrl } from "../../../API";
-import { useAppSelector } from "../../../hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { ILink } from "../../../Models";
 import { isLogon } from "../../../Services/user";
+import { createNewShortUrl } from "../../../Services/link";
 
 export const CreateLink = () => {
   const userID = useAppSelector((state) => state.user.user.userId);
+  const shortUrl = useAppSelector((state) => state.goal.shortUrl);
+  const dispatch = useAppDispatch();
   const [state, setState] = useState<ILink>({
     fullUrl: "",
     isPrivate: false,
@@ -14,16 +17,12 @@ export const CreateLink = () => {
   });
 
    const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
-    addUrl(state).then((res) => {
-      //to thunk; return shorturl to page
-      setState({
-        fullUrl: state.fullUrl,
-        isPrivate: state.isPrivate,
-        userId: userID,
-        shortUrl: res.shortUrl,
-      });
-    });
+    dispatch(createNewShortUrl(state));
   };
+
+  useEffect(() => {
+    setState({ ...state, shortUrl: shortUrl });
+  }, [shortUrl]);
 
   return (
     //css flex
