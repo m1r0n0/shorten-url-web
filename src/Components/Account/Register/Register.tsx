@@ -27,22 +27,22 @@ export const Register = () => {
       Number(state.year.slice(0, 4)) < 1910 ||
       Number(state.year.slice(0, 4)) > 2023);
 
-  const [
-    showInvalidPasswordInputDisclaimer,
-    setShowInvalidPasswordInputDisclaimer,
-  ] = useState(false);
+  // const [
+  //   showInvalidPasswordInputDisclaimer,
+  //   setShowInvalidPasswordInputDisclaimer,
+  // ] = useState(false); 
   const [isReadyToRedirect, setIsReadyToRedirect] = useState(false);
-  const [showExistingEmailDisclaimer, setShowExistingEmailDisclaimer] =
-    useState(false);
-  const [showInvalidEmailDisclaimer, setShowInvalidEmailDisclaimer] =
-    useState(false);
+  // const [showExistingEmailDisclaimer, setShowExistingEmailDisclaimer] =
+  //   useState(false);
+  // const [showInvalidEmailDisclaimer, setShowInvalidEmailDisclaimer] =
+  //   useState(false);
 
   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
-    const HideDisclaimers = () => {
-      setShowInvalidPasswordInputDisclaimer(false);
-      setShowExistingEmailDisclaimer(false);
-      setShowInvalidEmailDisclaimer(false);
-    };
+    // const HideDisclaimers = () => {
+    //   setShowInvalidEmailDisclaimer(false);
+    //   setShowExistingEmailDisclaimer(false);
+    //   setShowInvalidEmailDisclaimer(false);
+    // };
 
     HideDisclaimers();
 
