@@ -1,44 +1,47 @@
+import { useState } from "react";
 import { fetchUserEmail, proceedLogin } from "../API";
 import { lifeTimeOfCookie } from "../JS/constants";
 import { ILoginUser, IUser } from "../Models";
 import { AppDispatch } from "../Store";
 import {
   handleAppReadinessAction,
+  handleEmailRequestAction,
   handleLoginFailureAction,
   handleLoginRequestAction,
   handleLoginSuccessAction,
   setUserEmailAction,
   setUserIdAction,
 } from "../Store/UserReducer";
+import { useAppSelector } from "../hooks";
 
 const splittedCookies: string[] = document.cookie.split("; ");
 
 export const prepareAppToLoad =
   (user: IUser) => async (dispatch: AppDispatch) => {
-    dispatch(setUserStateBasedOnCookies());
+    await dispatch(setUserStateBasedOnCookies());
     if (user.userEmail !== "" || splittedCookies.at(0) === "")
       dispatch(handleAppReadinessAction());
   };
 
 export const setUserStateBasedOnCookies =
   () => async (dispatch: AppDispatch) => {
-    // const setUserEmail = (UserID: string) => async (dispatch: AppDispatch) => {
-    //   fetchUserEmail(UserID).then((result) => {
-    //     dispatch(setUserEmailAction(result.newEmail));
-    //   });
-    // };
-
-    splittedCookies.forEach((cookie) => {
-      if (cookie.startsWith("userID=")) {
-        let tempUserID = cookie.split("=").pop()!;
-        dispatch(setUserIdAction(tempUserID));
-        if (!(tempUserID === undefined || tempUserID === ""))
-          //dispatch(setUserEmail(tempUserID));
-          fetchUserEmail(tempUserID).then((result) => {
-            dispatch(setUserEmailAction(result.newEmail));
-          });
-      }
-    });
+    const isUserEmailRequested = useAppSelector(
+      (state) => state.user.isUserEmailRequested
+    );
+    if (!isUserEmailRequested) {
+      splittedCookies.forEach((cookie) => {
+        if (cookie.startsWith("userID=")) {
+          let tempUserID = cookie.split("=").pop()!;
+          dispatch(setUserIdAction(tempUserID));
+          if (!(tempUserID === undefined || tempUserID === "")) {
+            dispatch(handleEmailRequestAction());
+            fetchUserEmail(tempUserID).then((result) => {
+              dispatch(setUserEmailAction(result.newEmail));
+            });
+          }
+        }
+      });
+    }
   };
 
 export const handleLogin =

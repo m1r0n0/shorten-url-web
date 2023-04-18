@@ -1,13 +1,6 @@
 import { Reducer } from "redux";
 import { ILoginUserResponse, IUser } from "../Models";
 
-const SET_USER_ID = "SET_USER_ID";
-const SET_USER_EMAIL = "SET_USER_EMAIL";
-const HANDLE_LOGIN_REQUEST = "HANDLE_LOGIN_REQUEST";
-const HANDLE_LOGIN_SUCCESS = "HANDLE_LOGIN_SUCCESS";
-const HANDLE_LOGIN_FAILURE = "HANDLE_LOGIN_FAILURE";
-const HANDLE_APP_READINESS = "HANDLE_APP_READINESS";
-
 interface IUserAction {
   type: string;
   payload: ILoginUserResponse | string | Error | IUser;
@@ -19,6 +12,7 @@ interface UserState {
   isLoginSuccessful: boolean;
   isLoginFinished: boolean;
   isAppLoaded: boolean;
+  isUserEmailRequested: boolean;
 }
 
 const defaultState: UserState = {
@@ -27,7 +21,17 @@ const defaultState: UserState = {
   isLoginSuccessful: true,
   isLoginFinished: false,
   isAppLoaded: false,
+  isUserEmailRequested: false,
 };
+
+const SET_USER_ID = "SET_USER_ID";
+const SET_USER_EMAIL = "SET_USER_EMAIL";
+const HANDLE_LOGIN_REQUEST = "HANDLE_LOGIN_REQUEST";
+const HANDLE_LOGIN_SUCCESS = "HANDLE_LOGIN_SUCCESS";
+const HANDLE_LOGIN_FAILURE = "HANDLE_LOGIN_FAILURE";
+const HANDLE_APP_READINESS = "HANDLE_APP_READINESS";
+const HANDLE_EMAIL_REQUEST = "HANDLE_EMAIL_REQUEST";
+const HANDLE_EMAIL_FETCHED = "HANDLE_EMAIL_FETCHED";
 
 export const userReducer: Reducer<UserState, IUserAction> = (
   state = defaultState,
@@ -65,6 +69,10 @@ export const userReducer: Reducer<UserState, IUserAction> = (
       };
     case HANDLE_APP_READINESS:
       return { ...state, isAppLoaded: true };
+    case HANDLE_EMAIL_REQUEST:
+      return { ...state, isUserEmailRequested: true };
+    case HANDLE_EMAIL_FETCHED:
+      return { ...state, isUserEmailRequested: false };
     default:
       return state;
   }
@@ -96,4 +104,12 @@ export const handleLoginFailureAction = (payload: Error) => ({
 
 export const handleAppReadinessAction = () => ({
   type: HANDLE_APP_READINESS,
+});
+
+export const handleEmailRequestAction = () => ({
+  type: HANDLE_EMAIL_REQUEST,
+});
+
+export const handleEmailFetchedAction = () => ({
+  type: HANDLE_EMAIL_FETCHED,
 });
