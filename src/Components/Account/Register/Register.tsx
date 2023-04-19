@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { checkEmailExisting, proceedRegister } from "../../../API";
-import InvalidEmailDisclaimer from "./InvalidEmailDisclaimer";
-import IncorrectDateOfBirthDisclaimer from "./IncorrectDateOfBirthDisclaimer";
-import InvalidPasswordInputDisclaimer from "./InvalidPasswordInputDisclaimer";
-import NoMatchingPasswordsDisclaimer from "./NoMatchingPasswordsDisclaimer";
-import { handleLogin, isLogon } from "../../../Services/user";
-import { ILoginUser } from "../../../Models";
+import { proceedRegister } from "../../../API";
+import { handleLogin, handleRegister, isLogon } from "../../../Services/user";
+import { ILoginUser, IRegisterUser } from "../../../Models";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import ExistingEmailDisclaimer from "./ExistingEmailDisclaimer";
+import {
+  hideAllDisclaimersAction,
+  setIsEmailSuitable,
+  setIsExistingEmailAction,
+  setIsIncorrectDateOfBirthAction,
+  setIsInvalidEmailAction,
+  setIsInvalidPasswordInputAction,
+  setIsNoMatchingPasswordsAction,
+} from "../../../Store/DisclaimerReducer";
+import Disclaimers from "./Disclaimers";
 
 export const Register = () => {
   const dispatch = useAppDispatch();
@@ -19,19 +24,38 @@ export const Register = () => {
     year: "",
   });
 
+  const isNoMatchingPasswords = useAppSelector(
+    (state) => state.disclaimer.isNoMatchingPasswords
+  );
+  const isIncorrectDateOfBirth = useAppSelector(
+    (state) => state.disclaimer.isIncorrectDateOfBirth
+  );
+  const isEmailSuitable = useAppSelector(
+    (state) => state.disclaimer.isEmailSuitable
+  );
+
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  let showNoMatchingPasswordsDisclaimer = state.password !== passwordConfirm;
-  let showIncorrectDateOfBirth =
-    state.year !== "" &&
-    (state.year === "0" ||
-      Number(state.year.slice(0, 4)) < 1910 ||
-      Number(state.year.slice(0, 4)) > 2023);
+  //let isPasswordsMatching = state.password === passwordConfirm;
+  dispatch(setIsNoMatchingPasswordsAction(state.password !== passwordConfirm));
+  // let isIncorrectDateOfBirth =
+  //   state.year !== "" &&
+  //   (state.year === "0" ||
+  //     Number(state.year.slice(0, 4)) < 1910 ||
+  //     Number(state.year.slice(0, 4)) > 2023);
+  dispatch(
+    setIsIncorrectDateOfBirthAction(
+      state.year !== "" &&
+        (state.year === "0" ||
+          Number(state.year.slice(0, 4)) < 1910 ||
+          Number(state.year.slice(0, 4)) > 2023)
+    )
+  );
 
   // const [
   //   showInvalidPasswordInputDisclaimer,
   //   setShowInvalidPasswordInputDisclaimer,
-  // ] = useState(false); 
-  const [isReadyToRedirect, setIsReadyToRedirect] = useState(false);
+  // ] = useState(false);
+  //const [isReadyToRedirect, setIsReadyToRedirect] = useState(false);
   // const [showExistingEmailDisclaimer, setShowExistingEmailDisclaimer] =
   //   useState(false);
   // const [showInvalidEmailDisclaimer, setShowInvalidEmailDisclaimer] =
@@ -44,40 +68,23 @@ export const Register = () => {
     //   setShowInvalidEmailDisclaimer(false);
     // };
 
-    HideDisclaimers();
+    //HideDisclaimers();
 
-    var properState = {
+    dispatch(hideAllDisclaimersAction());
+
+    var properState: IRegisterUser = {
       email: state.email,
       password: state.password,
       year: state.year.slice(0, 4),
     };
 
-    let isEmailSuitable = state.email !== "";
-    setShowInvalidEmailDisclaimer(!isEmailSuitable);
+    //let isEmailSuitable = state.email !== "";
+    dispatch(setIsEmailSuitable(state.email !== ""));
+    //setShowInvalidEmailDisclaimer(!isEmailSuitable);
+    dispatch(setIsInvalidEmailAction(!isEmailSuitable));
 
-    if (
-      !showIncorrectDateOfBirth &&
-      !showNoMatchingPasswordsDisclaimer &&
-      isEmailSuitable
-    ) {
-      proceedRegister(properState) //thunk
-        .catch((error) => {
-          isEmailSuitable = error.message !== "409";
-          if (isEmailSuitable) setShowInvalidPasswordInputDisclaimer(true);
-          setShowExistingEmailDisclaimer(!isEmailSuitable);
-        })
-        .then((res) => {
-          if (isEmailSuitable) {
-            const user: ILoginUser = {
-              email: res.email,
-              password: res.password,
-              rememberMe: true,
-            };
-            dispatch(handleLogin(user));
-            setIsReadyToRedirect(true);
-            HideDisclaimers();
-          }
-        });
+    if (!isIncorrectDateOfBirth && !isNoMatchingPasswords && isEmailSuitable) {
+      dispatch(handleRegister(properState));
     }
   };
 
@@ -150,23 +157,7 @@ export const Register = () => {
             <input type="button" value="Register" onClick={handleSubmit} />
           )}
         </div>
-        <div>
-          {showNoMatchingPasswordsDisclaimer ? (
-            <NoMatchingPasswordsDisclaimer />
-          ) : null}
-        </div>
-        <div>
-          {showExistingEmailDisclaimer ? <ExistingEmailDisclaimer /> : null}
-          {showInvalidEmailDisclaimer ? <InvalidEmailDisclaimer /> : null}
-        </div>
-        <div>
-          {showInvalidPasswordInputDisclaimer ? (
-            <InvalidPasswordInputDisclaimer />
-          ) : null}
-        </div>
-        <div>
-          {showIncorrectDateOfBirth ? <IncorrectDateOfBirthDisclaimer /> : null}
-        </div>
+        <Disclaimers />
       </form>
     </div>
   );

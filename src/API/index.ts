@@ -86,10 +86,10 @@ export async function proceedRegister(body: IRegisterUser) {
   }
 }
 
-export async function checkEmailExisting(email: string) {
-  const response = await fetch(`${CheckEmailExistingURI}?email=${email}`);
-  return await response.json();
-}
+// export async function checkEmailExisting(email: string) {
+//   const response = await fetch(`${CheckEmailExistingURI}?email=${email}`);
+//   return await response.json();
+// }
 
 export async function getItemsForMyLinksTable(userID: string) {
   const response = await fetch(`${GetUserLinksURI}?userID=${userID}`);

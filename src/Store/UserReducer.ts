@@ -13,6 +13,7 @@ interface UserState {
   isLoginFinished: boolean;
   isAppLoaded: boolean;
   isUserEmailRequested: boolean;
+  isRegisterSuccessful: boolean;
 }
 
 const defaultState: UserState = {
@@ -22,6 +23,7 @@ const defaultState: UserState = {
   isLoginFinished: false,
   isAppLoaded: false,
   isUserEmailRequested: false,
+  isRegisterSuccessful: false,
 };
 
 const SET_USER_ID = "SET_USER_ID";
@@ -32,6 +34,7 @@ const HANDLE_LOGIN_FAILURE = "HANDLE_LOGIN_FAILURE";
 const HANDLE_APP_READINESS = "HANDLE_APP_READINESS";
 const HANDLE_EMAIL_REQUEST = "HANDLE_EMAIL_REQUEST";
 const HANDLE_EMAIL_FETCHED = "HANDLE_EMAIL_FETCHED";
+const HANDLE_REGISTER_SUCCESS = "HANDLE_REGISTER_SUCCESS";
 
 export const userReducer: Reducer<UserState, IUserAction> = (
   state = defaultState,
@@ -73,6 +76,8 @@ export const userReducer: Reducer<UserState, IUserAction> = (
       return { ...state, isUserEmailRequested: true };
     case HANDLE_EMAIL_FETCHED:
       return { ...state, isUserEmailRequested: false };
+      case HANDLE_REGISTER_SUCCESS:
+      return { ...state, isRegisterSuccessful: true };
     default:
       return state;
   }

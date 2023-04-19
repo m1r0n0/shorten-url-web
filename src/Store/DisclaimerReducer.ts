@@ -11,6 +11,7 @@ interface DisclaimerState {
   isInvalidEmail: boolean;
   isInvalidPasswordInput: boolean;
   isNoMatchingPasswords: boolean;
+  isEmailSuitable: boolean;
 }
 
 const defaultState: DisclaimerState = {
@@ -19,6 +20,7 @@ const defaultState: DisclaimerState = {
   isInvalidEmail: false,
   isInvalidPasswordInput: false,
   isNoMatchingPasswords: false,
+  isEmailSuitable: true,
 };
 
 const SET_IS_EXISTING_EMAIL = "SET_IS_EXISTING_EMAIL";
@@ -26,7 +28,8 @@ const SET_IS_INCORRECT_DATE_OF_BIRTH = "IS_INCORRECT_DATE_OF_BIRTH";
 const SET_IS_INVALID_EMAIL = "IS_INVALID_EMAIL ";
 const SET_IS_INVALID_PASSWORD_INPUT = "IS_INVALID_PASSWORD_INPUT";
 const SET_IS_NO_MATCHING_PASSWORDS = "IS_NO_MATCHING_PASSWORDS";
-const HIDE_ALL_DISCLAIMERS ="HIDE_ALL_DISCLAIMERS";
+const SET_IS_EMAIL_SUITABLE = "SET_IS_EMAIL_SUITABLE";
+const HIDE_ALL_DISCLAIMERS = "HIDE_ALL_DISCLAIMERS";
 
 export const disclaimerReducer: Reducer<DisclaimerState, IDisclaimerAction> = (
   state = defaultState,
@@ -43,6 +46,10 @@ export const disclaimerReducer: Reducer<DisclaimerState, IDisclaimerAction> = (
       return { ...state, isInvalidPasswordInput: action.payload };
     case SET_IS_NO_MATCHING_PASSWORDS:
       return { ...state, isNoMatchingPasswords: action.payload };
+    case HIDE_ALL_DISCLAIMERS:
+      return { ...defaultState };
+    case SET_IS_EMAIL_SUITABLE:
+      return { ...state, isEmailSuitable: action.payload };
     default:
       return state;
   }
@@ -66,5 +73,12 @@ export const setIsInvalidPasswordInputAction = (payload: boolean) => ({
 });
 export const setIsNoMatchingPasswordsAction = (payload: boolean) => ({
   type: SET_IS_NO_MATCHING_PASSWORDS,
+  payload,
+});
+export const hideAllDisclaimersAction = () => ({
+  type: HIDE_ALL_DISCLAIMERS,
+});
+export const setIsEmailSuitable = (payload: boolean) => ({
+  type: SET_IS_EMAIL_SUITABLE,
   payload,
 });

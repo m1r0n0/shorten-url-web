@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { fetchUserEmail, proceedLogin } from "../API";
+import { fetchUserEmail, proceedLogin, proceedRegister } from "../API";
 import { lifeTimeOfCookie } from "../JS/constants";
-import { ILoginUser, IUser } from "../Models";
+import { ILoginUser, IRegisterUser, IUser } from "../Models";
 import { AppDispatch } from "../Store";
+import { setIsEmailSuitable, setIsInvalidPasswordInputAction, setIsExistingEmailAction, hideAllDisclaimersAction } from "../Store/DisclaimerReducer";
 import {
   handleAppReadinessAction,
   handleEmailRequestAction,
@@ -43,6 +43,32 @@ export const setUserStateBasedOnCookies =
       });
     }
   };
+
+  export const handleRegister = (properState: IRegisterUser) => async (dispatch: AppDispatch) => {
+    const isEmailSuitable = useAppSelector(state => state.disclaimer.isEmailSuitable);
+    proceedRegister(properState)
+        .catch((error) => {
+          //isEmailSuitable = error.message !== "409";
+          dispatch(setIsEmailSuitable(error.message !== "409"));
+          if (isEmailSuitable) dispatch(setIsInvalidPasswordInputAction(true));
+          //setShowInvalidPasswordInputDisclaimer(true);
+          dispatch(setIsExistingEmailAction(!isEmailSuitable));
+          //setShowExistingEmailDisclaimer(!isEmailSuitable);
+        })
+        .then((res) => {
+          if (isEmailSuitable) {
+            const user: ILoginUser = {
+              email: res.email,
+              password: res.password,
+              rememberMe: true,
+            };
+            dispatch(handleLogin(user));
+            setIsReadyToRedirect(true);
+            dispatch(hideAllDisclaimersAction());
+            //HideDisclaimers();
+          }
+        });
+  } 
 
 export const handleLogin =
   (loginData: ILoginUser) => async (dispatch: AppDispatch) => {
