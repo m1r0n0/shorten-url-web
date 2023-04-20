@@ -6,49 +6,39 @@ import { ILoginUser, IRegisterUser } from "../../../Models";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import {
   hideAllDisclaimersAction,
-  setIsEmailSuitable,
-  setIsExistingEmailAction,
+  setIsEmailSuitableAction,
   setIsIncorrectDateOfBirthAction,
   setIsInvalidEmailAction,
-  setIsInvalidPasswordInputAction,
   setIsNoMatchingPasswordsAction,
+  setIsStateUpdatedAction,
 } from "../../../Store/DisclaimerReducer";
 import Disclaimers from "./Disclaimers";
 
 export const Register = () => {
   const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => state.user.user.userId);
+  const isRegisterSuccessful = useAppSelector(
+    (state) => state.user.isRegisterSuccessful
+  );
+  const isDisclaimersUpdated = useAppSelector(
+    (state) => state.disclaimer.isStateUpdated
+  );
   const [state, setState] = useState({
     email: "",
     password: "",
     year: "",
   });
 
+  const [passwordConfirm, setPasswordConfirm] = useState("");
   const isNoMatchingPasswords = useAppSelector(
     (state) => state.disclaimer.isNoMatchingPasswords
   );
   const isIncorrectDateOfBirth = useAppSelector(
     (state) => state.disclaimer.isIncorrectDateOfBirth
   );
+
   const isEmailSuitable = useAppSelector(
     (state) => state.disclaimer.isEmailSuitable
-  );
-
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-  //let isPasswordsMatching = state.password === passwordConfirm;
-  dispatch(setIsNoMatchingPasswordsAction(state.password !== passwordConfirm));
-  // let isIncorrectDateOfBirth =
-  //   state.year !== "" &&
-  //   (state.year === "0" ||
-  //     Number(state.year.slice(0, 4)) < 1910 ||
-  //     Number(state.year.slice(0, 4)) > 2023);
-  dispatch(
-    setIsIncorrectDateOfBirthAction(
-      state.year !== "" &&
-        (state.year === "0" ||
-          Number(state.year.slice(0, 4)) < 1910 ||
-          Number(state.year.slice(0, 4)) > 2023)
-    )
   );
 
   // const [
@@ -61,7 +51,36 @@ export const Register = () => {
   // const [showInvalidEmailDisclaimer, setShowInvalidEmailDisclaimer] =
   //   useState(false);
 
-  const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
+  async function updateRegisterStateDependentDisclaimerStates() {
+    //let isPasswordsMatching = state.password === passwordConfirm;
+    dispatch(
+      setIsNoMatchingPasswordsAction(
+        state.password !== passwordConfirm ||
+          (state.password === "" && passwordConfirm === "")
+      )
+    );
+    // let isIncorrectDateOfBirth =
+    //   state.year !== "" &&
+    //   (state.year === "0" ||
+    //     Number(state.year.slice(0, 4)) < 1910 ||
+    //     Number(state.year.slice(0, 4)) > 2023);
+    dispatch(
+      setIsIncorrectDateOfBirthAction(
+        (state.year !== "" &&
+          (state.year === "0" ||
+            Number(state.year.slice(0, 4)) < 1910 ||
+            Number(state.year.slice(0, 4)) > 2023)) ||
+          state.year === ""
+      )
+    );
+    //let isEmailSuitable = state.email !== "";
+    dispatch(setIsEmailSuitableAction(state.email !== ""));
+    //setShowInvalidEmailDisclaimer(!isEmailSuitable);
+    dispatch(setIsInvalidEmailAction(!isEmailSuitable));
+    dispatch(setIsStateUpdatedAction());
+  }
+
+  function handleSubmit() {
     // const HideDisclaimers = () => {
     //   setShowInvalidEmailDisclaimer(false);
     //   setShowExistingEmailDisclaimer(false);
@@ -69,7 +88,6 @@ export const Register = () => {
     // };
 
     //HideDisclaimers();
-
     dispatch(hideAllDisclaimersAction());
 
     var properState: IRegisterUser = {
@@ -78,15 +96,11 @@ export const Register = () => {
       year: state.year.slice(0, 4),
     };
 
-    //let isEmailSuitable = state.email !== "";
-    dispatch(setIsEmailSuitable(state.email !== ""));
-    //setShowInvalidEmailDisclaimer(!isEmailSuitable);
-    dispatch(setIsInvalidEmailAction(!isEmailSuitable));
-
-    if (!isIncorrectDateOfBirth && !isNoMatchingPasswords && isEmailSuitable) {
-      dispatch(handleRegister(properState));
-    }
-  };
+    updateRegisterStateDependentDisclaimerStates();
+    while (!isDisclaimersUpdated) {}
+    if (!isIncorrectDateOfBirth && !isNoMatchingPasswords && isEmailSuitable)
+      dispatch(handleRegister(properState, isEmailSuitable));
+  }
 
   return isLogon(userId) ? (
     <Navigate to="/" />
@@ -151,7 +165,7 @@ export const Register = () => {
         </div>
         <br />
         <div className="mb-4">
-          {isReadyToRedirect ? (
+          {isRegisterSuccessful ? (
             <Navigate to="/" />
           ) : (
             <input type="button" value="Register" onClick={handleSubmit} />

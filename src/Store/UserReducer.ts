@@ -87,34 +87,30 @@ export const setUserIdAction = (payload: string) => ({
   type: SET_USER_ID,
   payload,
 });
-
 export const setUserEmailAction = (payload: string) => ({
   type: SET_USER_EMAIL,
   payload,
 });
-
 export const handleLoginRequestAction = () => ({
   type: HANDLE_LOGIN_REQUEST,
 });
-
 export const handleLoginSuccessAction = (payload: ILoginUserResponse) => ({
   type: HANDLE_LOGIN_SUCCESS,
   payload,
 });
-
 export const handleLoginFailureAction = (payload: Error) => ({
   type: HANDLE_LOGIN_FAILURE,
   payload,
 });
-
 export const handleAppReadinessAction = () => ({
   type: HANDLE_APP_READINESS,
 });
-
 export const handleEmailRequestAction = () => ({
   type: HANDLE_EMAIL_REQUEST,
 });
-
 export const handleEmailFetchedAction = () => ({
   type: HANDLE_EMAIL_FETCHED,
+});
+export const handleRegisterSuccessAction = () => ({
+  type: HANDLE_REGISTER_SUCCESS,
 });

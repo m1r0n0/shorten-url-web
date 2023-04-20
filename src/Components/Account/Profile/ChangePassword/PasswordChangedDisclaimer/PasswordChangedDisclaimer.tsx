@@ -1,4 +1,4 @@
-import InvalidPasswordInputDisclaimer from "../../../Register/InvalidPasswordInputDisclaimer";
+import InvalidPasswordInputDisclaimer from "../../../Register/Disclaimers/InvalidPasswordInputDisclaimer";
 
 interface PasswordChangedDisclaimerProps {
   isPasswordChanged: boolean;
