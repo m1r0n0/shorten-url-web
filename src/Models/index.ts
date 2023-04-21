@@ -38,3 +38,9 @@ export interface IUserPasswordId {
   newPassword: string;
   userId: string;
 }
+
+export interface IComponentDependentDisclaimerStates {
+  isIncorrectDateOfBirth: boolean;
+  isNoMatchingPasswords: boolean;
+  isInvalidEmail: boolean;
+}

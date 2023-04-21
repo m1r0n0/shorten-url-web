@@ -1,12 +1,21 @@
 import { fetchUserEmail, proceedLogin, proceedRegister } from "../API";
 import { lifeTimeOfCookie } from "../JS/constants";
-import { ILoginUser, IRegisterUser, IUser } from "../Models";
+import {
+  IComponentDependentDisclaimerStates,
+  ILoginUser,
+  IRegisterUser,
+  IUser,
+} from "../Models";
 import { AppDispatch } from "../Store";
 import {
   setIsEmailSuitableAction,
   setIsInvalidPasswordInputAction,
   setIsExistingEmailAction,
   hideAllDisclaimersAction,
+  setIsIncorrectDateOfBirthAction,
+  setIsInvalidEmailAction,
+  setIsNoMatchingPasswordsAction,
+  setIsStateUpdatedAction,
 } from "../Store/DisclaimerReducer";
 import {
   handleAppReadinessAction,
@@ -55,8 +64,8 @@ export const handleRegister =
   async (dispatch: AppDispatch) => {
     await proceedRegister(properState)
       .catch((error) => {
-        //isEmailSuitable = error.message !== "409";
-        dispatch(setIsEmailSuitableAction(error.message !== "409"));
+        isEmailSuitable = error.message !== "409";
+        dispatch(setIsEmailSuitableAction(isEmailSuitable));
         if (isEmailSuitable) dispatch(setIsInvalidPasswordInputAction(true));
         //setShowInvalidPasswordInputDisclaimer(true);
         dispatch(setIsExistingEmailAction(!isEmailSuitable));
@@ -76,6 +85,21 @@ export const handleRegister =
           //HideDisclaimers();
         }
       });
+  };
+
+export const updateRegisterStateDependentDisclaimerStates =
+  (disclaimerStates: IComponentDependentDisclaimerStates) =>
+  async (dispatch: AppDispatch) => {
+    dispatch(
+      setIsNoMatchingPasswordsAction(disclaimerStates.isNoMatchingPasswords)
+    );
+    dispatch(
+      setIsIncorrectDateOfBirthAction(disclaimerStates.isIncorrectDateOfBirth)
+    );
+    dispatch(setIsInvalidEmailAction(disclaimerStates.isInvalidEmail));
+    //dispatch(setIsEmailSuitableAction(!isInvalidEmail));
+
+    dispatch(setIsStateUpdatedAction());
   };
 
 export const handleLogin =
