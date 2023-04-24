@@ -4,6 +4,7 @@ import IncorrectLoginInputDisclaimer from "./IncorrectLoginInputDisclaimer";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { setUserIdAction } from "../../../Store/UserReducer";
 import { handleLogin, isLogon } from "../../../Services/user";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export const Login = () => {
   const dispatch = useAppDispatch();
@@ -69,7 +70,14 @@ export const Login = () => {
         {isLoginFinished ? (
           <Navigate to="/" />
         ) : isLoginRequested ? (
-          <p>Loading...</p>
+          <ClipLoader
+            size={75}
+            loading={true}
+            color={"#000000"}
+            cssOverride={{}}
+            speedMultiplier={1}
+            className="loader"
+          />
         ) : (
           <input type="button" value="Log in" onClick={handleSubmit} />
         )}

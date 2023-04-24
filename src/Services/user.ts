@@ -60,31 +60,41 @@ export const setUserStateBasedOnCookies =
   };
 
 export const handleRegister =
-  (properState: IRegisterUser, isEmailSuitable: boolean) =>
+  (
+    userState: IRegisterUser,
+    disclaimerStates: IComponentDependentDisclaimerStates
+  ) =>
   async (dispatch: AppDispatch) => {
-    await proceedRegister(properState)
-      .catch((error) => {
-        isEmailSuitable = error.message !== "409";
-        dispatch(setIsEmailSuitableAction(isEmailSuitable));
-        if (isEmailSuitable) dispatch(setIsInvalidPasswordInputAction(true));
-        //setShowInvalidPasswordInputDisclaimer(true);
-        dispatch(setIsExistingEmailAction(!isEmailSuitable));
-        //setShowExistingEmailDisclaimer(!isEmailSuitable);
-      })
-      .then((res) => {
-        if (isEmailSuitable) {
-          const user: ILoginUser = {
-            email: res.email,
-            password: res.password,
-            rememberMe: true,
-          };
-          dispatch(handleLogin(user));
-          dispatch(handleRegisterSuccessAction());
-          //setIsReadyToRedirect(true);
-          dispatch(hideAllDisclaimersAction());
-          //HideDisclaimers();
-        }
-      });
+    if (
+      !disclaimerStates.isIncorrectDateOfBirth &&
+      !disclaimerStates.isNoMatchingPasswords &&
+      !disclaimerStates.isInvalidEmail
+    ) {
+      var isEmailSuitable: boolean = true;
+      var isInvalidPassword: boolean = false;
+      await proceedRegister(userState)
+        .catch((error) => {
+          isEmailSuitable = error.message !== "409";
+          dispatch(setIsEmailSuitableAction(isEmailSuitable));
+          if (isEmailSuitable) {
+            isInvalidPassword = true;
+            dispatch(setIsInvalidPasswordInputAction(isInvalidPassword));
+          }
+          dispatch(setIsExistingEmailAction(!isEmailSuitable));
+        })
+        .then((res) => {
+          if (isEmailSuitable && !isInvalidPassword) {
+            const user: ILoginUser = {
+              email: res.email,
+              password: res.password,
+              rememberMe: true,
+            };
+            dispatch(handleLogin(user));
+            dispatch(handleRegisterSuccessAction());
+            dispatch(hideAllDisclaimersAction());
+          }
+        });
+    }
   };
 
 export const updateRegisterStateDependentDisclaimerStates =
@@ -97,9 +107,6 @@ export const updateRegisterStateDependentDisclaimerStates =
       setIsIncorrectDateOfBirthAction(disclaimerStates.isIncorrectDateOfBirth)
     );
     dispatch(setIsInvalidEmailAction(disclaimerStates.isInvalidEmail));
-    //dispatch(setIsEmailSuitableAction(!isInvalidEmail));
-
-    dispatch(setIsStateUpdatedAction());
   };
 
 export const handleLogin =

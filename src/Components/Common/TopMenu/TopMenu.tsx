@@ -2,8 +2,7 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { isLogon } from "../../../Services/user";
 import {
-  setUserEmailAction,
-  setUserIdAction,
+  handleLogoutAction,
 } from "../../../Store/UserReducer";
 import "./TopMenu.css";
 
@@ -20,8 +19,7 @@ export function TopMenu() {
     };
 
     deleteCookies();
-    dispatch(setUserEmailAction(""));
-    dispatch(setUserIdAction(""));
+    dispatch(handleLogoutAction());
   };
 
   return (

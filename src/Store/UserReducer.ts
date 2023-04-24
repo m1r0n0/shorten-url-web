@@ -35,6 +35,7 @@ const HANDLE_APP_READINESS = "HANDLE_APP_READINESS";
 const HANDLE_EMAIL_REQUEST = "HANDLE_EMAIL_REQUEST";
 const HANDLE_EMAIL_FETCHED = "HANDLE_EMAIL_FETCHED";
 const HANDLE_REGISTER_SUCCESS = "HANDLE_REGISTER_SUCCESS";
+const HANDLE_LOGOUT = "HANDLE_LOGOUT";
 
 export const userReducer: Reducer<UserState, IUserAction> = (
   state = defaultState,
@@ -76,8 +77,16 @@ export const userReducer: Reducer<UserState, IUserAction> = (
       return { ...state, isUserEmailRequested: true };
     case HANDLE_EMAIL_FETCHED:
       return { ...state, isUserEmailRequested: false };
-      case HANDLE_REGISTER_SUCCESS:
+    case HANDLE_REGISTER_SUCCESS:
       return { ...state, isRegisterSuccessful: true };
+    case HANDLE_LOGOUT:
+      return {
+        ...state,
+        user: defaultState.user,
+        isLoginRequested: defaultState.isLoginRequested,
+        isLoginSuccessful: defaultState.isLoginSuccessful,
+        isLoginFinished: defaultState.isLoginFinished,
+      };
     default:
       return state;
   }
@@ -113,4 +122,7 @@ export const handleEmailFetchedAction = () => ({
 });
 export const handleRegisterSuccessAction = () => ({
   type: HANDLE_REGISTER_SUCCESS,
+});
+export const handleLogoutAction = () => ({
+  type: HANDLE_LOGOUT,
 });

@@ -1,37 +1,23 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { proceedRegister } from "../../../API";
 import {
-  handleLogin,
   handleRegister,
   isLogon,
   updateRegisterStateDependentDisclaimerStates,
 } from "../../../Services/user";
 import {
   IComponentDependentDisclaimerStates,
-  ILoginUser,
   IRegisterUser,
 } from "../../../Models";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import {
-  hideAllDisclaimersAction,
-  setIsEmailSuitableAction,
-  setIsIncorrectDateOfBirthAction,
-  setIsInvalidEmailAction,
-  setIsNoMatchingPasswordsAction,
-  setIsStateUpdatedAction,
-} from "../../../Store/DisclaimerReducer";
+import { hideAllDisclaimersAction } from "../../../Store/DisclaimerReducer";
 import Disclaimers from "./Disclaimers";
-import { AppDispatch } from "../../../Store";
 
 export const Register = () => {
   const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => state.user.user.userId);
   const isRegisterSuccessful = useAppSelector(
     (state) => state.user.isRegisterSuccessful
-  );
-  const isDisclaimersUpdated = useAppSelector(
-    (state) => state.disclaimer.isStateUpdated
   );
   const [state, setState] = useState({
     email: "",
@@ -40,19 +26,6 @@ export const Register = () => {
   });
 
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  // const isNoMatchingPasswords = useAppSelector(
-  //   (state) => state.disclaimer.isNoMatchingPasswords
-  // );
-  // const isIncorrectDateOfBirth = useAppSelector(
-  //   (state) => state.disclaimer.isIncorrectDateOfBirth
-  // );
-  // const isEmailSuitable = useAppSelector(
-  //   (state) => state.disclaimer.isEmailSuitable
-  // );
-  // const isInvalidEmail = useAppSelector(
-  //   (state) => state.disclaimer.isInvalidEmail
-  // );
-
   function handleSubmit() {
     dispatch(hideAllDisclaimersAction());
 
@@ -75,13 +48,7 @@ export const Register = () => {
     };
 
     dispatch(updateRegisterStateDependentDisclaimerStates(disclaimerStates));
-    if (
-      !isIncorrectDateOfBirth &&
-      !isNoMatchingPasswords &&
-      isInvalidEmail &&
-      isDisclaimersUpdated
-    )
-      dispatch(handleRegister(properUserState, isEmailisInvalidEmailSuitable));
+    dispatch(handleRegister(properUserState, disclaimerStates));
   }
 
   return isLogon(userId) ? (
