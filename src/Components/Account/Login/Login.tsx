@@ -1,8 +1,7 @@
-import React, { useContext, useState } from "react";
-import { BrowserRouter as Router, Navigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
 import IncorrectLoginInputDisclaimer from "./IncorrectLoginInputDisclaimer";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { setUserIdAction } from "../../../Store/UserReducer";
 import { handleLogin, isLogon } from "../../../Services/user";
 import ClipLoader from "react-spinners/ClipLoader";
 

@@ -5,6 +5,14 @@ export interface ILink {
   userId: string | undefined;
 }
 
+export interface IUserLink {
+  fullUrl: string;
+  shortUrl: string;
+  isPrivate: boolean;
+}
+
+export interface IUserLinks extends Array<IUserLink> {}
+
 export interface IUser {
   userId: string;
   userEmail: string;

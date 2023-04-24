@@ -2,17 +2,15 @@ import { useEffect, useState } from "react";
 import Table from "../Table/";
 import { getItemsForMyLinksTable } from "../../../../API";
 import { Navigate } from "react-router-dom";
-import { useAppSelector } from "../../../../hooks";
+import { useAppDispatch, useAppSelector } from "../../../../hooks";
 import { isLogon } from "../../../../Services/user";
+import { useSelector } from "react-redux";
+import { updateTableData } from "../../../../Services/link";
 
 export const MyLinksPage = () => {
   const userID = useAppSelector((state) => state.user.user.userId);
-  const [state, setState] = useState({
-    // to redux
-    items: [],
-    isLoaded: false,
-    error: null,
-  });
+  const state = useAppSelector(state => state.link.userLinks);
+  const dispatch = useAppDispatch();
   const { items, isLoaded } = state;
 
   const getHeadings = () => {
@@ -20,33 +18,13 @@ export const MyLinksPage = () => {
     return Object.keys(items[0]);
   };
 
-  const isTBodyEmpty = () => { //var
-    return items.length === 0 || items == null
-  };
 
-  const updateTableData = () => {
-    if (userID !== "") {
-      getItemsForMyLinksTable(userID).then( //thunk
-        (result) => {
-          setState({
-            items: result.urlList,
-            isLoaded: true,
-            error: state.error,
-          });
-        },
-        (error) => {
-          setState({
-            items: state.items,
-            isLoaded: true,
-            error,
-          });
-        }
-      );
-    }
-  };
+  const isTBodyEmpty = items.length === 0 || items == null;
+
+  
 
   useEffect(() => {
-    updateTableData();
+    dispatch(updateTableData());
   }, [userID, isLoaded]);
 
   if (!isLoaded) {
@@ -60,7 +38,7 @@ export const MyLinksPage = () => {
     return (
       <div>
         <h1>My links</h1>
-        {isTBodyEmpty() ? (
+        {isTBodyEmpty ? (
           <p>You haven't created any link yet!</p>
         ) : (
           <Table
