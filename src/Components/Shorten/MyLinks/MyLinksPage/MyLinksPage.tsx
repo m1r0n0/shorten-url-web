@@ -15,14 +15,15 @@ export const MyLinksPage = () => {
   const dispatch = useAppDispatch();
   const { items, isLoaded } = state;
 
-  const getHeadings = () => {
-    // const { items } = state;
-    // return Object.keys(items[0]);
-    return Object({
-      fullUrl: "Full Url",
-      shortUrl: "Short Url",
-      isPrivate: "Is Private",
-    });
+  const getKeys = () => {
+    const { items } = state;
+    return Object.keys(items[0]);
+    // return Object({
+    //   fullUrl: "Full Url",
+    //   shortUrl: "Short Url",
+    //   isPrivate: "Is Private",
+    // });
+    // return Object(["Full Url", "Short Url", "Is Private"]);
   };
 
   const isTBodyEmpty = items.length === 0 || items == null;
@@ -52,11 +53,7 @@ export const MyLinksPage = () => {
         {isTBodyEmpty ? (
           <p>You haven't created any link yet!</p>
         ) : (
-          <Table
-            theadData={getHeadings()}
-            tbodyData={items}
-            updateTableData={updateUserLinksTableData}
-          />
+          <Table theadData={getKeys()} tbodyData={items} />
         )}
       </div>
     );

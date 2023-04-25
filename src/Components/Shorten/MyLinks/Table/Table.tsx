@@ -1,8 +1,16 @@
 import { changeParticularLinkPrivacy } from "../../../../API";
-import { useAppSelector } from "../../../../hooks";
+import { ITableHeadings, IUserLink, IUserLinks } from "../../../../Models";
+import { updateUserLinksTableData } from "../../../../Services/link";
+import { useAppDispatch, useAppSelector } from "../../../../hooks";
 
-export default function Table({ theadData, tbodyData, updateTableData }: any) {
-  const userID = useAppSelector((state) => state.user.user.userId);
+interface ITable {
+  theadData: string[];
+  tbodyData: IUserLinks;
+}
+
+export default function Table({ theadData, tbodyData }: ITable) {
+  const dispatch = useAppDispatch();
+  const userId = useAppSelector((state) => state.user.user.userId);
 
   const IsThereNeededCheckBox = (value: any): boolean => {
     //to different JSON
@@ -13,9 +21,22 @@ export default function Table({ theadData, tbodyData, updateTableData }: any) {
     }
   };
 
+  const TurnKeyIntoHeading = (key: string): string => {
+    switch (key) {
+      case "fullUrl":
+        return "Full Url";
+      case "shortUrl":
+        return "Short Url";
+      case "isPrivate":
+        return "Is Private?";
+      default:
+        return "";
+    }
+  };
+
   const ChangePrivacyOfLink = (row: any): any => {
-    changeParticularLinkPrivacy(row, userID).then(() => {
-      updateTableData();
+    changeParticularLinkPrivacy(row, userId).then(() => {
+      dispatch(updateUserLinksTableData(userId));
     });
   };
 
@@ -25,15 +46,15 @@ export default function Table({ theadData, tbodyData, updateTableData }: any) {
       <thead>
         <tr>
           {theadData.map((heading: string) => {
-            return <th>{heading}</th>;
+            return <th key={heading}> {TurnKeyIntoHeading(heading)} </th>;
           })}
         </tr>
       </thead>
       <tbody>
-        {tbodyData.map((row: any, index: any) => {
+        {tbodyData.map((row: IUserLink, index: number) => {
           return (
             <tr key={index}>
-              {theadData.map((key: any) => {
+              {theadData.map((key: string) => {
                 //non-boolean (non-checkbox) row[key] always equals true
                 return row[key] ? (
                   IsThereNeededCheckBox(row[key]) ? (
