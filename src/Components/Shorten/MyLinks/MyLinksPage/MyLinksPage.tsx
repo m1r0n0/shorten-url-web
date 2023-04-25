@@ -5,33 +5,44 @@ import { Navigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../hooks";
 import { isLogon } from "../../../../Services/user";
 import { useSelector } from "react-redux";
-import { updateTableData } from "../../../../Services/link";
+import { updateUserLinksTableData } from "../../../../Services/link";
+import ClipLoader from "react-spinners/ClipLoader";
+import { ITableHeadings } from "../../../../Models";
 
 export const MyLinksPage = () => {
-  const userID = useAppSelector((state) => state.user.user.userId);
-  const state = useAppSelector(state => state.link.userLinks);
+  const userId = useAppSelector((state) => state.user.user.userId);
+  const state = useAppSelector((state) => state.link.userLinks);
   const dispatch = useAppDispatch();
   const { items, isLoaded } = state;
 
   const getHeadings = () => {
-    const { items } = state;
-    return Object.keys(items[0]);
+    // const { items } = state;
+    // return Object.keys(items[0]);
+    return Object({
+      fullUrl: "Full Url",
+      shortUrl: "Short Url",
+      isPrivate: "Is Private",
+    });
   };
-
 
   const isTBodyEmpty = items.length === 0 || items == null;
 
-  
-
   useEffect(() => {
-    dispatch(updateTableData());
-  }, [userID, isLoaded]);
+    dispatch(updateUserLinksTableData(userId));
+  }, [userId, isLoaded]);
 
   if (!isLoaded) {
     return (
       <div>
-        <p>Loading...</p>
-        {isLogon(userID) ? null : <Navigate to="/Unauthorized" />}
+        <ClipLoader
+          size={200}
+          loading={true}
+          color={"#000000"}
+          cssOverride={{}}
+          speedMultiplier={1}
+          className="loader"
+        />
+        {isLogon(userId) ? null : <Navigate to="/Unauthorized" />}
       </div>
     );
   } else {
@@ -44,7 +55,7 @@ export const MyLinksPage = () => {
           <Table
             theadData={getHeadings()}
             tbodyData={items}
-            updateTableData={updateTableData}
+            updateTableData={updateUserLinksTableData}
           />
         )}
       </div>

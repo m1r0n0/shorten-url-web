@@ -52,3 +52,9 @@ export interface IComponentDependentDisclaimerStates {
   isNoMatchingPasswords: boolean;
   isInvalidEmail: boolean;
 }
+
+export interface ITableHeadings {
+  fullUrl: string;
+  shortUrl: string;
+  isPrivate: string;
+}

@@ -4,7 +4,8 @@ import { useAppSelector } from "../../../../hooks";
 export default function Table({ theadData, tbodyData, updateTableData }: any) {
   const userID = useAppSelector((state) => state.user.user.userId);
 
-  const IsThereNeededCheckBox = (value: any): boolean => { //to different JSON
+  const IsThereNeededCheckBox = (value: any): boolean => {
+    //to different JSON
     if (value === true || value === false) {
       return true;
     } else {
@@ -18,12 +19,13 @@ export default function Table({ theadData, tbodyData, updateTableData }: any) {
     });
   };
 
-  return ( //css flex
+  return (
+    //css flex
     <table className="table">
       <thead>
         <tr>
-          {theadData.map((heading: any) => {
-            return <th key={heading}>{heading}</th>;
+          {theadData.map((heading: string) => {
+            return <th>{heading}</th>;
           })}
         </tr>
       </thead>
