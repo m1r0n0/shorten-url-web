@@ -4,6 +4,7 @@ import {
   ILoginUser,
   IUserEmailId,
   IUserPasswordId,
+  IUserLink,
 } from "../Models";
 import {
   ACCOUNT,
@@ -89,8 +90,8 @@ export async function getItemsForMyLinksTable(userID: string) {
   return await response.json();
 }
 
-export async function changeParticularLinkPrivacy(
-  body: ILink,
+export async function changeCertainLinkPrivacy(
+  body: IUserLink,
   userID: string | undefined
 ) {
   body.shortUrl = body.shortUrl.split(".com/").pop()!;

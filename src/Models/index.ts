@@ -6,6 +6,7 @@ export interface ILink {
 }
 
 export interface IUserLink {
+  [key: string]: string | boolean;
   fullUrl: string;
   shortUrl: string;
   isPrivate: boolean;

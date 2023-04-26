@@ -1,5 +1,9 @@
-import { addUrl, getItemsForMyLinksTable } from "../API";
-import { ILink } from "../Models";
+import {
+  addUrl,
+  changeCertainLinkPrivacy,
+  getItemsForMyLinksTable,
+} from "../API";
+import { ILink, IUserLink } from "../Models";
 import { AppDispatch } from "../Store";
 import {
   handleUserLinksGettingAction,
@@ -21,4 +25,12 @@ export const updateUserLinksTableData =
         dispatch(handleUserLinksGettingAction(result.urlList));
       });
     }
+  };
+
+export const ChangeLinkPrivacy =
+  (row: IUserLink, userId: string) => async (dispatch: AppDispatch) => {
+    
+    changeCertainLinkPrivacy(row, userId).then(() => {
+      dispatch(updateUserLinksTableData(userId));
+    });
   };
