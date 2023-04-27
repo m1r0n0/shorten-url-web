@@ -1,9 +1,9 @@
 import { Reducer } from "redux";
-import { IUserLinks } from "../Models";
+import { IUserLink, IUserLinks } from "../Models";
 
 interface ILinkAction {
   type: string;
-  payload: string | IUserLinks;
+  payload: string | IUserLinks | IUserLink;
 }
 
 interface ILinkState {
@@ -40,10 +40,18 @@ export const linkReducer: Reducer<ILinkState, ILinkAction> = (
           isLoaded: true,
         },
       };
-      case HANDLE_LINK_PRIVACY_CHANGING:
-        var items = state.userLinks.items;
-        items.find(element => element.shortUrl === action.payload)
-        return{...state, userLinks:{...state.userLinks, items: }}
+    case HANDLE_LINK_PRIVACY_CHANGING:
+      var link = action.payload as IUserLink;
+      var changingLinkIndexInItems = state.userLinks.items.findIndex(
+        (element) => element.shortUrl === link.shortUrl
+      );
+      var updatedItems = state.userLinks.items;
+      updatedItems[changingLinkIndexInItems].isPrivate =
+        !updatedItems[changingLinkIndexInItems].isPrivate;
+      return {
+        ...state,
+        userLinks: { ...state.userLinks, items: updatedItems },
+      };
     default:
       return state;
   }
@@ -60,7 +68,7 @@ export const handleUserLinksGettingAction = (payload: IUserLinks) => ({
   type: HANDLE_USER_LINKS_GETTING,
   payload,
 });
-export const changeCertainLinkPrivacyAction = (payload: IUserLinks) => ({
+export const handleLinkPrivacyChangeAction = (payload: IUserLink) => ({
   type: HANDLE_LINK_PRIVACY_CHANGING,
   payload,
 });

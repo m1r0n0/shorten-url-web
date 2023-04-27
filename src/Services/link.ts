@@ -6,6 +6,7 @@ import {
 import { ILink, IUserLink } from "../Models";
 import { AppDispatch } from "../Store";
 import {
+  handleLinkPrivacyChangeAction,
   handleUserLinksGettingAction,
   setShortUrlAction,
 } from "../Store/LinkReducer";
@@ -29,7 +30,7 @@ export const updateUserLinksTableData =
 
 export const ChangeLinkPrivacy =
   (row: IUserLink, userId: string) => async (dispatch: AppDispatch) => {
-    
+    dispatch(handleLinkPrivacyChangeAction(row));
     changeCertainLinkPrivacy(row, userId).then(() => {
       dispatch(updateUserLinksTableData(userId));
     });
