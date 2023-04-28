@@ -57,10 +57,8 @@ export const Register = () => {
     <div>
       <h2>Register</h2>
       <form method="post" asp-controller="Account" asp-action="Register">
-        <div asp-validation-summary="ModelOnly"></div>
         <div>
           <label htmlFor="Email">Email</label>
-          <br />
           <input
             value={state.email}
             onChange={(event) =>
@@ -73,7 +71,6 @@ export const Register = () => {
         </div>
         <div>
           <label htmlFor="Year">Date of birth</label>
-          <br />
           <input
             type="date"
             id="year"
@@ -92,7 +89,6 @@ export const Register = () => {
         </div>
         <div>
           <label htmlFor="Password">Password</label>
-          <br />
           <input
             onChange={(event) =>
               setState({ ...state, password: event.target.value })
@@ -104,7 +100,6 @@ export const Register = () => {
         </div>
         <div>
           <label htmlFor="PasswordConfirm">Password Confirm</label>
-          <br />
           <input
             onChange={(event) => setPasswordConfirm(event.target.value)}
             type="password"
@@ -112,8 +107,7 @@ export const Register = () => {
             id="passwordConfirm"
           />
         </div>
-        <br />
-        <div className="mb-4">
+        <div className="m-4">
           {isRegisterSuccessful ? (
             <Navigate to="/" />
           ) : (

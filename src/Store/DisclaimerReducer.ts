@@ -13,6 +13,7 @@ interface DisclaimerState {
   isNoMatchingPasswords: boolean;
   isEmailSuitable: boolean;
   isStateUpdated: boolean;
+  isFullUrlInvalid: boolean;
 }
 
 const defaultState: DisclaimerState = {
@@ -23,6 +24,7 @@ const defaultState: DisclaimerState = {
   isNoMatchingPasswords: false,
   isEmailSuitable: true,
   isStateUpdated: false,
+  isFullUrlInvalid: false,
 };
 
 const SET_IS_EXISTING_EMAIL = "SET_IS_EXISTING_EMAIL";
@@ -33,6 +35,7 @@ const SET_IS_NO_MATCHING_PASSWORDS = "IS_NO_MATCHING_PASSWORDS";
 const SET_IS_EMAIL_SUITABLE = "SET_IS_EMAIL_SUITABLE";
 const HIDE_ALL_DISCLAIMERS = "HIDE_ALL_DISCLAIMERS";
 const SET_IS_STATE_UPDATED = "SET_IS_STATE_UPDATED";
+const SET_IS_FULL_URL_INVALID = "SET_IS_FULL_URL_INVALID";
 
 export const disclaimerReducer: Reducer<DisclaimerState, IDisclaimerAction> = (
   state = defaultState,
@@ -55,6 +58,8 @@ export const disclaimerReducer: Reducer<DisclaimerState, IDisclaimerAction> = (
       return { ...state, isEmailSuitable: action.payload };
     case SET_IS_STATE_UPDATED:
       return { ...state, isStateUpdated: true };
+    case SET_IS_FULL_URL_INVALID:
+      return { ...state, isFullUrlInvalid: action.payload };
     default:
       return state;
   }
@@ -89,4 +94,8 @@ export const setIsEmailSuitableAction = (payload: boolean) => ({
 });
 export const setIsStateUpdatedAction = () => ({
   type: SET_IS_STATE_UPDATED,
+});
+export const setIsFullUrlInvalidAction = (payload: boolean) => ({
+  type: SET_IS_FULL_URL_INVALID,
+  payload,
 });

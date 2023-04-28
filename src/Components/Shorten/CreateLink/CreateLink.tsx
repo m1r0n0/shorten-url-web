@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { addUrl } from "../../../API";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { ILink } from "../../../Models";
 import { isLogon } from "../../../Services/user";
 import { createNewShortUrl } from "../../../Services/link";
+import { setIsFullUrlInvalidAction } from "../../../Store/DisclaimerReducer";
+import InvalidFullUrlDisclaimer from "./InvalidFullUrlDisclaimer";
+import { setShortUrlAction } from "../../../Store/LinkReducer";
 
 export const CreateLink = () => {
   const userID = useAppSelector((state) => state.user.user.userId);
   const shortUrl = useAppSelector((state) => state.link.shortUrl);
+  const isFullUrlInvalid = useAppSelector(
+    (state) => state.disclaimer.isFullUrlInvalid
+  );
   const dispatch = useAppDispatch();
   const [state, setState] = useState<ILink>({
     fullUrl: "",
@@ -17,7 +22,13 @@ export const CreateLink = () => {
   });
 
   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
-    dispatch(createNewShortUrl(state));
+    var isFullUrlValid: boolean = state.fullUrl !== "";
+    if (isFullUrlValid) {
+      dispatch(createNewShortUrl(state));
+    } else {
+      dispatch(setShortUrlAction(""));
+    }
+    dispatch(setIsFullUrlInvalidAction(!isFullUrlValid));
   };
 
   useEffect(() => {
@@ -28,11 +39,9 @@ export const CreateLink = () => {
     //css flex
     <div>
       <h1>Create your Short URL!</h1>
-      <br />
       <div className="row">
         <div>
           <label htmlFor="FullUrl"> Your Full URL: </label>
-          <br />
           <input
             value={state.fullUrl}
             onChange={(event) =>
@@ -45,12 +54,9 @@ export const CreateLink = () => {
             name="fullUrl"
             id="fullUrl"
           />
-          <span asp-validation-for="FullUrl" className="text-danger"></span>
-          <br />
-          <br />
           {isLogon(userID) ? (
             <div>
-              <label htmlFor="IsPrivate">Private link?</label> <br />
+              <label htmlFor="IsPrivate">Private link?</label>
               <input
                 onChange={(event) =>
                   setState({
@@ -62,23 +68,16 @@ export const CreateLink = () => {
                 name="isPrivate"
                 id="isPrivate"
               />
-              <br />
-              <br />
             </div>
-          ) : (
-            <></>
-          )}
+          ) : null}
         </div>
-        <br />
-        <div>
+        <div className="my-2">
           <input type="button" value="Create" onClick={handleSubmit} />
         </div>
-        <br />
-        <br />
-        <div>
+        <div className="mb-3">
           <h3> Your shortened Url: {state.shortUrl}</h3>
-          <br />
         </div>
+        <div>{isFullUrlInvalid ? <InvalidFullUrlDisclaimer /> : null}</div>
       </div>
     </div>
   );

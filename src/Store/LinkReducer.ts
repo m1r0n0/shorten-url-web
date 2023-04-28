@@ -46,11 +46,11 @@ export const linkReducer: Reducer<ILinkState, ILinkAction> = (
         (element) => element.shortUrl === link.shortUrl
       );
       var updatedItems = state.userLinks.items;
-      updatedItems[changingLinkIndexInItems].isPrivate =
-        !updatedItems[changingLinkIndexInItems].isPrivate;
+      // updatedItems[changingLinkIndexInItems].isPrivate =
+      //   !updatedItems[changingLinkIndexInItems].isPrivate;
       return {
         ...state,
-        userLinks: { ...state.userLinks, items: updatedItems },
+        userLinks: { ...state.userLinks, items: [...updatedItems] },
       };
     default:
       return state;

@@ -32,7 +32,7 @@ export const Login = () => {
     <div>
       <h2> Enter the app</h2>
       <div>
-        <label htmlFor="email">Email</label> <br />
+        <label htmlFor="email">Email</label>
         <input
           value={state.email}
           onChange={(event) =>
@@ -44,7 +44,7 @@ export const Login = () => {
         />
       </div>
       <div>
-        <label htmlFor="password"></label>Password <br />
+        <label htmlFor="password">Password</label>
         <input
           onChange={(event) =>
             setState({ ...state, password: event.target.value })
@@ -55,7 +55,7 @@ export const Login = () => {
         />
       </div>
       <div>
-        <label htmlFor="rememberMe">Remember me?</label> <br />
+        <label htmlFor="rememberMe">Remember me?</label>
         <input
           onChange={(event) =>
             setState({ ...state, rememberMe: event.target.checked })
@@ -65,7 +65,7 @@ export const Login = () => {
           id="rememberMe"
         />
       </div>
-      <div className="mb-3">
+      <div className="m-3">
         {isLoginFinished ? (
           <Navigate to="/" />
         ) : isLoginRequested ? (

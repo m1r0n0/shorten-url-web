@@ -10,14 +10,6 @@ interface ITable {
 }
 
 export default function Table({ tKeys, tbodyData }: ITable) {
-  // const IsThereNeededCheckBox = (value: any): boolean => {
-  //   //to different JSON
-  //   if (value === true || value === false) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // };
 
   const TurnKeyIntoHeading = (key: string): string => {
     switch (key) {
@@ -27,9 +19,8 @@ export default function Table({ tKeys, tbodyData }: ITable) {
         return "Short Url";
       case "isPrivate":
         return "Is Private?";
-      default:
-        return "";
     }
+    return "";
   };
 
   return (
@@ -39,14 +30,16 @@ export default function Table({ tKeys, tbodyData }: ITable) {
         <tr key="heading">
           {tKeys.map((heading: string) => {
             return (
-              <th key={heading as React.Key}>{TurnKeyIntoHeading(heading)} </th>
+              <th key={heading as React.Key}>
+                {TurnKeyIntoHeading(heading)} 
+                </th>
             );
           })}
         </tr>
       </thead>
       <tbody>
         {tbodyData.map((row: IUserLink, index: number) => {
-          return <TBodyRow row={row} keys={tKeys} index={index} />;
+          return <TBodyRow key={index} row={row} keys={tKeys} index={index} />;
         })}
       </tbody>
     </table>

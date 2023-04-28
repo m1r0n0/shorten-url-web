@@ -32,8 +32,8 @@ export const ChangeEmail = () => {
 
   return (
     <div>
-      <div className="mb-4">
-        <label htmlFor="email">Enter new Email:</label> <br />
+      <div className="mb-3">
+        <label htmlFor="email">Enter new Email:</label>
         <input
           value={state.newEmail}
           onChange={(event) =>
