@@ -8,14 +8,15 @@ import { AppDispatch } from "../Store";
 import {
   handleLinkPrivacyChangeAction,
   handleUserLinksGettingAction,
+  setIsShortLinkCreated,
   setShortUrlAction,
 } from "../Store/LinkReducer";
-import { useAppSelector } from "../hooks";
 
 export const createNewShortUrl =
   (state: ILink) => async (dispatch: AppDispatch) => {
     addUrl(state).then((res) => {
       dispatch(setShortUrlAction(res.shortUrl));
+      dispatch(setIsShortLinkCreated(true));
     });
   };
 
@@ -30,7 +31,7 @@ export const updateUserLinksTableData =
 
 export const ChangeLinkPrivacy =
   (row: IUserLink, userId: string) => async (dispatch: AppDispatch) => {
-   await dispatch(handleLinkPrivacyChangeAction(row));
+    // await dispatch(handleLinkPrivacyChangeAction(row));
     changeCertainLinkPrivacy(row, userId).then(() => {
       dispatch(updateUserLinksTableData(userId));
     });

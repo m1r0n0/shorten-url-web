@@ -5,7 +5,7 @@ import { isLogon } from "../../../Services/user";
 import { createNewShortUrl } from "../../../Services/link";
 import { setIsFullUrlInvalidAction } from "../../../Store/DisclaimerReducer";
 import InvalidFullUrlDisclaimer from "./InvalidFullUrlDisclaimer";
-import { setShortUrlAction } from "../../../Store/LinkReducer";
+import { setIsShortLinkCreated, setShortUrlAction } from "../../../Store/LinkReducer";
 
 export const CreateLink = () => {
   const userID = useAppSelector((state) => state.user.user.userId);
@@ -20,6 +20,9 @@ export const CreateLink = () => {
     userId: userID,
     shortUrl: "",
   });
+  const isShortLinkCreated = useAppSelector(
+    (state) => state.link.isShortLinkCreated
+  );
 
   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
     var isFullUrlValid: boolean = state.fullUrl !== "";
@@ -27,6 +30,7 @@ export const CreateLink = () => {
       dispatch(createNewShortUrl(state));
     } else {
       dispatch(setShortUrlAction(""));
+      dispatch(setIsShortLinkCreated(false))
     }
     dispatch(setIsFullUrlInvalidAction(!isFullUrlValid));
   };
@@ -39,8 +43,8 @@ export const CreateLink = () => {
     //css flex
     <div>
       <h1>Create your Short URL!</h1>
-      <div className="row">
-        <div>
+      <div>
+        <div className="mt-5">
           <label htmlFor="FullUrl"> Your Full URL: </label>
           <input
             value={state.fullUrl}
@@ -75,7 +79,9 @@ export const CreateLink = () => {
           <input type="button" value="Create" onClick={handleSubmit} />
         </div>
         <div className="mb-3">
-          <h3> Your shortened Url: {state.shortUrl}</h3>
+          {isShortLinkCreated ? (
+            <h3> Your shortened Url: {state.shortUrl}</h3>
+          ) : null}
         </div>
         <div>{isFullUrlInvalid ? <InvalidFullUrlDisclaimer /> : null}</div>
       </div>

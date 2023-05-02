@@ -15,7 +15,6 @@ import {
   setIsIncorrectDateOfBirthAction,
   setIsInvalidEmailAction,
   setIsNoMatchingPasswordsAction,
-  setIsStateUpdatedAction,
 } from "../Store/DisclaimerReducer";
 import {
   handleAppReadinessAction,
@@ -121,7 +120,7 @@ export const handleLogin =
         setOnCloseUserCookies(String(user.userId));
       }
     } catch (error) {
-      dispatch(handleLoginFailureAction(error as Error));
+      dispatch(handleLoginFailureAction());
     }
   };
 

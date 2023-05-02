@@ -3,7 +3,7 @@ import { ILoginUserResponse, IUser } from "../Models";
 
 interface IUserAction {
   type: string;
-  payload: ILoginUserResponse | string | Error | IUser;
+  payload: ILoginUserResponse | string | IUser;
 }
 
 interface UserState {
@@ -107,9 +107,8 @@ export const handleLoginSuccessAction = (payload: ILoginUserResponse) => ({
   type: HANDLE_LOGIN_SUCCESS,
   payload,
 });
-export const handleLoginFailureAction = (payload: Error) => ({
+export const handleLoginFailureAction = () => ({
   type: HANDLE_LOGIN_FAILURE,
-  payload,
 });
 export const handleAppReadinessAction = () => ({
   type: HANDLE_APP_READINESS,
