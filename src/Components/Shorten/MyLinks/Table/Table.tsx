@@ -10,7 +10,6 @@ interface ITable {
 }
 
 export default function Table({ tKeys, tbodyData }: ITable) {
-
   const TurnKeyIntoHeading = (key: string): string => {
     switch (key) {
       case "fullUrl":
@@ -24,24 +23,21 @@ export default function Table({ tKeys, tbodyData }: ITable) {
   };
 
   return (
-    //css flex
-    <table className="table">
-      <thead>
-        <tr key="heading">
-          {tKeys.map((heading: string) => {
-            return (
-              <th key={heading as React.Key}>
-                {TurnKeyIntoHeading(heading)} 
-                </th>
-            );
-          })}
-        </tr>
-      </thead>
-      <tbody>
+    <div className="table">
+      <div key="heading" className="d-flex flex-row">
+        {tKeys.map((heading: string) => {
+          return (
+            <div key={heading as React.Key}>
+              <p className="font-italic">{TurnKeyIntoHeading(heading)}</p>
+            </div>
+          );
+        })}
+      </div>
+      <div className="d-flex flex-row">
         {tbodyData.map((row: IUserLink, index: number) => {
           return <TBodyRow key={index} row={row} keys={tKeys} index={index} />;
         })}
-      </tbody>
-    </table>
+      </div>
+    </div>
   );
 }

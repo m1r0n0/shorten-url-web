@@ -18,20 +18,20 @@ export const TBodyRow = ({ row, keys, index }: Props): JSX.Element => {
   };
 
   return (
-    <tr key={index}>
+    <div key={index} className="flex-column">
       {keys.map((key: string) => {
         return IsCheckBoxThere(key as string) ? (
-          <td key={row[key] as React.Key}>
+          <div key={row[key] as React.Key}>
             <input
               type="checkbox"
               defaultChecked={row[key] as boolean}
               onClick={() => dispatch(ChangeLinkPrivacy(row, userId))}
             />
-          </td>
+          </div>
         ) : (
-          <td key={row[key] as React.Key}> {row[key]} </td>
+          <div key={row[key] as React.Key}> {row[key]} </div>
         );
       })}
-    </tr>
+    </div>
   );
 };
