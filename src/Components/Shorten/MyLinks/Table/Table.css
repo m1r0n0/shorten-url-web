@@ -1,0 +1,9 @@
+.tableCell {
+  width: 33%;
+  word-wrap: break-word;
+  padding-left: 10px;
+}
+
+.tableHeading {
+  font-weight: bold;
+}

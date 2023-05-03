@@ -5,7 +5,7 @@ import ChangePassword from "./ChangePassword";
 export const Profile = () => {
   return (
     <>
-      <div>
+      <div className="d-flex align-items-center justify-content-center">
         <ul>
           <li>
             <Link to="/Profile/ChangeEmail">Change Email</Link>

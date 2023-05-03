@@ -1,8 +1,6 @@
-import { changeCertainLinkPrivacy } from "../../../../API";
-import { ITableHeadings, IUserLink, IUserLinks } from "../../../../Models";
-import { updateUserLinksTableData } from "../../../../Services/link";
-import { useAppDispatch, useAppSelector } from "../../../../hooks";
+import { IUserLink, IUserLinks } from "../../../../Models";
 import TBodyRow from "./TBodyRow";
+import "./Table.css";
 
 interface ITable {
   tKeys: string[];
@@ -23,17 +21,20 @@ export default function Table({ tKeys, tbodyData }: ITable) {
   };
 
   return (
-    <div className="table">
-      <div key="heading" className="d-flex flex-row">
+    <div className="d-flex flex-column">
+      <div
+        key="heading"
+        className="d-flex flex-row justify-content-around align-items-center"
+      >
         {tKeys.map((heading: string) => {
           return (
-            <div key={heading as React.Key}>
-              <p className="font-italic">{TurnKeyIntoHeading(heading)}</p>
-            </div>
+            <p className="tableCell tableHeading" key={heading as React.Key}>
+              {TurnKeyIntoHeading(heading)}
+            </p>
           );
         })}
       </div>
-      <div className="d-flex flex-row">
+      <div className="d-flex flex-column">
         {tbodyData.map((row: IUserLink, index: number) => {
           return <TBodyRow key={index} row={row} keys={tKeys} index={index} />;
         })}

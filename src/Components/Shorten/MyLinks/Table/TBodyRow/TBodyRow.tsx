@@ -1,6 +1,7 @@
 import { IUserLink } from "../../../../../Models";
 import { ChangeLinkPrivacy } from "../../../../../Services/link";
 import { useAppDispatch, useAppSelector } from "../../../../../hooks";
+import "../Table.css";
 
 interface Props {
   row: IUserLink;
@@ -18,18 +19,23 @@ export const TBodyRow = ({ row, keys, index }: Props): JSX.Element => {
   };
 
   return (
-    <div key={index} className="flex-column">
+    <div
+      key={index}
+      className="d-flex flex-row justify-content-around align-items-center"
+    >
       {keys.map((key: string) => {
         return IsCheckBoxThere(key as string) ? (
-          <div key={row[key] as React.Key}>
-            <input
-              type="checkbox"
-              defaultChecked={row[key] as boolean}
-              onClick={() => dispatch(ChangeLinkPrivacy(row, userId))}
-            />
-          </div>
+          <input
+            type="checkbox"
+            defaultChecked={row[key] as boolean}
+            onClick={() => dispatch(ChangeLinkPrivacy(row, userId))}
+            key={row[key] as React.Key}
+            className="tableCell"
+          />
         ) : (
-          <div key={row[key] as React.Key}> {row[key]} </div>
+          <p key={row[key] as React.Key} className="tableCell">
+            {row[key]}
+          </p>
         );
       })}
     </div>

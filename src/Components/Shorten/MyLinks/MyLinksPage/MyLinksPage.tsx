@@ -1,13 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Table from "../Table/";
-import { getItemsForMyLinksTable } from "../../../../API";
 import { Navigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../hooks";
 import { isLogon } from "../../../../Services/user";
-import { useSelector } from "react-redux";
 import { updateUserLinksTableData } from "../../../../Services/link";
 import ClipLoader from "react-spinners/ClipLoader";
-import { ITableHeadings } from "../../../../Models";
 
 export const MyLinksPage = () => {
   const userId = useAppSelector((state) => state.user.user.userId);
