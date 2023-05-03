@@ -31,7 +31,7 @@ export const ChangePassword = () => {
   return (
     <div>
       <div className="mb-4">
-        <label htmlFor="password">Enter new Password:</label> <br />
+        <label htmlFor="password">Enter new Password:</label>
         <input
           value={state.newPassword}
           onChange={(event) =>

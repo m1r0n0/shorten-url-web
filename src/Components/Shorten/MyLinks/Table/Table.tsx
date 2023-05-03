@@ -1,64 +1,44 @@
-import { changeParticularLinkPrivacy } from "../../../../API";
-import { useAppSelector } from "../../../../hooks";
+import { IUserLink, IUserLinks } from "../../../../Models";
+import TBodyRow from "./TBodyRow";
+import "./Table.css";
 
-export default function Table({ theadData, tbodyData, updateTableData }: any) {
-  const userID = useAppSelector((state) => state.user.user.userId);
+interface ITable {
+  tKeys: string[];
+  tbodyData: IUserLinks;
+}
 
-  const IsThereNeededCheckBox = (value: any): boolean => { //to different JSON
-    if (value === true || value === false) {
-      return true;
-    } else {
-      return false;
+export default function Table({ tKeys, tbodyData }: ITable) {
+  const TurnKeyIntoHeading = (key: string): string => {
+    switch (key) {
+      case "fullUrl":
+        return "Full Url";
+      case "shortUrl":
+        return "Short Url";
+      case "isPrivate":
+        return "Is Private?";
     }
+    return "";
   };
 
-  const ChangePrivacyOfLink = (row: any): any => {
-    changeParticularLinkPrivacy(row, userID).then(() => {
-      updateTableData();
-    });
-  };
-
-  return ( //css flex
-    <table className="table">
-      <thead>
-        <tr>
-          {theadData.map((heading: any) => {
-            return <th key={heading}>{heading}</th>;
-          })}
-        </tr>
-      </thead>
-      <tbody>
-        {tbodyData.map((row: any, index: any) => {
+  return (
+    <div className="d-flex flex-column">
+      <div
+        key="heading"
+        className="d-flex flex-row justify-content-around align-items-center"
+      >
+        {tKeys.map((heading: string) => {
           return (
-            <tr key={index}>
-              {theadData.map((key: any) => {
-                //non-boolean (non-checkbox) row[key] always equals true
-                return row[key] ? (
-                  IsThereNeededCheckBox(row[key]) ? (
-                    <td key={row[key]}>
-                      <input
-                        type="checkbox"
-                        defaultChecked={row[key]}
-                        onClick={() => ChangePrivacyOfLink(row)}
-                      />
-                    </td>
-                  ) : (
-                    <td key={row[key]}> {row[key]}</td>
-                  )
-                ) : (
-                  <td key={row[key]}>
-                    <input
-                      type="checkbox"
-                      defaultChecked={row[key]}
-                      onClick={() => ChangePrivacyOfLink(row)}
-                    />
-                  </td>
-                );
-              })}
-            </tr>
+            <p className="tableCell tableHeading" key={heading as React.Key}>
+              {TurnKeyIntoHeading(heading)}
+            </p>
           );
         })}
-      </tbody>
-    </table>
+      </div>
+      <div className="d-flex flex-column">
+        {tbodyData.map((row: IUserLink, index: number) => {
+          return <TBodyRow key={index} row={row} keys={tKeys} index={index} />;
+        })}
+      </div>
+    </div>
   );
 }

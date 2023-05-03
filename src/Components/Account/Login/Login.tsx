@@ -1,9 +1,9 @@
-import React, { useContext, useState } from "react";
-import { BrowserRouter as Router, Navigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
 import IncorrectLoginInputDisclaimer from "./IncorrectLoginInputDisclaimer";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { setUserIdAction } from "../../../Store/UserReducer";
 import { handleLogin, isLogon } from "../../../Services/user";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export const Login = () => {
   const dispatch = useAppDispatch();
@@ -32,7 +32,7 @@ export const Login = () => {
     <div>
       <h2> Enter the app</h2>
       <div>
-        <label htmlFor="email">Email</label> <br />
+        <label htmlFor="email">Email</label>
         <input
           value={state.email}
           onChange={(event) =>
@@ -44,7 +44,7 @@ export const Login = () => {
         />
       </div>
       <div>
-        <label htmlFor="password"></label>Password <br />
+        <label htmlFor="password">Password</label>
         <input
           onChange={(event) =>
             setState({ ...state, password: event.target.value })
@@ -55,7 +55,7 @@ export const Login = () => {
         />
       </div>
       <div>
-        <label htmlFor="rememberMe">Remember me?</label> <br />
+        <label htmlFor="rememberMe">Remember me?</label>
         <input
           onChange={(event) =>
             setState({ ...state, rememberMe: event.target.checked })
@@ -65,11 +65,18 @@ export const Login = () => {
           id="rememberMe"
         />
       </div>
-      <div className="mb-3">
+      <div className="m-3">
         {isLoginFinished ? (
           <Navigate to="/" />
         ) : isLoginRequested ? (
-          <p>Loading...</p>
+          <ClipLoader
+            size={75}
+            loading={true}
+            color={"#000000"}
+            cssOverride={{}}
+            speedMultiplier={1}
+            className="loader"
+          />
         ) : (
           <input type="button" value="Log in" onClick={handleSubmit} />
         )}

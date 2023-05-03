@@ -1,18 +1,24 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { checkEmailExisting, proceedRegister } from "../../../API";
-import InvalidEmailDisclaimer from "./InvalidEmailDisclaimer";
-import IncorrectDateOfBirthDisclaimer from "./IncorrectDateOfBirthDisclaimer";
-import InvalidPasswordInputDisclaimer from "./InvalidPasswordInputDisclaimer";
-import NoMatchingPasswordsDisclaimer from "./NoMatchingPasswordsDisclaimer";
-import { handleLogin, isLogon } from "../../../Services/user";
-import { ILoginUser } from "../../../Models";
+import {
+  handleRegister,
+  isLogon,
+  updateRegisterStateDependentDisclaimerStates,
+} from "../../../Services/user";
+import {
+  IComponentDependentDisclaimerStates,
+  IRegisterUser,
+} from "../../../Models";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import ExistingEmailDisclaimer from "./ExistingEmailDisclaimer";
+import { hideAllDisclaimersAction } from "../../../Store/DisclaimerReducer";
+import Disclaimers from "./Disclaimers";
 
 export const Register = () => {
   const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => state.user.user.userId);
+  const isRegisterSuccessful = useAppSelector(
+    (state) => state.user.isRegisterSuccessful
+  );
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -20,66 +26,30 @@ export const Register = () => {
   });
 
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  let showNoMatchingPasswordsDisclaimer = state.password !== passwordConfirm;
-  let showIncorrectDateOfBirth =
-    state.year !== "" &&
-    (state.year === "0" ||
-      Number(state.year.slice(0, 4)) < 1910 ||
-      Number(state.year.slice(0, 4)) > 2023);
+  function handleSubmit() {
+    dispatch(hideAllDisclaimersAction());
 
-  const [
-    showInvalidPasswordInputDisclaimer,
-    setShowInvalidPasswordInputDisclaimer,
-  ] = useState(false);
-  const [isReadyToRedirect, setIsReadyToRedirect] = useState(false);
-  const [showExistingEmailDisclaimer, setShowExistingEmailDisclaimer] =
-    useState(false);
-  const [showInvalidEmailDisclaimer, setShowInvalidEmailDisclaimer] =
-    useState(false);
-
-  const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
-    const HideDisclaimers = () => {
-      setShowInvalidPasswordInputDisclaimer(false);
-      setShowExistingEmailDisclaimer(false);
-      setShowInvalidEmailDisclaimer(false);
-    };
-
-    HideDisclaimers();
-
-    var properState = {
+    var properUserState: IRegisterUser = {
       email: state.email,
       password: state.password,
       year: state.year.slice(0, 4),
     };
+    var disclaimerStates: IComponentDependentDisclaimerStates = {
+      isIncorrectDateOfBirth:
+        (state.year !== "" &&
+          (state.year === "0" ||
+            Number(state.year.slice(0, 4)) < 1910 ||
+            Number(state.year.slice(0, 4)) > 2023)) ||
+        state.year === "",
+      isNoMatchingPasswords:
+        state.password !== passwordConfirm ||
+        (state.password === "" && passwordConfirm === ""),
+      isInvalidEmail: state.email === "",
+    };
 
-    let isEmailSuitable = state.email !== "";
-    setShowInvalidEmailDisclaimer(!isEmailSuitable);
-
-    if (
-      !showIncorrectDateOfBirth &&
-      !showNoMatchingPasswordsDisclaimer &&
-      isEmailSuitable
-    ) {
-      proceedRegister(properState) //thunk
-        .catch((error) => {
-          isEmailSuitable = error.message !== "409";
-          if (isEmailSuitable) setShowInvalidPasswordInputDisclaimer(true);
-          setShowExistingEmailDisclaimer(!isEmailSuitable);
-        })
-        .then((res) => {
-          if (isEmailSuitable) {
-            const user: ILoginUser = {
-              email: res.email,
-              password: res.password,
-              rememberMe: true,
-            };
-            dispatch(handleLogin(user));
-            setIsReadyToRedirect(true);
-            HideDisclaimers();
-          }
-        });
-    }
-  };
+    dispatch(updateRegisterStateDependentDisclaimerStates(disclaimerStates));
+    dispatch(handleRegister(properUserState, disclaimerStates));
+  }
 
   return isLogon(userId) ? (
     <Navigate to="/" />
@@ -87,10 +57,8 @@ export const Register = () => {
     <div>
       <h2>Register</h2>
       <form method="post" asp-controller="Account" asp-action="Register">
-        <div asp-validation-summary="ModelOnly"></div>
         <div>
           <label htmlFor="Email">Email</label>
-          <br />
           <input
             value={state.email}
             onChange={(event) =>
@@ -103,7 +71,6 @@ export const Register = () => {
         </div>
         <div>
           <label htmlFor="Year">Date of birth</label>
-          <br />
           <input
             type="date"
             id="year"
@@ -122,7 +89,6 @@ export const Register = () => {
         </div>
         <div>
           <label htmlFor="Password">Password</label>
-          <br />
           <input
             onChange={(event) =>
               setState({ ...state, password: event.target.value })
@@ -134,7 +100,6 @@ export const Register = () => {
         </div>
         <div>
           <label htmlFor="PasswordConfirm">Password Confirm</label>
-          <br />
           <input
             onChange={(event) => setPasswordConfirm(event.target.value)}
             type="password"
@@ -142,31 +107,14 @@ export const Register = () => {
             id="passwordConfirm"
           />
         </div>
-        <br />
-        <div className="mb-4">
-          {isReadyToRedirect ? (
+        <div className="m-4">
+          {isRegisterSuccessful ? (
             <Navigate to="/" />
           ) : (
             <input type="button" value="Register" onClick={handleSubmit} />
           )}
         </div>
-        <div>
-          {showNoMatchingPasswordsDisclaimer ? (
-            <NoMatchingPasswordsDisclaimer />
-          ) : null}
-        </div>
-        <div>
-          {showExistingEmailDisclaimer ? <ExistingEmailDisclaimer /> : null}
-          {showInvalidEmailDisclaimer ? <InvalidEmailDisclaimer /> : null}
-        </div>
-        <div>
-          {showInvalidPasswordInputDisclaimer ? (
-            <InvalidPasswordInputDisclaimer />
-          ) : null}
-        </div>
-        <div>
-          {showIncorrectDateOfBirth ? <IncorrectDateOfBirthDisclaimer /> : null}
-        </div>
+        <Disclaimers />
       </form>
     </div>
   );

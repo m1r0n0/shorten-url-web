@@ -4,6 +4,7 @@ import {
   ILoginUser,
   IUserEmailId,
   IUserPasswordId,
+  IUserLink,
 } from "../Models";
 import {
   ACCOUNT,
@@ -11,7 +12,6 @@ import {
   CHANGE_LINK_PRIVACY,
   CHANGE_USER_EMAIL,
   CHANGE_USER_PASSWORD,
-  CHECK_EMAIL_EXISTING,
   CREATE_LINK,
   GET_USER_EMAIL,
   GET_USER_ID,
@@ -28,7 +28,6 @@ const GetUserEmailURI: string = `${API}/${ACCOUNT}/${GET_USER_EMAIL}`;
 const CreateLinkURI: string = `${API}/${SHORTEN}/${CREATE_LINK}`;
 const LoginURI: string = `${API}/${ACCOUNT}/${LOGIN}`;
 const RegisterURI: string = `${API}/${ACCOUNT}/${REGISTER}`;
-const CheckEmailExistingURI: string = `${API}/${ACCOUNT}/${CHECK_EMAIL_EXISTING}`;
 const ChangeLinkPrivacyURI: string = `${API}/${SHORTEN}/${CHANGE_LINK_PRIVACY}`;
 const GetUserLinksURI: string = `${API}/${SHORTEN}/${GET_USER_LINKS}`;
 const RedirectToOriginalUrlURI: string = `${API}/${REDIRECT}/${REDIRECT_TO_ORIGINAL_URL}`;
@@ -86,18 +85,13 @@ export async function proceedRegister(body: IRegisterUser) {
   }
 }
 
-export async function checkEmailExisting(email: string) {
-  const response = await fetch(`${CheckEmailExistingURI}?email=${email}`);
-  return await response.json();
-}
-
 export async function getItemsForMyLinksTable(userID: string) {
   const response = await fetch(`${GetUserLinksURI}?userID=${userID}`);
   return await response.json();
 }
 
-export async function changeParticularLinkPrivacy(
-  body: ILink,
+export async function changeCertainLinkPrivacy(
+  body: IUserLink,
   userID: string | undefined
 ) {
   body.shortUrl = body.shortUrl.split(".com/").pop()!;

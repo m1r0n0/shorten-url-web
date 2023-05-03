@@ -1,43 +1,51 @@
-import React, { useState } from "react";
-import { addUrl } from "../../../API";
-import { useAppSelector } from "../../../hooks";
+import React, { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { ILink } from "../../../Models";
+import { isLogon } from "../../../Services/user";
+import { createNewShortUrl } from "../../../Services/link";
+import { setIsFullUrlInvalidAction } from "../../../Store/DisclaimerReducer";
+import InvalidFullUrlDisclaimer from "./InvalidFullUrlDisclaimer";
+import { setIsShortLinkCreated, setShortUrlAction } from "../../../Store/LinkReducer";
 
 export const CreateLink = () => {
   const userID = useAppSelector((state) => state.user.user.userId);
-  const [state, setState] = useState({ //Interafe for type
+  const shortUrl = useAppSelector((state) => state.link.shortUrl);
+  const isFullUrlInvalid = useAppSelector(
+    (state) => state.disclaimer.isFullUrlInvalid
+  );
+  const dispatch = useAppDispatch();
+  const [state, setState] = useState<ILink>({
     fullUrl: "",
     isPrivate: false,
     userId: userID,
     shortUrl: "",
   });
-
-  const isAuthorized = (): boolean => { //make a variable
-    if (userID === undefined) {
-      return false;
-    } else {
-      return true;
-    }
-  };
+  const isShortLinkCreated = useAppSelector(
+    (state) => state.link.isShortLinkCreated
+  );
 
   const handleSubmit: React.MouseEventHandler<HTMLInputElement> = (event) => {
-    addUrl(state).then((res) => { //to thunk; return shorturl to page
-      setState({
-        fullUrl: state.fullUrl,
-        isPrivate: state.isPrivate,
-        userId: userID,
-        shortUrl: res.shortUrl,
-      });
-    });
+    var isFullUrlValid: boolean = state.fullUrl !== "";
+    if (isFullUrlValid) {
+      dispatch(createNewShortUrl(state));
+    } else {
+      dispatch(setShortUrlAction(""));
+      dispatch(setIsShortLinkCreated(false))
+    }
+    dispatch(setIsFullUrlInvalidAction(!isFullUrlValid));
   };
 
-  return ( //css flex
+  useEffect(() => {
+    setState({ ...state, shortUrl: shortUrl });
+  }, [shortUrl]);
+
+  return (
+    //css flex
     <div>
       <h1>Create your Short URL!</h1>
-      <br />
-      <div className="row">
-        <div>
+      <div>
+        <div className="mt-5">
           <label htmlFor="FullUrl"> Your Full URL: </label>
-          <br />
           <input
             value={state.fullUrl}
             onChange={(event) =>
@@ -50,12 +58,9 @@ export const CreateLink = () => {
             name="fullUrl"
             id="fullUrl"
           />
-          <span asp-validation-for="FullUrl" className="text-danger"></span>
-          <br />
-          <br />
-          {isAuthorized() ? (
+          {isLogon(userID) ? (
             <div>
-              <label htmlFor="IsPrivate">Private link?</label> <br />
+              <label htmlFor="IsPrivate">Private link?</label>
               <input
                 onChange={(event) =>
                   setState({
@@ -67,23 +72,18 @@ export const CreateLink = () => {
                 name="isPrivate"
                 id="isPrivate"
               />
-              <br />
-              <br />
             </div>
-          ) : (
-            <></>
-          )}
+          ) : null}
         </div>
-        <br />
-        <div>
+        <div className="my-2">
           <input type="button" value="Create" onClick={handleSubmit} />
         </div>
-        <br />
-        <br />
-        <div>
-          <h3> Your shortened Url: {state.shortUrl}</h3>
-          <br />
+        <div className="mb-3">
+          {isShortLinkCreated ? (
+            <h3> Your shortened Url: {state.shortUrl}</h3>
+          ) : null}
         </div>
+        <div>{isFullUrlInvalid ? <InvalidFullUrlDisclaimer /> : null}</div>
       </div>
     </div>
   );

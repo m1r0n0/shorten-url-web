@@ -51,3 +51,7 @@
   align-items: center;
   text-align: center;
 }
+
+label {
+  display: block;
+}

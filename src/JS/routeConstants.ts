@@ -7,7 +7,6 @@ export const REGISTER = "Register";
 export const SHORTEN = "Shorten";
 export const GET_USER_LINKS = "GetLinksForCurrentUser";
 export const CREATE_LINK = "CreateLink";
-export const CHECK_EMAIL_EXISTING = "CheckEmailExisting";
 export const CHANGE_LINK_PRIVACY = "ChangeLinkPrivacy";
 export const REDIRECT = "Redirect";
 export const REDIRECT_TO_ORIGINAL_URL = "RedirectToOriginalUrl";
