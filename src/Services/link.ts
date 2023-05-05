@@ -36,3 +36,27 @@ export const ChangeLinkPrivacy =
       dispatch(updateUserLinksTableData(userId));
     });
   };
+
+export const TurnKeyIntoHeading = (key: string): string => {
+  switch (key) {
+    case "fullUrl":
+      return "Full Url";
+    case "shortUrl":
+      return "Short Url";
+    case "isPrivate":
+      return "Is Private?";
+  }
+  return "";
+};
+
+export const TurnKeyIntoTableColumnStyleName = (key: string): string => {
+  switch (key) {
+    case "fullUrl":
+      return "tableFullUrlColumn";
+    case "shortUrl":
+      return "tableShortUrlColumn";
+    case "isPrivate" || "deleteAction":
+      return "tableActionColumn";
+  }
+  return "";
+};

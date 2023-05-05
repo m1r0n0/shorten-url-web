@@ -1,9 +1,23 @@
-.tableCell {
+/* .tableCell {
   width: 33%;
   word-wrap: break-word;
   padding-left: 10px;
-}
+} */
 
 .tableHeading {
   font-weight: bold;
+}
+
+.tableFullUrlColumn {
+  width: 40%;
+  word-wrap: break-word;
+}
+
+.tableShortUrlColumn {
+  width: 30%;
+  word-wrap: break-word;
+}
+
+.tableActionColumn {
+  width: 15%;
 }

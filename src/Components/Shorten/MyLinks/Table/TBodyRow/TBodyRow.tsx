@@ -1,5 +1,8 @@
 import { IUserLink } from "../../../../../Models";
-import { ChangeLinkPrivacy } from "../../../../../Services/link";
+import {
+  ChangeLinkPrivacy,
+  TurnKeyIntoTableColumnStyleName,
+} from "../../../../../Services/link";
 import { useAppDispatch, useAppSelector } from "../../../../../hooks";
 import "../Table.css";
 
@@ -30,10 +33,13 @@ export const TBodyRow = ({ row, keys, index }: Props): JSX.Element => {
             defaultChecked={row[key] as boolean}
             onClick={() => dispatch(ChangeLinkPrivacy(row, userId))}
             key={row[key] as React.Key}
-            className="tableCell"
+            className={TurnKeyIntoTableColumnStyleName(key)}
           />
         ) : (
-          <p key={row[key] as React.Key} className="tableCell">
+          <p
+            key={row[key] as React.Key}
+            className={TurnKeyIntoTableColumnStyleName(key)}
+          >
             {row[key]}
           </p>
         );
