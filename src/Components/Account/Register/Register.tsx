@@ -12,10 +12,12 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { hideAllDisclaimersAction } from "../../../Store/DisclaimerReducer";
 import Disclaimers from "./Disclaimers";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export const Register = () => {
   const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => state.user.user.userId);
+  const isRegisterRequested = useAppSelector((s) => s.user.isRegisterRequested);
   const isRegisterSuccessful = useAppSelector(
     (state) => state.user.isRegisterSuccessful
   );
@@ -24,8 +26,8 @@ export const Register = () => {
     password: "",
     year: "",
   });
-
   const [passwordConfirm, setPasswordConfirm] = useState("");
+
   function handleSubmit() {
     dispatch(hideAllDisclaimersAction());
 
@@ -47,7 +49,6 @@ export const Register = () => {
       isInvalidEmail: state.email === "",
     };
 
-    dispatch(updateRegisterStateDependentDisclaimerStates(disclaimerStates));
     dispatch(handleRegister(properUserState, disclaimerStates));
   }
 
@@ -110,6 +111,15 @@ export const Register = () => {
         <div className="m-4">
           {isRegisterSuccessful ? (
             <Navigate to="/" />
+          ) : isRegisterRequested ? (
+            <ClipLoader
+              size={75}
+              loading={true}
+              color={"#000000"}
+              cssOverride={{}}
+              speedMultiplier={1}
+              className="loader"
+            />
           ) : (
             <input type="button" value="Register" onClick={handleSubmit} />
           )}

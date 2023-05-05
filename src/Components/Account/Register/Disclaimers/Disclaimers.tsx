@@ -21,9 +21,9 @@ export const Disclaimers = () => {
   const showNoMatchingPasswordsDisclaimer = useAppSelector(
     (state) => state.disclaimer.isNoMatchingPasswords
   );
-  
+
   return (
-    <div>
+    <div className="d-flex justify-content-center">
       <div>
         {showNoMatchingPasswordsDisclaimer ? (
           <NoMatchingPasswordsDisclaimer />
