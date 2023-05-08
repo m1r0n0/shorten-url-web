@@ -6,7 +6,6 @@ import {
 import { ILink, IUserLink } from "../Models";
 import { AppDispatch } from "../Store";
 import {
-  handleLinkPrivacyChangeAction,
   handleUserLinksGettingAction,
   setIsShortLinkCreated,
   setShortUrlAction,
@@ -37,25 +36,14 @@ export const ChangeLinkPrivacy =
     });
   };
 
-export const TurnKeyIntoHeading = (key: string): string => {
-  switch (key) {
-    case "fullUrl":
-      return "Full Url";
-    case "shortUrl":
-      return "Short Url";
-    case "isPrivate":
-      return "Is Private?";
-  }
-  return "";
-};
-
 export const TurnKeyIntoTableColumnStyleName = (key: string): string => {
   switch (key) {
     case "fullUrl":
       return "tableFullUrlColumn";
     case "shortUrl":
       return "tableShortUrlColumn";
-    case "isPrivate" || "deleteAction":
+    case "isPrivate":
+    case "deleteAction":
       return "tableActionColumn";
   }
   return "";

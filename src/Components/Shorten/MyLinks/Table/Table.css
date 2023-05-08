@@ -1,23 +1,17 @@
-/* .tableCell {
-  width: 33%;
-  word-wrap: break-word;
-  padding-left: 10px;
-} */
-
 .tableHeading {
   font-weight: bold;
 }
 
 .tableFullUrlColumn {
-  width: 40%;
+  width: 45%;
   word-wrap: break-word;
 }
 
 .tableShortUrlColumn {
-  width: 30%;
+  width: 20%;
   word-wrap: break-word;
 }
 
 .tableActionColumn {
-  width: 15%;
+  width: 10%;
 }

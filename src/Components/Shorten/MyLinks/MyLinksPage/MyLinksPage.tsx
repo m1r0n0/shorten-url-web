@@ -14,7 +14,9 @@ export const MyLinksPage = () => {
 
   const getKeys = () => {
     const { items } = state;
-    return Object.keys(items[0]);
+    var keys = Object.keys(items[0]);
+    keys.push("deleteAction")
+    return keys;
   };
 
   const isTBodyEmpty = items.length === 0 || items == null;

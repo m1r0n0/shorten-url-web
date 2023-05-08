@@ -16,9 +16,34 @@ export const TBodyRow = ({ row, keys, index }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => state.user.user.userId);
 
-  const IsCheckBoxThere = (key: string) => {
+  const IsActionButtonThere = (key: string) => {
     if (key === "fullUrl" || key === "shortUrl") return false;
-    if (key === "isPrivate") return true;
+    if (key === "isPrivate" || key === "deleteAction") return true;
+  };
+
+  const renderActionButton = (row: IUserLink, key: string) => {
+    switch (key) {
+      case "isPrivate":
+        return (
+          <input
+            type="checkbox"
+            defaultChecked={row[key] as boolean}
+            onClick={() => dispatch(ChangeLinkPrivacy(row, userId))}
+            key={row[key] as unknown as React.Key}
+            className={TurnKeyIntoTableColumnStyleName(key)}
+          />
+        );
+      case "deleteAction":
+        return (
+          <div className={TurnKeyIntoTableColumnStyleName(key)}>
+            <button type="button" className="btn btn-danger">
+              Delete
+            </button>
+          </div>
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -27,14 +52,8 @@ export const TBodyRow = ({ row, keys, index }: Props): JSX.Element => {
       className="d-flex flex-row justify-content-around align-items-center"
     >
       {keys.map((key: string) => {
-        return IsCheckBoxThere(key as string) ? (
-          <input
-            type="checkbox"
-            defaultChecked={row[key] as boolean}
-            onClick={() => dispatch(ChangeLinkPrivacy(row, userId))}
-            key={row[key] as React.Key}
-            className={TurnKeyIntoTableColumnStyleName(key)}
-          />
+        return IsActionButtonThere(key as string) ? (
+          renderActionButton(row, key)
         ) : (
           <p
             key={row[key] as React.Key}

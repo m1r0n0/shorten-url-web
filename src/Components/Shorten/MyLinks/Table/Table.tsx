@@ -1,5 +1,5 @@
 import { IUserLink, IUserLinks } from "../../../../Models";
-import { TurnKeyIntoHeading, TurnKeyIntoTableColumnStyleName } from "../../../../Services/link";
+import { TurnKeyIntoTableColumnStyleName } from "../../../../Services/link";
 import TBodyRow from "./TBodyRow";
 import "./Table.css";
 
@@ -7,6 +7,19 @@ interface ITable {
   tKeys: string[];
   tbodyData: IUserLinks;
 }
+
+const TurnKeyIntoHeading = (key: string): string => {
+  switch (key) {
+    case "fullUrl":
+      return "Full Url";
+    case "shortUrl":
+      return "Short Url";
+    case "isPrivate":
+      return "Is Private?";
+    default:
+      return "";
+  }
+};
 
 export default function Table({ tKeys, tbodyData }: ITable) {
   return (
@@ -17,8 +30,12 @@ export default function Table({ tKeys, tbodyData }: ITable) {
       >
         {tKeys.map((heading: string) => {
           return (
-            <p className={TurnKeyIntoTableColumnStyleName(heading) + " " + "tableHeading"}
-             key={heading as React.Key}>
+            <p
+              className={
+                TurnKeyIntoTableColumnStyleName(heading) + " " + "tableHeading"
+              }
+              key={heading as React.Key}
+            >
               {TurnKeyIntoHeading(heading)}
             </p>
           );
