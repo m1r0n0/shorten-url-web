@@ -2,8 +2,9 @@ import {
   addUrl,
   changeCertainLinkPrivacy,
   getItemsForMyLinksTable,
+  proceedLinkDeleting,
 } from "../API";
-import { ILink, IUserLink } from "../Models";
+import { IUserLink, ILink } from "../Models";
 import { AppDispatch } from "../Store";
 import {
   handleUserLinksGettingAction,
@@ -12,7 +13,7 @@ import {
 } from "../Store/LinkReducer";
 
 export const createNewShortUrl =
-  (state: ILink) => async (dispatch: AppDispatch) => {
+  (state: IUserLink) => async (dispatch: AppDispatch) => {
     addUrl(state).then((res) => {
       dispatch(setShortUrlAction(res.shortUrl));
       dispatch(setIsShortLinkCreated(true));
@@ -29,8 +30,7 @@ export const updateUserLinksTableData =
   };
 
 export const ChangeLinkPrivacy =
-  (row: IUserLink, userId: string) => async (dispatch: AppDispatch) => {
-    // await dispatch(handleLinkPrivacyChangeAction(row));
+  (row: ILink, userId: string) => async (dispatch: AppDispatch) => {
     changeCertainLinkPrivacy(row, userId).then(() => {
       dispatch(updateUserLinksTableData(userId));
     });
@@ -48,3 +48,11 @@ export const TurnKeyIntoTableColumnStyleName = (key: string): string => {
   }
   return "";
 };
+
+export const DeleteLink =
+  (link: ILink, userId: string) => async (dispatch: AppDispatch) => {
+    var userLink: IUserLink = { ...link, userId: userId };
+    proceedLinkDeleting(userLink).then((res) => {
+      dispatch(updateUserLinksTableData(userId));
+    });
+  };

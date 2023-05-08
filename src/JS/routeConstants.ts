@@ -12,3 +12,4 @@ export const REDIRECT = "Redirect";
 export const REDIRECT_TO_ORIGINAL_URL = "RedirectToOriginalUrl";
 export const CHANGE_USER_EMAIL = "ChangeUserEmail";
 export const CHANGE_USER_PASSWORD = "ChangeUserPassword";
+export const DELETE_LINK = "DeleteLink";

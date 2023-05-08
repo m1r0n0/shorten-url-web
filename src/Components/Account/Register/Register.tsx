@@ -11,7 +11,7 @@ import {
 } from "../../../Models";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { hideAllDisclaimersAction } from "../../../Store/DisclaimerReducer";
-import Disclaimers from "./Disclaimers";
+import RegisterDisclaimers from "./Disclaimers";
 import ClipLoader from "react-spinners/ClipLoader";
 
 export const Register = () => {
@@ -124,7 +124,7 @@ export const Register = () => {
             <input type="button" value="Register" onClick={handleSubmit} />
           )}
         </div>
-        <Disclaimers />
+        <RegisterDisclaimers />
       </form>
     </div>
   );

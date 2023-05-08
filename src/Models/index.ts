@@ -1,18 +1,18 @@
-export interface ILink {
+export interface IUserLink {
   fullUrl: string;
   shortUrl: string;
   isPrivate: boolean;
   userId: string | undefined;
 }
 
-export interface IUserLink {
+export interface ILink {
   [key: string]: string | boolean;
   fullUrl: string;
   shortUrl: string;
   isPrivate: boolean;
 }
 
-export interface IUserLinks extends Array<IUserLink> {}
+export interface ILinks extends Array<ILink> {}
 
 export interface IUser {
   userId: string;

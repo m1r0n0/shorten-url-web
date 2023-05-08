@@ -1,11 +1,11 @@
-import { IUserLink, IUserLinks } from "../../../../Models";
+import { ILink, ILinks } from "../../../../Models";
 import { TurnKeyIntoTableColumnStyleName } from "../../../../Services/link";
 import TBodyRow from "./TBodyRow";
 import "./Table.css";
 
 interface ITable {
   tKeys: string[];
-  tbodyData: IUserLinks;
+  tbodyData: ILinks;
 }
 
 const TurnKeyIntoHeading = (key: string): string => {
@@ -42,7 +42,7 @@ export default function Table({ tKeys, tbodyData }: ITable) {
         })}
       </div>
       <div className="d-flex flex-column">
-        {tbodyData.map((row: IUserLink, index: number) => {
+        {tbodyData.map((row: ILink, index: number) => {
           return <TBodyRow key={index} row={row} keys={tKeys} index={index} />;
         })}
       </div>

@@ -5,7 +5,7 @@ import InvalidEmailDisclaimer from "./InvalidEmailDisclaimer";
 import InvalidPasswordInputDisclaimer from "./InvalidPasswordInputDisclaimer";
 import NoMatchingPasswordsDisclaimer from "./NoMatchingPasswordsDisclaimer";
 
-export const Disclaimers = () => {
+export const RegisterDisclaimers = () => {
   const showExistingEmailDisclaimer = useAppSelector(
     (state) => state.disclaimer.isExistingEmail
   );

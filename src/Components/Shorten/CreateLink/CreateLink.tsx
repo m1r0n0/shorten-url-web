@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { ILink } from "../../../Models";
+import { IUserLink } from "../../../Models";
 import { isLogon } from "../../../Services/user";
 import { createNewShortUrl } from "../../../Services/link";
 import { setIsFullUrlInvalidAction } from "../../../Store/DisclaimerReducer";
 import InvalidFullUrlDisclaimer from "./InvalidFullUrlDisclaimer";
-import { setIsShortLinkCreated, setShortUrlAction } from "../../../Store/LinkReducer";
+import {
+  setIsShortLinkCreated,
+  setShortUrlAction,
+} from "../../../Store/LinkReducer";
 
 export const CreateLink = () => {
   const userID = useAppSelector((state) => state.user.user.userId);
@@ -14,7 +17,7 @@ export const CreateLink = () => {
     (state) => state.disclaimer.isFullUrlInvalid
   );
   const dispatch = useAppDispatch();
-  const [state, setState] = useState<ILink>({
+  const [state, setState] = useState<IUserLink>({
     fullUrl: "",
     isPrivate: false,
     userId: userID,
@@ -30,7 +33,7 @@ export const CreateLink = () => {
       dispatch(createNewShortUrl(state));
     } else {
       dispatch(setShortUrlAction(""));
-      dispatch(setIsShortLinkCreated(false))
+      dispatch(setIsShortLinkCreated(false));
     }
     dispatch(setIsFullUrlInvalidAction(!isFullUrlValid));
   };

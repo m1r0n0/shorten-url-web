@@ -1,13 +1,14 @@
-import { IUserLink } from "../../../../../Models";
+import { ILink } from "../../../../../Models";
 import {
   ChangeLinkPrivacy,
+  DeleteLink,
   TurnKeyIntoTableColumnStyleName,
 } from "../../../../../Services/link";
 import { useAppDispatch, useAppSelector } from "../../../../../hooks";
 import "../Table.css";
 
 interface Props {
-  row: IUserLink;
+  row: ILink;
   keys: string[];
   index: number;
 }
@@ -21,7 +22,7 @@ export const TBodyRow = ({ row, keys, index }: Props): JSX.Element => {
     if (key === "isPrivate" || key === "deleteAction") return true;
   };
 
-  const renderActionButton = (row: IUserLink, key: string) => {
+  const renderActionButton = (row: ILink, key: string, index: number) => {
     switch (key) {
       case "isPrivate":
         return (
@@ -29,14 +30,21 @@ export const TBodyRow = ({ row, keys, index }: Props): JSX.Element => {
             type="checkbox"
             defaultChecked={row[key] as boolean}
             onClick={() => dispatch(ChangeLinkPrivacy(row, userId))}
-            key={row[key] as unknown as React.Key}
+            key={(key + index) as React.Key}
             className={TurnKeyIntoTableColumnStyleName(key)}
           />
         );
       case "deleteAction":
         return (
-          <div className={TurnKeyIntoTableColumnStyleName(key)}>
-            <button type="button" className="btn btn-danger">
+          <div
+            className={TurnKeyIntoTableColumnStyleName(key)}
+            key={(key + index) as React.Key}
+          >
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={() => dispatch(DeleteLink(row, userId))}
+            >
               Delete
             </button>
           </div>
@@ -52,8 +60,8 @@ export const TBodyRow = ({ row, keys, index }: Props): JSX.Element => {
       className="d-flex flex-row justify-content-around align-items-center"
     >
       {keys.map((key: string) => {
-        return IsActionButtonThere(key as string) ? (
-          renderActionButton(row, key)
+        return IsActionButtonThere(key) ? (
+          renderActionButton(row, key, index)
         ) : (
           <p
             key={row[key] as React.Key}

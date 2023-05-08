@@ -1,14 +1,14 @@
 import { Reducer } from "redux";
-import { IUserLink, IUserLinks } from "../Models";
+import { ILink, ILinks } from "../Models";
 
 interface ILinkAction {
   type: string;
-  payload: string | IUserLinks | IUserLink | boolean;
+  payload: string | ILinks | ILink | boolean;
 }
 
 interface ILinkState {
   shortUrl: string;
-  userLinks: { items: IUserLinks; isLoaded: boolean };
+  userLinks: { items: ILinks; isLoaded: boolean };
   isShortLinkCreated: boolean;
 }
 
@@ -38,12 +38,12 @@ export const linkReducer: Reducer<ILinkState, ILinkAction> = (
         ...state,
         userLinks: {
           ...state.userLinks,
-          items: action.payload as IUserLinks,
+          items: action.payload as ILinks,
           isLoaded: true,
         },
       };
     case HANDLE_LINK_PRIVACY_CHANGING:
-      var link = action.payload as IUserLink;
+      var link = action.payload as ILink;
       var changingLinkIndexInItems = state.userLinks.items.findIndex(
         (element) => element.shortUrl === link.shortUrl
       );
@@ -65,11 +65,11 @@ export const setShortUrlAction = (payload: string) => ({
   type: SET_SHORT_URL,
   payload,
 });
-export const handleUserLinksGettingAction = (payload: IUserLinks) => ({
+export const handleUserLinksGettingAction = (payload: ILinks) => ({
   type: HANDLE_USER_LINKS_GETTING,
   payload,
 });
-export const handleLinkPrivacyChangeAction = (payload: IUserLink) => ({
+export const handleLinkPrivacyChangeAction = (payload: ILink) => ({
   type: HANDLE_LINK_PRIVACY_CHANGING,
   payload,
 });
