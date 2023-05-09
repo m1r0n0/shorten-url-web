@@ -1,3 +1,3 @@
 export const SuccessfulDeleteDisclaimer = () => {
-    <p>Link deleted successfully!</p>
-}
+  return <p>Link deleted successfully!</p>;
+};

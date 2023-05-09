@@ -16,6 +16,7 @@ interface DisclaimerState {
   isFullUrlInvalid: boolean;
   isDeletingLinkNotFound: boolean;
   isDeletingLinkUnaccessible: boolean;
+  isLinkDeletedSuccessfully: boolean;
 }
 
 const defaultState: DisclaimerState = {
@@ -29,6 +30,7 @@ const defaultState: DisclaimerState = {
   isFullUrlInvalid: false,
   isDeletingLinkNotFound: false,
   isDeletingLinkUnaccessible: false,
+  isLinkDeletedSuccessfully: false,
 };
 
 const SET_IS_EXISTING_EMAIL = "SET_IS_EXISTING_EMAIL";
@@ -42,6 +44,7 @@ const SET_IS_STATE_UPDATED = "SET_IS_STATE_UPDATED";
 const SET_IS_FULL_URL_INVALID = "SET_IS_FULL_URL_INVALID";
 const SET_IS_DELETING_LINK_NOT_FOUND = "SET_IS_DELETING_LINK_NOT_FOUND";
 const SET_IS_DELETING_LINK_UNACCESSIBLE = "SET_IS_DELETING_LINK_UNACCESSIBLE";
+const SET_IS_LINK_DELETED_SUCCESSFULLY = "SET_IS_LINK_DELETED_SUCCESSFULLY";
 
 export const disclaimerReducer: Reducer<DisclaimerState, IDisclaimerAction> = (
   state = defaultState,
@@ -70,6 +73,8 @@ export const disclaimerReducer: Reducer<DisclaimerState, IDisclaimerAction> = (
       return { ...state, isDeletingLinkNotFound: action.payload };
     case SET_IS_DELETING_LINK_UNACCESSIBLE:
       return { ...state, isDeletingLinkUnaccessible: action.payload };
+    case SET_IS_LINK_DELETED_SUCCESSFULLY:
+      return { ...state, isLinkDeletedSuccessfully: action.payload };
     default:
       return state;
   }
@@ -115,5 +120,9 @@ export const setIsDeletingLinkNotFoundAction = (payload: boolean) => ({
 });
 export const setIsDeletingLinkUnaccessibleAction = (payload: boolean) => ({
   type: SET_IS_DELETING_LINK_UNACCESSIBLE,
+  payload,
+});
+export const setIsLinkDeletedSuccessfullyAction = (payload: boolean) => ({
+  type: SET_IS_LINK_DELETED_SUCCESSFULLY,
   payload,
 });

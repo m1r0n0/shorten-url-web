@@ -6,7 +6,7 @@ import { createNewShortUrl } from "../../../Services/link";
 import { setIsFullUrlInvalidAction } from "../../../Store/DisclaimerReducer";
 import InvalidFullUrlDisclaimer from "./InvalidFullUrlDisclaimer";
 import {
-  setIsShortLinkCreated,
+  setIsShortLinkCreatedAction,
   setShortUrlAction,
 } from "../../../Store/LinkReducer";
 
@@ -33,7 +33,7 @@ export const CreateLink = () => {
       dispatch(createNewShortUrl(state));
     } else {
       dispatch(setShortUrlAction(""));
-      dispatch(setIsShortLinkCreated(false));
+      dispatch(setIsShortLinkCreatedAction(false));
     }
     dispatch(setIsFullUrlInvalidAction(!isFullUrlValid));
   };
@@ -79,7 +79,12 @@ export const CreateLink = () => {
           ) : null}
         </div>
         <div className="my-2">
-          <input type="button" value="Create" onClick={handleSubmit} />
+          <input
+            type="button"
+            value="Create"
+            className="btn btn-primary btn-lg"
+            onClick={handleSubmit}
+          />
         </div>
         <div className="mb-3">
           {isShortLinkCreated ? (

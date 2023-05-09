@@ -23,6 +23,7 @@ import {
   REGISTER,
   SHORTEN,
 } from "../JS/routeConstants";
+import { error } from "console";
 
 const GetUserIdURI: string = `${API}/${ACCOUNT}/${GET_USER_ID}`;
 const GetUserEmailURI: string = `${API}/${ACCOUNT}/${GET_USER_EMAIL}`;
@@ -145,7 +146,7 @@ export async function proceedLinkDeleting(body: IUserLink) {
     body: JSON.stringify(body),
   });
   if (!response.ok) {
-    throw new Error("Network response was not OK");
+    throw new Error(String(response.status));
   } else {
     return await response.json();
   }

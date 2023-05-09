@@ -121,7 +121,12 @@ export const Register = () => {
               className="loader"
             />
           ) : (
-            <input type="button" value="Register" onClick={handleSubmit} />
+            <input
+              type="button"
+              value="Register"
+              className="btn btn-success btn-lg"
+              onClick={handleSubmit}
+            />
           )}
         </div>
         <RegisterDisclaimers />
