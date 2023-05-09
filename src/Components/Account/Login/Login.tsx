@@ -78,7 +78,12 @@ export const Login = () => {
             className="loader"
           />
         ) : (
-          <input type="button" value="Log in" onClick={handleSubmit} />
+          <input
+            type="button"
+            className="btn btn-primary btn-lg"
+            value="Log in"
+            onClick={handleSubmit}
+          />
         )}
       </div>
       <div>{isLoginSuccessful ? null : <IncorrectLoginInputDisclaimer />}</div>

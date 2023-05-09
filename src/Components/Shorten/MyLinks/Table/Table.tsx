@@ -1,25 +1,27 @@
-import { IUserLink, IUserLinks } from "../../../../Models";
+import { ILink, ILinks } from "../../../../Models";
+import { TurnKeyIntoTableColumnStyleName } from "../../../../Services/link";
 import TBodyRow from "./TBodyRow";
 import "./Table.css";
 
 interface ITable {
   tKeys: string[];
-  tbodyData: IUserLinks;
+  tbodyData: ILinks;
 }
 
-export default function Table({ tKeys, tbodyData }: ITable) {
-  const TurnKeyIntoHeading = (key: string): string => {
-    switch (key) {
-      case "fullUrl":
-        return "Full Url";
-      case "shortUrl":
-        return "Short Url";
-      case "isPrivate":
-        return "Is Private?";
-    }
-    return "";
-  };
+const TurnKeyIntoHeading = (key: string): string => {
+  switch (key) {
+    case "fullUrl":
+      return "Full Url";
+    case "shortUrl":
+      return "Short Url";
+    case "isPrivate":
+      return "Is Private?";
+    default:
+      return "";
+  }
+};
 
+export default function Table({ tKeys, tbodyData }: ITable) {
   return (
     <div className="d-flex flex-column">
       <div
@@ -28,14 +30,19 @@ export default function Table({ tKeys, tbodyData }: ITable) {
       >
         {tKeys.map((heading: string) => {
           return (
-            <p className="tableCell tableHeading" key={heading as React.Key}>
+            <p
+              className={
+                TurnKeyIntoTableColumnStyleName(heading) + " " + "tableHeading"
+              }
+              key={heading as React.Key}
+            >
               {TurnKeyIntoHeading(heading)}
             </p>
           );
         })}
       </div>
       <div className="d-flex flex-column">
-        {tbodyData.map((row: IUserLink, index: number) => {
+        {tbodyData.map((row: ILink, index: number) => {
           return <TBodyRow key={index} row={row} keys={tKeys} index={index} />;
         })}
       </div>

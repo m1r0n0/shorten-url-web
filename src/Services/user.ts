@@ -22,6 +22,8 @@ import {
   handleLoginFailureAction,
   handleLoginRequestAction,
   handleLoginSuccessAction,
+  handleRegisterFailureAction,
+  handleRegisterRequestAction,
   handleRegisterSuccessAction,
   setUserEmailAction,
   setUserIdAction,
@@ -64,6 +66,8 @@ export const handleRegister =
     disclaimerStates: IComponentDependentDisclaimerStates
   ) =>
   async (dispatch: AppDispatch) => {
+    dispatch(handleRegisterRequestAction());
+    dispatch(updateRegisterStateDependentDisclaimerStates(disclaimerStates));
     if (
       !disclaimerStates.isIncorrectDateOfBirth &&
       !disclaimerStates.isNoMatchingPasswords &&
@@ -80,6 +84,7 @@ export const handleRegister =
             dispatch(setIsInvalidPasswordInputAction(isInvalidPassword));
           }
           dispatch(setIsExistingEmailAction(!isEmailSuitable));
+          dispatch(handleRegisterFailureAction());
         })
         .then((res) => {
           if (isEmailSuitable && !isInvalidPassword) {
@@ -93,7 +98,7 @@ export const handleRegister =
             dispatch(hideAllDisclaimersAction());
           }
         });
-    }
+    } else dispatch(handleRegisterFailureAction());
   };
 
 export const updateRegisterStateDependentDisclaimerStates =

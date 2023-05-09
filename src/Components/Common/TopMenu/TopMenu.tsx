@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { isLogon } from "../../../Services/user";
-import {
-  handleLogoutAction,
-} from "../../../Store/UserReducer";
+import { handleLogoutAction } from "../../../Store/UserReducer";
 import "./TopMenu.css";
 
 export function TopMenu() {
@@ -53,7 +51,11 @@ export function TopMenu() {
                     <Link to="/MyLinks" className="navi-link">
                       My links
                     </Link>
-                  ) : null}
+                  ) : (
+                    <Link to="/DeleteLink" className="navi-link">
+                      Delete Link
+                    </Link>
+                  )}
                 </li>
               </ul>
             </div>

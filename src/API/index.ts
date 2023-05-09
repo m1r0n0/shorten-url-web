@@ -1,10 +1,10 @@
 import {
-  ILink,
+  IUserLink,
   IRegisterUser,
   ILoginUser,
   IUserEmailId,
   IUserPasswordId,
-  IUserLink,
+  ILink,
 } from "../Models";
 import {
   ACCOUNT,
@@ -13,6 +13,7 @@ import {
   CHANGE_USER_EMAIL,
   CHANGE_USER_PASSWORD,
   CREATE_LINK,
+  DELETE_LINK,
   GET_USER_EMAIL,
   GET_USER_ID,
   GET_USER_LINKS,
@@ -22,6 +23,7 @@ import {
   REGISTER,
   SHORTEN,
 } from "../JS/routeConstants";
+import { error } from "console";
 
 const GetUserIdURI: string = `${API}/${ACCOUNT}/${GET_USER_ID}`;
 const GetUserEmailURI: string = `${API}/${ACCOUNT}/${GET_USER_EMAIL}`;
@@ -33,6 +35,7 @@ const GetUserLinksURI: string = `${API}/${SHORTEN}/${GET_USER_LINKS}`;
 const RedirectToOriginalUrlURI: string = `${API}/${REDIRECT}/${REDIRECT_TO_ORIGINAL_URL}`;
 const ChangeUserEmailURI: string = `${API}/${ACCOUNT}/${CHANGE_USER_EMAIL}`;
 const ChangeUserPasswordURI: string = `${API}/${ACCOUNT}/${CHANGE_USER_PASSWORD}`;
+const DeleteLinkURI: string = `${API}/${SHORTEN}/${DELETE_LINK}`;
 
 export async function fetchUserID(userEmail: string) {
   const response = await fetch(`${GetUserIdURI}?userEmail=${userEmail}`);
@@ -44,7 +47,7 @@ export async function fetchUserEmail(tempUserID: string) {
   return await response.json();
 }
 
-export async function addUrl(body: ILink) {
+export async function addUrl(body: IUserLink) {
   const response = await fetch(CreateLinkURI, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -91,7 +94,7 @@ export async function getItemsForMyLinksTable(userID: string) {
 }
 
 export async function changeCertainLinkPrivacy(
-  body: IUserLink,
+  body: ILink,
   userID: string | undefined
 ) {
   body.shortUrl = body.shortUrl.split(".com/").pop()!;
@@ -131,6 +134,19 @@ export async function proceedPasswordChange(body: IUserPasswordId) {
   });
   if (!response.ok) {
     throw new Error("Network response was not OK");
+  } else {
+    return await response.json();
+  }
+}
+
+export async function proceedLinkDeleting(body: IUserLink) {
+  const response = await fetch(DeleteLinkURI, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) {
+    throw new Error(String(response.status));
   } else {
     return await response.json();
   }

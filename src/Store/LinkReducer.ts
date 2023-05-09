@@ -1,27 +1,33 @@
 import { Reducer } from "redux";
-import { IUserLink, IUserLinks } from "../Models";
+import { ILink, ILinks } from "../Models";
 
 interface ILinkAction {
   type: string;
-  payload: string | IUserLinks | IUserLink | boolean;
+  payload: string | ILinks | ILink | boolean;
 }
 
 interface ILinkState {
   shortUrl: string;
-  userLinks: { items: IUserLinks; isLoaded: boolean };
+  userLinks: { items: ILinks; isLoaded: boolean };
   isShortLinkCreated: boolean;
+  isLinkDeletingRequested: boolean;
+  isLinkDeletingFinished: boolean;
 }
 
 const defaultState: ILinkState = {
   shortUrl: "",
   userLinks: { items: [], isLoaded: false },
   isShortLinkCreated: false,
+  isLinkDeletingRequested: false,
+  isLinkDeletingFinished: false,
 };
 
 const SET_SHORT_URL = "SET_SHORT_URL";
 const HANDLE_USER_LINKS_GETTING = "HANDLE_USER_LINKS_GETTING";
 const HANDLE_LINK_PRIVACY_CHANGING = "HANDLE_LINK_PRIVACY_CHANGING";
 const SET_IS_SHORT_LINK_CREATED = "SET_IS_SHORT_LINK_CREATED";
+const SET_IS_LINK_DELETING_REQUESTED = "SET_IS_LINK_DELETING_REQUESTED";
+const SET_IS_LINK_DELETING_FINISHED = "SET_IS_LINK_DELETING_FINISHED";
 
 export const linkReducer: Reducer<ILinkState, ILinkAction> = (
   state: ILinkState = defaultState,
@@ -38,12 +44,12 @@ export const linkReducer: Reducer<ILinkState, ILinkAction> = (
         ...state,
         userLinks: {
           ...state.userLinks,
-          items: action.payload as IUserLinks,
+          items: action.payload as ILinks,
           isLoaded: true,
         },
       };
     case HANDLE_LINK_PRIVACY_CHANGING:
-      var link = action.payload as IUserLink;
+      var link = action.payload as ILink;
       var changingLinkIndexInItems = state.userLinks.items.findIndex(
         (element) => element.shortUrl === link.shortUrl
       );
@@ -56,6 +62,14 @@ export const linkReducer: Reducer<ILinkState, ILinkAction> = (
       };
     case SET_IS_SHORT_LINK_CREATED:
       return { ...state, isShortLinkCreated: action.payload as boolean };
+    case SET_IS_LINK_DELETING_REQUESTED:
+      return { ...state, isLinkDeletingRequested: action.payload as boolean };
+    case SET_IS_LINK_DELETING_FINISHED:
+      return {
+        ...state,
+        isLinkDeletingRequested: false,
+        isLinkDeletingFinished: true,
+      };
     default:
       return state;
   }
@@ -65,15 +79,22 @@ export const setShortUrlAction = (payload: string) => ({
   type: SET_SHORT_URL,
   payload,
 });
-export const handleUserLinksGettingAction = (payload: IUserLinks) => ({
+export const handleUserLinksGettingAction = (payload: ILinks) => ({
   type: HANDLE_USER_LINKS_GETTING,
   payload,
 });
-export const handleLinkPrivacyChangeAction = (payload: IUserLink) => ({
+export const handleLinkPrivacyChangeAction = (payload: ILink) => ({
   type: HANDLE_LINK_PRIVACY_CHANGING,
   payload,
 });
-export const setIsShortLinkCreated = (payload: boolean) => ({
+export const setIsShortLinkCreatedAction = (payload: boolean) => ({
   type: SET_IS_SHORT_LINK_CREATED,
   payload,
+});
+export const setIsLinkDeletingRequestedAction = (payload: boolean) => ({
+  type: SET_IS_LINK_DELETING_REQUESTED,
+  payload,
+});
+export const setIsLinkDeletingFinishedAction = () => ({
+  type: SET_IS_LINK_DELETING_FINISHED,
 });

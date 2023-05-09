@@ -10,6 +10,7 @@ import MyLinksPage from "../../Shorten/MyLinks/MyLinksPage";
 import HomePage from "../../Common/HomePage";
 import TopMenu from "../../Common/TopMenu";
 import "./Routers.css";
+import DeleteLinkPage from "../../Shorten/DeleteLinkPage";
 
 export const Routers = () => {
   return (
@@ -20,6 +21,7 @@ export const Routers = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/CreateLink" element={<CreateLink />} />
           <Route path="/MyLinks" element={<MyLinksPage />} />
+          <Route path="/DeleteLink" element={<DeleteLinkPage />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
           <Route path="/Unauthorized" element={<Unauthorized />} />

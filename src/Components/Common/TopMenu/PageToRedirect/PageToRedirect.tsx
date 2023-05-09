@@ -10,13 +10,15 @@ export function PageToRedirect() {
   if (userID === undefined) tempUserId = "";
   proceedRedirect(String(params.shortenedUrl), tempUserId);
   return (
-    <ClipLoader
-      size={500}
-      loading={true}
-      color={"#000000"}
-      cssOverride={{}}
-      speedMultiplier={1}
-      className="loader"
-    />
+    <div className="d-flex align-items-center justify-content-center">
+      <ClipLoader
+        size={300}
+        loading={true}
+        color={"#000000"}
+        cssOverride={{}}
+        speedMultiplier={1}
+        className="loader"
+      />
+    </div>
   );
 }
